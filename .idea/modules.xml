@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LMBackendService.iml" filepath="$PROJECT_DIR$/LMBackendService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LMShipService.iml" filepath="$PROJECT_DIR$/LMShipService.iml" />
     </modules>
   </component>
 </project>
