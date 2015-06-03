@@ -23,10 +23,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="LMBackendService" />
+        <module name="LMShipService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="LMBackendService" target="1.5" />
+      <module name="LMShipService" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
