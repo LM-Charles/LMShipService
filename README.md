@@ -1,5 +1,7 @@
 # LMShipService
 
-## Environments:
+#### Devo 
 
-Devo Endpoint:  "http://lmshipservice-devo.elasticbeanstalk.com"
+Branch: release-devo
+
+Endpoint:  http://lmshipservice-devo.elasticbeanstalk.com
