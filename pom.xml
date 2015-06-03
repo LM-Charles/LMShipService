@@ -30,7 +30,7 @@
         <version>2.2</version>
         <configuration>
           <server>TomcatServer</server>
-          <path>/service</path>
+          <path>/</path>
         </configuration>
       </plugin>
     </plugins>
