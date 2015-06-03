@@ -1,0 +1,54 @@
+Application Info
+Application name
+    LMShipService
+Description
+    LMShipService Backend
+New Environment
+Tier
+    Web Server
+Instance profile
+    aws-elasticbeanstalk-ec2-role
+Environment Type
+Container type
+    64bit Amazon Linux 2015.03 v1.4.1 running Tomcat 8 Java 8
+Environment type
+    Single instance
+Application Version
+Application source
+    Sample application
+Environment Info
+Environment name
+    LMShipService-Devo
+Environment URL
+    http://lmshipservice-devo.elasticbeanstalk.com
+Description
+    Devo stage of LMShipService
+Configuration Details
+Instance type
+    t2.micro
+Key pair
+Email address
+    desmond007@gmail.com
+Root volume type
+    (default)
+Root volume size
+    (default)
+Root volume IOPS
+    (default)
+Application health check URL
+Environment Tags
+stage
+    devo
+fleet-type
+    service
+RDS Configuration
+DB engine
+    mysql
+Engine version
+    5.6
+Instance class
+    db.t2.micro
+Allocated storage
+    5
+Deletion policy
+    Create snapshot
