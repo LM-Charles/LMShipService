@@ -15,12 +15,12 @@ import java.util.List;
  */
 public class TwilioSMSClient implements SMSClient{
     public String sendSMS(String toNumber, String body) throws DependentServiceException {
-        TwilioRestClient client = new TwilioRestClient(TwilioTestCredential.ACCOUNT_SID, TwilioTestCredential.AUTH_TOKEN);
+        TwilioRestClient client = new TwilioRestClient(TwilioTestCredentials.ACCOUNT_SID, TwilioTestCredentials.AUTH_TOKEN);
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("Body", body));
         params.add(new BasicNameValuePair("To",  toNumber));
-        params.add(new BasicNameValuePair("From", TwilioTestCredential.FROM));
+        params.add(new BasicNameValuePair("From", TwilioTestCredentials.FROM));
 
         MessageFactory messageFactory = client.getAccount().getMessageFactory();
         try {
