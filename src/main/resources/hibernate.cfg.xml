@@ -21,5 +21,9 @@
 
         <!-- Persistence Models using the annotation based mapping -->
         <mapping class="com.longmendelivery.persistence.model.AppUser"/>
+        <mapping class="com.longmendelivery.persistence.model.Shipment"/>
+        <mapping class="com.longmendelivery.persistence.model.ShipmentService"/>
+        <mapping class="com.longmendelivery.persistence.model.ShipmentStatusHistory"/>
+
     </session-factory>
 </hibernate-configuration>
