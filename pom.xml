@@ -8,21 +8,62 @@
   <name>LMBackendService Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
-    <dependency>
+
+      <!-- Hibernate for DB -->
+      <dependency>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate-core</artifactId>
+          <version>4.3.10.Final</version>
+      </dependency>
+
+      <!-- Hibernate uses slf4j for logging, for our purposes here use the simple backend -->
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+          <version>1.7.12</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.javassist</groupId>
+          <artifactId>javassist</artifactId>
+          <version>3.19.0-GA</version>
+      </dependency>
+
+      <!-- MySQL 5.6-->
+      <dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>5.1.35</version>
+      </dependency>
+
+      <!-- JUnit for Unit Tests -->
+      <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+
+      <!-- Jersey REST -->
+
     <dependency>
       <groupId>org.glassfish.jersey.containers</groupId>
       <artifactId>jersey-container-servlet</artifactId>
       <version>2.10.1</version>
     </dependency>
+
+      <!-- Twilio SMS -->
     <dependency>
       <groupId>com.twilio.sdk</groupId>
       <artifactId>twilio-java-sdk</artifactId>
       <version>3.4.5</version>
+    </dependency>
+
+      <!-- Helper Utility -->
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <version>2.7</version>
     </dependency>
   </dependencies>
   <build>
