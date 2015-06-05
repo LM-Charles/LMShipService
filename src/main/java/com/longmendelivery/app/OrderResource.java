@@ -1,6 +1,5 @@
 package com.longmendelivery.app;
 import com.longmendelivery.lib.security.SecurityPower;
-import com.longmendelivery.lib.security.ThrottleSecurity;
 import com.longmendelivery.lib.security.TokenSecurity;
 import com.longmendelivery.persistence.model.Shipment;
 
