@@ -1,4 +1,4 @@
-package persistence;
+package com.longmendelivery.persistence;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;

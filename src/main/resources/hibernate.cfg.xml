@@ -18,6 +18,8 @@
 
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">update</property>
-    </session-factory>
 
+        <!-- Persistence Models using the annotation based mapping -->
+        <mapping class="com.longmendelivery.persistence.model.AppUser"/>
+    </session-factory>
 </hibernate-configuration>
