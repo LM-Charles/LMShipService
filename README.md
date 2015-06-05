@@ -1,14 +1,14 @@
 # LMShipService
 
-#### Devo 
+### Devo 
 
 Branch: release-devo
 
 Endpoint:  http://lmshipservice-devo.elasticbeanstalk.com
 
-##### Resource
+#### Resource
 
-###### Debug Test SMS Gateway
+##### Debug Test SMS Gateway
 
 Request: PUT http://lmshipservice-devo.elasticbeanstalk.com/rest/debug/testSMS/{phone_number}/{body}
 
