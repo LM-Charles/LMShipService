@@ -4,9 +4,9 @@ package com.longmendelivery.lib.client.shipment.model;
  * Created by desmond on 04/06/15.
  */
 public class ShippingAddress {
-    protected String country;
-    protected String province;
-    protected String address;
+    private final String country;
+    private final String province;
+    private final String address;
 
     public String getPostalCode() {
         return postalCode;
@@ -24,7 +24,7 @@ public class ShippingAddress {
         return country;
     }
 
-    protected String postalCode;
+    private final String postalCode;
 
     public ShippingAddress(String country, String province, String address, String postalCode){
         this.country = country;
