@@ -4,11 +4,11 @@ package com.longmendelivery.lib.client.shipment.model;
  * Created by  rabiddesireon 04/06/15.
  */
 public class ShippingDimension {
-    protected Integer length;
-    protected Integer width;
-    protected Integer height;
+    private final Integer length;
+    private final Integer width;
+    private final Integer height;
 
-    protected Integer weight;
+    private final Integer weight;
 
 
     public ShippingDimension(Integer length, Integer width, Integer height, Integer weight){

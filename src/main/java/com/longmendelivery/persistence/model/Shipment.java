@@ -7,25 +7,25 @@ import java.math.BigDecimal;
  * Created by  rabiddesireon 04/06/15.
  */
 public class Shipment {
-    AppUser client;
-    DateTime orderDate;
+    private AppUser client;
+    private DateTime orderDate;
 
-    Integer height;
-    Integer width;
-    Integer length;
+    private Integer height;
+    private Integer width;
+    private Integer length;
 
-    Integer weight;
+    private Integer weight;
 
-    BigDecimal estimateCost;
-    BigDecimal finalCost;
+    private BigDecimal estimateCost;
+    private BigDecimal finalCost;
 
-    String fromAddress;
-    String fromCity;
-    String fromProvince;
-    String fromCode;
-    String fromCountry;
+    private String fromAddress;
+    private String fromCity;
+    private String fromProvince;
+    private String fromCode;
+    private String fromCountry;
 
-    String toAddress;
+    private String toAddress;
 
     public AppUser getClient() {
         return client;
@@ -203,14 +203,14 @@ public class Shipment {
         this.handler = handler;
     }
 
-    String toCity;
-    String toProvince;
-    String toCode;
-    String toCountry;
+    private String toCity;
+    private String toProvince;
+    private String toCode;
+    private String toCountry;
 
-    ShipmentService shipmentService;
-    String trackingNumber;
-    String trackingDocumentType;
+    private ShipmentService shipmentService;
+    private String trackingNumber;
+    private String trackingDocumentType;
 
-    String handler;
+    private String handler;
 }

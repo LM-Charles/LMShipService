@@ -5,7 +5,6 @@ import com.longmendelivery.lib.security.TokenSecurity;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.sql.Time;
 
 @Path("/user")
 public class AppUserResource {
