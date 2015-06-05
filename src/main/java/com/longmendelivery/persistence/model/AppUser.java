@@ -4,24 +4,24 @@ package com.longmendelivery.persistence.model;
  * Created by  rabiddesireon 04/06/15.
  */
 public class AppUser {
-    String id;
+    private String id;
 
-    String phone;
-    String email;
-    String password_md5;
+    private String phone;
+    private String email;
+    private String password_md5;
 
-    String userGroup;
-    String userStatus;
+    private String userGroup;
+    private String userStatus;
 
-    String apiToken;
-    String verificationString;
+    private String apiToken;
+    private String verificationString;
 
-    String firstName;
-    String lastName;
-    String address;
-    String city;
-    String province;
-    String country;
+    private String firstName;
+    private String lastName;
+    private String address;
+    private String city;
+    private String province;
+    private String country;
 
     public String getId() {
         return id;

@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by  rabiddesireon 04/06/15.
  */
-public class HibernateDiagnostic {
+class HibernateDiagnostic {
     private final SessionFactory ourSessionFactory;
     private final ServiceRegistry serviceRegistry;
 
@@ -30,7 +30,7 @@ public class HibernateDiagnostic {
         }
     }
 
-    public Session getSession() throws HibernateException {
+    private Session getSession() throws HibernateException {
         return ourSessionFactory.openSession();
     }
 

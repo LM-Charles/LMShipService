@@ -2,7 +2,6 @@ package com.longmendelivery.app;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
