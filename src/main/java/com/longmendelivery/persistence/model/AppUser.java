@@ -1,27 +1,122 @@
 package com.longmendelivery.persistence.model;
 
+import javax.persistence.*;
+
 /**
  * Created by  rabiddesireon 04/06/15.
  */
+@Entity
+@Table(name ="APP_USER")
 public class AppUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
+    @Column(name = "PHONE", nullable = false)
     private String phone;
+
+    @Column(name = "EMAIL", nullable = false)
     private String email;
+
+    @Column(name = "PASSWORD_MD5", nullable = false)
     private String password_md5;
 
+    @Column(name = "USER_GROUP", nullable = false)
     private String userGroup;
+
+    @Column(name = "USER_STATUS", nullable = false)
     private String userStatus;
 
+    @Column(name = "API_TOKEN")
     private String apiToken;
+
+    @Column(name = "VERIFICATION_STRING")
     private String verificationString;
 
+    @Column(name = "FIRST_NAME")
     private String firstName;
+
+    @Column(name = "LAST_NAME")
     private String lastName;
+
+    @Column(name = "ADDRESS")
     private String address;
+
+    @Column(name = "CITY")
     private String city;
+
+    @Column(name = "PROVINCE")
     private String province;
+
+    @Column(name = "COUNTRY")
     private String country;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AppUser appUser = (AppUser) o;
+
+        if (id != null ? !id.equals(appUser.id) : appUser.id != null) return false;
+        if (phone != null ? !phone.equals(appUser.phone) : appUser.phone != null) return false;
+        if (email != null ? !email.equals(appUser.email) : appUser.email != null) return false;
+        if (password_md5 != null ? !password_md5.equals(appUser.password_md5) : appUser.password_md5 != null)
+            return false;
+        if (userGroup != null ? !userGroup.equals(appUser.userGroup) : appUser.userGroup != null) return false;
+        if (userStatus != null ? !userStatus.equals(appUser.userStatus) : appUser.userStatus != null) return false;
+        if (apiToken != null ? !apiToken.equals(appUser.apiToken) : appUser.apiToken != null) return false;
+        if (verificationString != null ? !verificationString.equals(appUser.verificationString) : appUser.verificationString != null)
+            return false;
+        if (firstName != null ? !firstName.equals(appUser.firstName) : appUser.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(appUser.lastName) : appUser.lastName != null) return false;
+        if (address != null ? !address.equals(appUser.address) : appUser.address != null) return false;
+        if (city != null ? !city.equals(appUser.city) : appUser.city != null) return false;
+        if (province != null ? !province.equals(appUser.province) : appUser.province != null) return false;
+        return !(country != null ? !country.equals(appUser.country) : appUser.country != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (password_md5 != null ? password_md5.hashCode() : 0);
+        result = 31 * result + (userGroup != null ? userGroup.hashCode() : 0);
+        result = 31 * result + (userStatus != null ? userStatus.hashCode() : 0);
+        result = 31 * result + (apiToken != null ? apiToken.hashCode() : 0);
+        result = 31 * result + (verificationString != null ? verificationString.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (province != null ? province.hashCode() : 0);
+        result = 31 * result + (country != null ? country.hashCode() : 0);
+        return result;
+    }
+
+    public AppUser(String id, String phone, String email, String password_md5, String userGroup, String userStatus, String apiToken, String verificationString, String firstName, String lastName, String address, String city, String province, String country) {
+        this.id = id;
+        this.phone = phone;
+        this.email = email;
+        this.password_md5 = password_md5;
+        this.userGroup = userGroup;
+        this.userStatus = userStatus;
+        this.apiToken = apiToken;
+        this.verificationString = verificationString;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.city = city;
+        this.province = province;
+        this.country = country;
+    }
+
+    public AppUser() {
+
+    }
 
     public String getId() {
         return id;
