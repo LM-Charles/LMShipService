@@ -18,7 +18,7 @@ public class OrderResource {
 
     @POST
     public Response createOrder(String order, @QueryParam("token") String token){
-        String userId = fetchOrder(order).getClient().getId();
+        String userId = fetchOrder(order).getClientId().getId();
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
 
         return Response.status(200).build();
