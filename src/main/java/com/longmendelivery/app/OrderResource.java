@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 @Path("/order")
 public class OrderResource {
     @GET
-    public Response listOrdersForUser(@QueryParam("userId") String userId, @QueryParam("token") String token) {
+    public Response listOrdersForUser(@QueryParam("userId") Integer userId, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, userId);
 
         //list all active and recent order for users
@@ -18,7 +18,7 @@ public class OrderResource {
 
     @POST
     public Response createOrder(String order, @QueryParam("token") String token){
-        String userId = fetchOrder(order).getClientId().getId();
+        Integer userId = fetchOrder(order).getClientId().getId();
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
 
         return Response.status(200).build();

@@ -18,7 +18,7 @@ public class LoginResource {
 
     @DELETE
     @Path("/{userId}")
-    public Response logout(@PathParam("userId") String userId, @QueryParam("token") String token) {
+    public Response logout(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
         TokenSecurity.getInstance().invalidateToken(userId);
         return Response.status(200).build();
