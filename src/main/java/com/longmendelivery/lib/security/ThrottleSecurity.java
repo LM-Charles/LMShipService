@@ -16,6 +16,6 @@ public class ThrottleSecurity {
         return instance;
     }
 
-    public void throttle(String key) {
+    public void throttle(Object key) {
     }
 }
