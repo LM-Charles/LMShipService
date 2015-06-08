@@ -14,7 +14,7 @@ public class Shipment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "CLIENT_ID")
@@ -60,7 +60,7 @@ public class Shipment {
     @Column(name = "TO_COUNTRY", nullable = false)
     private String toCountry;
 
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name = "SHIPMENT_SERVICE_ID")
     private ShipmentService shipmentServiceId;
 
@@ -82,6 +82,14 @@ public class Shipment {
 
     public DateTime getOrderDate() {
         return orderDate;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setOrderDate(DateTime orderDate) {
