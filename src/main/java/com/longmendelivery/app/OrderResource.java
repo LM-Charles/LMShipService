@@ -32,7 +32,7 @@ public class OrderResource {
 
     @GET
     @Path("/{orderId}")
-    public Response getOrderDetails(@PathParam("orderId") String orderId, String status, @QueryParam("token") String token){
+    public Response getOrderDetails(@PathParam("orderId") String orderId, @QueryParam("token") String token){
         TokenSecurity.getInstance().authorize(token, SecurityPower.PUBLIC_READ);
 
         return Response.status(200).build();
@@ -50,7 +50,7 @@ public class OrderResource {
 
     @POST
     @Path("/{orderId}/tracking")
-    public Response addTrackingNumber(@PathParam("orderId") String orderId, String trackingNumber, String trackingDocument, @QueryParam("token") String token){
+    public Response addTrackingNumber(@PathParam("orderId") String orderId, @FormParam(("trackingNumber"))String trackingNumber, @FormParam("trackingDocument")String trackingDocument, @QueryParam("token") String token){
         TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE);
 
         return Response.status(200).build();

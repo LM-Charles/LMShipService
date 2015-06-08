@@ -1,7 +1,10 @@
 package com.longmendelivery.app;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
+import com.longmendelivery.persistence.HibernateUtil;
+import org.hibernate.Session;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -15,5 +18,12 @@ public class DebugResource {
         String output = "Testing SMS to : " + to + " with body: " + body;
         new TwilioSMSClient().sendSMS(to, body);
         return Response.status(200).entity(output).build();
+    }
+
+    @GET
+    @Path("testDB")
+    public Response getMessage() throws DependentServiceException {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        return Response.status(200).entity(session.toString()).build();
     }
 }
