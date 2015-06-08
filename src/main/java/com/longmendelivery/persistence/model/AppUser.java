@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Integer id;
 
     @Column(name = "PHONE", nullable = false)
     private String phone;
@@ -97,7 +97,7 @@ public class AppUser {
         return result;
     }
 
-    public AppUser(String id, String phone, String email, String password_md5, String userGroup, String userStatus, String apiToken, String verificationString, String firstName, String lastName, String address, String city, String province, String country) {
+    public AppUser(Integer id, String phone, String email, String password_md5, String userGroup, String userStatus, String apiToken, String verificationString, String firstName, String lastName, String address, String city, String province, String country) {
         this.id = id;
         this.phone = phone;
         this.email = email;
@@ -118,11 +118,11 @@ public class AppUser {
 
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

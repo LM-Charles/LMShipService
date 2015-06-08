@@ -1,9 +1,6 @@
 package com.longmendelivery.persistence.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by  rabiddesireon 04/06/15.
@@ -13,38 +10,17 @@ import javax.persistence.Table;
 public class ShipmentService {
 
     @Id()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
+
     @Column(name = "COURIER_NAME")
     String courierName;
-    @Id
+
     @Column(name = "SERVICE_NAME")
     String serviceName;
 
-    @Column(name = "SERVICE_CODE", nullable = false)
-    String serviceCode;
-
-    @Column(name="API_PROVIDER", nullable = false)
-    String apiProvider;
-
-    @Column(name="LM_CATEGORY_CODE", nullable = false)
-    String lmCategoryCode;
-
-    public ShipmentService(String courierName, String serviceName, String serviceCode, String apiProvider, String lmCategoryCode) {
-        this.courierName = courierName;
-        this.serviceName = serviceName;
-        this.serviceCode = serviceCode;
-        this.apiProvider = apiProvider;
-        this.lmCategoryCode = lmCategoryCode;
-    }
-
-    public ShipmentService() {
-    }
-
-    public String getCourierName() {
-        return courierName;
-    }
-
-    public void setCourierName(String courierName) {
-        this.courierName = courierName;
+    public Integer getId() {
+        return id;
     }
 
     @Override
@@ -54,6 +30,7 @@ public class ShipmentService {
 
         ShipmentService that = (ShipmentService) o;
 
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (courierName != null ? !courierName.equals(that.courierName) : that.courierName != null) return false;
         if (serviceName != null ? !serviceName.equals(that.serviceName) : that.serviceName != null) return false;
         if (serviceCode != null ? !serviceCode.equals(that.serviceCode) : that.serviceCode != null) return false;
@@ -64,12 +41,22 @@ public class ShipmentService {
 
     @Override
     public int hashCode() {
-        int result = courierName != null ? courierName.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (courierName != null ? courierName.hashCode() : 0);
         result = 31 * result + (serviceName != null ? serviceName.hashCode() : 0);
         result = 31 * result + (serviceCode != null ? serviceCode.hashCode() : 0);
         result = 31 * result + (apiProvider != null ? apiProvider.hashCode() : 0);
         result = 31 * result + (lmCategoryCode != null ? lmCategoryCode.hashCode() : 0);
         return result;
+    }
+
+    public String getCourierName() {
+
+        return courierName;
+    }
+
+    public void setCourierName(String courierName) {
+        this.courierName = courierName;
     }
 
     public String getServiceName() {
@@ -101,6 +88,32 @@ public class ShipmentService {
     }
 
     public void setLmCategoryCode(String lmCategoryCode) {
+        this.lmCategoryCode = lmCategoryCode;
+    }
+
+    public void setId(Integer id) {
+
+        this.id = id;
+    }
+
+    @Column(name = "SERVICE_CODE", nullable = false)
+    String serviceCode;
+
+    @Column(name="API_PROVIDER", nullable = false)
+    String apiProvider;
+
+    @Column(name="LM_CATEGORY_CODE", nullable = false)
+    String lmCategoryCode;
+
+    public ShipmentService() {
+    }
+
+    public ShipmentService(String courierName, String serviceName, String serviceCode, String apiProvider, String lmCategoryCode) {
+
+        this.courierName = courierName;
+        this.serviceName = serviceName;
+        this.serviceCode = serviceCode;
+        this.apiProvider = apiProvider;
         this.lmCategoryCode = lmCategoryCode;
     }
 }

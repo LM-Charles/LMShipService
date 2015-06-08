@@ -12,7 +12,7 @@ class AppUserActionHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    String id;
+    Integer id;
 
     @ManyToOne
     @JoinColumn(name = "APP_USER_ID", nullable = false)
@@ -27,7 +27,7 @@ class AppUserActionHistory {
     public AppUserActionHistory() {
     }
 
-    public AppUserActionHistory(String id, AppUser appUserId, String action, String actionDescription) {
+    public AppUserActionHistory(Integer id, AppUser appUserId, String action, String actionDescription) {
 
         this.id = id;
         this.appUserId = appUserId;
@@ -35,7 +35,7 @@ class AppUserActionHistory {
         this.actionDescription = actionDescription;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -62,7 +62,7 @@ class AppUserActionHistory {
         return result;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

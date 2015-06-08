@@ -10,7 +10,7 @@ import javax.persistence.*;
 class ShipmentStatusHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    String id;
+    Integer id;
 
     @ManyToOne
     @JoinColumn(name = "SHIPMENT_ID")
@@ -25,7 +25,7 @@ class ShipmentStatusHistory {
     @Column(name = "HANDLER")
     String handler;
 
-    public ShipmentStatusHistory(String id, Shipment shipmentId, String status, String statusDescription, String handler) {
+    public ShipmentStatusHistory(Integer id, Shipment shipmentId, String status, String statusDescription, String handler) {
         this.id = id;
         this.shipmentId = shipmentId;
         this.status = status;
@@ -36,11 +36,11 @@ class ShipmentStatusHistory {
     public ShipmentStatusHistory() {
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

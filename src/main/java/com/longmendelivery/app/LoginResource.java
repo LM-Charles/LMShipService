@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 @Path("/login")
 public class LoginResource {
     @POST
-    public Response login(String username, String password) {
+    public Response login(@QueryParam("username") String username, @QueryParam("password") String password) {
         ThrottleSecurity.getInstance().throttle(username);
 
         String token = TokenSecurity.getInstance().issueToken(username, password);
