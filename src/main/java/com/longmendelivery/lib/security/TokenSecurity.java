@@ -21,7 +21,7 @@ public class TokenSecurity {
 
     }
 
-    public void authorize(String token, SecurityPower requestedPower, String userId) {
+    public void authorize(String token, SecurityPower requestedPower, Integer userId) {
 
     }
 
@@ -29,6 +29,6 @@ public class TokenSecurity {
         return null;
     }
 
-    public void invalidateToken(String userId) {
+    public void invalidateToken(Integer userId) {
     }
 }

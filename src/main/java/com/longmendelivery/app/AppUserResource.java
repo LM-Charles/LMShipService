@@ -18,7 +18,7 @@ public class AppUserResource {
 
     @GET
     @Path("/{userId}")
-    public Response getUserDetail(@PathParam("userId") String userId, @QueryParam("token") String token) {
+    public Response getUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, userId);
 
         //get user information
@@ -27,7 +27,7 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}")
-    public Response changeUserDetail(@PathParam("userId") String userId, @QueryParam("token") String token) {
+    public Response changeUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
 
         //get user information
@@ -36,7 +36,7 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}/activation")
-    public Response sendActivationVerification(@PathParam("userId") String userId, @QueryParam("token") String token){
+    public Response sendActivationVerification(@PathParam("userId") Integer userId, @QueryParam("token") String token){
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
 
         //issue verify code
@@ -46,7 +46,7 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}/activation/{verificationCode}")
-    public Response activate(@PathParam("userId") String userId, @PathParam("verificationCode") String verificationCode, @QueryParam("token") String token){
+    public Response activate(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, @QueryParam("token") String token){
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
 
         //verify verification code
@@ -57,7 +57,7 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}/resetPassword")
-    public Response sendChangePasswordVerification(@PathParam("userId") String userId){
+    public Response sendChangePasswordVerification(@PathParam("userId") Integer userId){
         ThrottleSecurity.getInstance().throttle(userId);
         //issue verify code
 
@@ -68,7 +68,7 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}/resetPassword/{verificationCode}")
-    public Response changePassword(@PathParam("userId") String userId, @PathParam("verificationCode") String verificationCode, String password){
+    public Response changePassword(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, String password){
         //verify verification code
         //update user
 
