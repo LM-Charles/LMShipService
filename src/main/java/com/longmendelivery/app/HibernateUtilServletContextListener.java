@@ -13,7 +13,7 @@ public class HibernateUtilServletContextListener implements ServletContextListen
  
 	public void contextInitialized(ServletContextEvent arg0) {
 		System.out.println("ServletContextListener starting Hibernate...");
-		HibernateUtil.getSessionFactory();
+		HibernateUtil.getSessionFactory().openSession();
 		System.out.println("ServletContextListener started Hibernate");
 	}
 }

@@ -18,4 +18,7 @@ public class ThrottleSecurity {
 
     public void throttle(Object key) {
     }
+
+    public void throttle() {
+    }
 }

@@ -15,7 +15,16 @@ public class AppUser {
     @Column(name = "PHONE", nullable = false)
     private String phone;
 
+    public AppUser(String phone, String email, String password_md5, String userGroup, String userStatus) {
+        this.phone = phone;
+        this.email = email;
+        this.password_md5 = password_md5;
+        this.userGroup = userGroup;
+        this.userStatus = userStatus;
+    }
+
     @Column(name = "EMAIL", nullable = false)
+
     private String email;
 
     @Column(name = "PASSWORD_MD5", nullable = false)
