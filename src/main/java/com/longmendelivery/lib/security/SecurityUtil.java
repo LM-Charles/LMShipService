@@ -20,7 +20,6 @@ public class SecurityUtil {
         return new BigInteger(70, secureRandom).toString(32);
     }
 
-
     public static String md5(String password) {
         try {
             byte[] bytes = password.getBytes("UTF-8");
