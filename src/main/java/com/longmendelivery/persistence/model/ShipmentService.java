@@ -18,9 +18,32 @@ public class ShipmentService {
 
     @Column(name = "SERVICE_NAME")
     String serviceName;
+    @Column(name = "SERVICE_CODE", nullable = false)
+    String serviceCode;
+    @Column(name = "API_PROVIDER", nullable = false)
+    String apiProvider;
+    @Column(name = "LM_CATEGORY_CODE", nullable = false)
+    String lmCategoryCode;
+
+    public ShipmentService() {
+    }
+
+    public ShipmentService(String courierName, String serviceName, String serviceCode, String apiProvider, String lmCategoryCode) {
+
+        this.courierName = courierName;
+        this.serviceName = serviceName;
+        this.serviceCode = serviceCode;
+        this.apiProvider = apiProvider;
+        this.lmCategoryCode = lmCategoryCode;
+    }
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+
+        this.id = id;
     }
 
     @Override
@@ -88,32 +111,6 @@ public class ShipmentService {
     }
 
     public void setLmCategoryCode(String lmCategoryCode) {
-        this.lmCategoryCode = lmCategoryCode;
-    }
-
-    public void setId(Integer id) {
-
-        this.id = id;
-    }
-
-    @Column(name = "SERVICE_CODE", nullable = false)
-    String serviceCode;
-
-    @Column(name="API_PROVIDER", nullable = false)
-    String apiProvider;
-
-    @Column(name="LM_CATEGORY_CODE", nullable = false)
-    String lmCategoryCode;
-
-    public ShipmentService() {
-    }
-
-    public ShipmentService(String courierName, String serviceName, String serviceCode, String apiProvider, String lmCategoryCode) {
-
-        this.courierName = courierName;
-        this.serviceName = serviceName;
-        this.serviceCode = serviceCode;
-        this.apiProvider = apiProvider;
         this.lmCategoryCode = lmCategoryCode;
     }
 }

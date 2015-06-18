@@ -29,14 +29,14 @@ public class DebugResource {
     @Path("testDB")
     public Response getMessage() throws DependentServiceException {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Map<String, ClassMetadata>  map = sessionFactory.getAllClassMetadata();
+        Map<String, ClassMetadata> map = sessionFactory.getAllClassMetadata();
         StringBuilder builder = new StringBuilder();
         builder.append("Testing DB Hibernate entity mapping...");
         builder.append("\n");
 
-        for(String entityName : map.keySet()) {
+        for (String entityName : map.keySet()) {
             SessionFactoryImpl sfImpl = (SessionFactoryImpl) sessionFactory;
-            String tableName = ((AbstractEntityPersister)sfImpl.getEntityPersister(entityName)).getTableName();
+            String tableName = ((AbstractEntityPersister) sfImpl.getEntityPersister(entityName)).getTableName();
             builder.append("Entity: ").append(entityName).append(" mapped to table: ").append(tableName);
             builder.append("\n");
         }

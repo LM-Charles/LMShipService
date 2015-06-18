@@ -1,4 +1,5 @@
 package com.longmendelivery.app;
+
 import com.longmendelivery.lib.security.SecurityPower;
 import com.longmendelivery.lib.security.TokenSecurity;
 import com.longmendelivery.persistence.model.Shipment;
@@ -17,7 +18,7 @@ public class OrderResource {
     }
 
     @POST
-    public Response createOrder(String order, @QueryParam("token") String token){
+    public Response createOrder(String order, @QueryParam("token") String token) {
         Integer userId = fetchOrder(order).getClientId().getId();
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
 
@@ -32,7 +33,7 @@ public class OrderResource {
 
     @GET
     @Path("/{orderId}")
-    public Response getOrderDetails(@PathParam("orderId") String orderId, @QueryParam("token") String token){
+    public Response getOrderDetails(@PathParam("orderId") String orderId, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.PUBLIC_READ);
 
         return Response.status(200).build();
@@ -41,7 +42,7 @@ public class OrderResource {
 
     @POST
     @Path("/{orderId}/status")
-    public Response updateOrderStatus(@PathParam("orderId") String orderId, String status, @QueryParam("token") String token){
+    public Response updateOrderStatus(@PathParam("orderId") String orderId, String status, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE);
 
         return Response.status(200).build();
@@ -50,7 +51,7 @@ public class OrderResource {
 
     @POST
     @Path("/{orderId}/tracking")
-    public Response addTrackingNumber(@PathParam("orderId") String orderId, @FormParam(("trackingNumber"))String trackingNumber, @FormParam("trackingDocument")String trackingDocument, @QueryParam("token") String token){
+    public Response addTrackingNumber(@PathParam("orderId") String orderId, @FormParam(("trackingNumber")) String trackingNumber, @FormParam("trackingDocument") String trackingDocument, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE);
 
         return Response.status(200).build();

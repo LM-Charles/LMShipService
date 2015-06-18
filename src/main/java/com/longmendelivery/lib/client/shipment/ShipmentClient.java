@@ -10,5 +10,6 @@ import java.util.Map;
  */
 public interface ShipmentClient {
     Map<ShippingService, BigDecimal> getRates(ShippingAddress shippingAddress, ShippingDimension dimension);
+
     TrackingRecord getTracking(String trackingNumber, TrackingDocumentType trackingDocumentType);
 }

@@ -11,7 +11,7 @@ public class ShippingDimension {
     private final Integer weight;
 
 
-    public ShippingDimension(Integer length, Integer width, Integer height, Integer weight){
+    public ShippingDimension(Integer length, Integer width, Integer height, Integer weight) {
         this.length = length;
         this.width = width;
         this.height = height;
@@ -34,7 +34,7 @@ public class ShippingDimension {
         return weight;
     }
 
-    public ShippingDimension normalized(){
+    public ShippingDimension normalized() {
         return this;
     }
 }
