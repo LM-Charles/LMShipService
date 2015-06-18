@@ -7,6 +7,14 @@ public class ShippingAddress {
     private final String country;
     private final String province;
     private final String address;
+    private final String postalCode;
+
+    public ShippingAddress(String country, String province, String address, String postalCode) {
+        this.country = country;
+        this.province = province;
+        this.address = address;
+        this.postalCode = postalCode;
+    }
 
     public String getPostalCode() {
         return postalCode;
@@ -22,14 +30,5 @@ public class ShippingAddress {
 
     public String getCountry() {
         return country;
-    }
-
-    private final String postalCode;
-
-    public ShippingAddress(String country, String province, String address, String postalCode){
-        this.country = country;
-        this.province = province;
-        this.address = address;
-        this.postalCode = postalCode;
     }
 }

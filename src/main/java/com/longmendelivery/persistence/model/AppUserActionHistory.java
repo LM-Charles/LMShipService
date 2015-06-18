@@ -39,6 +39,10 @@ class AppUserActionHistory {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,10 +64,6 @@ class AppUserActionHistory {
         result = 31 * result + (action != null ? action.hashCode() : 0);
         result = 31 * result + (actionDescription != null ? actionDescription.hashCode() : 0);
         return result;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public AppUser getAppUserId() {

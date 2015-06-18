@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by  rabiddesireon 04/06/15.
  */
 @Entity
-@Table(name ="APP_USER")
+@Table(name = "APP_USER")
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,8 +14,35 @@ public class AppUser {
 
     @Column(name = "PHONE", nullable = false)
     private String phone;
+    @Column(name = "EMAIL", nullable = false, unique = true)
 
-    public AppUser(String phone, String email, String password_md5, String userGroup, String userStatus) {
+    private String email;
+    @Column(name = "PASSWORD_MD5", nullable = false)
+    private String password_md5;
+    @Column(name = "USER_GROUP", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AppUserGroup userGroup;
+    @Column(name = "USER_STATUS", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AppUserStatus userStatus;
+    @Column(name = "API_TOKEN")
+    private String apiToken;
+    @Column(name = "VERIFICATION_STRING")
+    private String verificationString;
+    @Column(name = "FIRST_NAME")
+    private String firstName;
+    @Column(name = "LAST_NAME")
+    private String lastName;
+    @Column(name = "ADDRESS")
+    private String address;
+    @Column(name = "CITY")
+    private String city;
+    @Column(name = "PROVINCE")
+    private String province;
+    @Column(name = "COUNTRY")
+    private String country;
+
+    public AppUser(String phone, String email, String password_md5, AppUserGroup userGroup, AppUserStatus userStatus) {
         this.phone = phone;
         this.email = email;
         this.password_md5 = password_md5;
@@ -23,43 +50,27 @@ public class AppUser {
         this.userStatus = userStatus;
     }
 
-    @Column(name = "EMAIL", nullable = false)
 
-    private String email;
+    public AppUser(Integer id, String phone, String email, String password_md5, AppUserGroup userGroup, AppUserStatus userStatus, String apiToken, String verificationString, String firstName, String lastName, String address, String city, String province, String country) {
+        this.id = id;
+        this.phone = phone;
+        this.email = email;
+        this.password_md5 = password_md5;
+        this.userGroup = userGroup;
+        this.userStatus = userStatus;
+        this.apiToken = apiToken;
+        this.verificationString = verificationString;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.city = city;
+        this.province = province;
+        this.country = country;
+    }
 
-    @Column(name = "PASSWORD_MD5", nullable = false)
-    private String password_md5;
+    public AppUser() {
 
-    @Column(name = "USER_GROUP", nullable = false)
-    private String userGroup;
-
-    @Column(name = "USER_STATUS", nullable = false)
-    private String userStatus;
-
-    @Column(name = "API_TOKEN")
-    private String apiToken;
-
-    @Column(name = "VERIFICATION_STRING")
-    private String verificationString;
-
-    @Column(name = "FIRST_NAME")
-    private String firstName;
-
-    @Column(name = "LAST_NAME")
-    private String lastName;
-
-    @Column(name = "ADDRESS")
-    private String address;
-
-    @Column(name = "CITY")
-    private String city;
-
-    @Column(name = "PROVINCE")
-    private String province;
-
-    @Column(name = "COUNTRY")
-    private String country;
-
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -106,27 +117,6 @@ public class AppUser {
         return result;
     }
 
-    public AppUser(Integer id, String phone, String email, String password_md5, String userGroup, String userStatus, String apiToken, String verificationString, String firstName, String lastName, String address, String city, String province, String country) {
-        this.id = id;
-        this.phone = phone;
-        this.email = email;
-        this.password_md5 = password_md5;
-        this.userGroup = userGroup;
-        this.userStatus = userStatus;
-        this.apiToken = apiToken;
-        this.verificationString = verificationString;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.city = city;
-        this.province = province;
-        this.country = country;
-    }
-
-    public AppUser() {
-
-    }
-
     public Integer getId() {
         return id;
     }
@@ -159,19 +149,19 @@ public class AppUser {
         this.password_md5 = password_md5;
     }
 
-    public String getUserGroup() {
+    public AppUserGroup getUserGroup() {
         return userGroup;
     }
 
-    public void setUserGroup(String userGroup) {
+    public void setUserGroup(AppUserGroup userGroup) {
         this.userGroup = userGroup;
     }
 
-    public String getUserStatus() {
+    public AppUserStatus getUserStatus() {
         return userStatus;
     }
 
-    public void setUserStatus(String userStatus) {
+    public void setUserStatus(AppUserStatus userStatus) {
         this.userStatus = userStatus;
     }
 
