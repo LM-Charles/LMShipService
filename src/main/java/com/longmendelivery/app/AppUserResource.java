@@ -63,7 +63,7 @@ public class AppUserResource {
         user.setApiToken("hidden");
         user.setPassword_md5("hidden");
         user.setVerificationString("hidden");
-        tx.commit();
+        tx.rollback();
         return Response.status(Response.Status.OK).entity(ReflectionToStringBuilder.toString(user)).build();
     }
 
