@@ -7,7 +7,9 @@
     <session-factory>
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://aa1cn3gfajee4lg.cc1rijt3nzv9.us-west-1.rds.amazonaws.com:3306/ebdb</property>
+        <property name="connection.url">
+            jdbc:mysql://aa1cn3gfajee4lg.cc1rijt3nzv9.us-west-1.rds.amazonaws.com:3306/ebdb
+        </property>
         <property name="connection.username">lmdevo</property>
         <property name="connection.password">4SCWRLKJ3968UL8Y</property>
 

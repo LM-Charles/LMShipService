@@ -5,12 +5,13 @@ package com.longmendelivery.lib.security;
  */
 public class TokenSecurity {
     private static TokenSecurity instance;
-    private TokenSecurity(){
+
+    private TokenSecurity() {
 
     }
 
     public static TokenSecurity getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new TokenSecurity();
         }
         return instance;

@@ -5,12 +5,13 @@ package com.longmendelivery.lib.security;
  */
 public class ThrottleSecurity {
     private static ThrottleSecurity instance;
-    private ThrottleSecurity(){
+
+    private ThrottleSecurity() {
 
     }
 
     public static ThrottleSecurity getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new ThrottleSecurity();
         }
         return instance;
