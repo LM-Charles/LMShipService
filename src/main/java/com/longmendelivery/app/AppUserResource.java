@@ -1,26 +1,23 @@
 package com.longmendelivery.app;
+
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.lib.security.SecurityPower;
+import com.longmendelivery.lib.security.SecurityUtil;
 import com.longmendelivery.lib.security.ThrottleSecurity;
 import com.longmendelivery.lib.security.TokenSecurity;
 import com.longmendelivery.persistence.HibernateUtil;
 import com.longmendelivery.persistence.model.AppUser;
+import com.longmendelivery.persistence.model.AppUserGroup;
+import com.longmendelivery.persistence.model.AppUserStatus;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang.math.RandomUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 
 @Path("/user")
 public class AppUserResource {
@@ -32,42 +29,28 @@ public class AppUserResource {
         Transaction tx = session.beginTransaction();
         List<AppUser> users = session.createCriteria(AppUser.class).list();
         tx.commit();
-        return Response.status(200).entity(ReflectionToStringBuilder.toString(users)).build();
+        return Response.status(Response.Status.OK).entity(ReflectionToStringBuilder.toString(users)).build();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response register(     @FormParam("phone") String phone,
-                                  @FormParam("email") String email,
-                                  @FormParam("password") String password,
-                                  @FormParam("firstName") String firstName,
-                                  @FormParam("lastName") String lastName) {
+    public Response register(@FormParam("phone") String phone,
+                             @FormParam("email") String email,
+                             @FormParam("password") String password,
+                             @FormParam("firstName") String firstName,
+                             @FormParam("lastName") String lastName) {
         ThrottleSecurity.getInstance().throttle();
-        String passwordMD5 = this.md5(password);
-        String userGroup = "APP_USER";
-        String status = "UNVERIFIED";
-        AppUser newUser = new AppUser(phone, email,  passwordMD5, userGroup, status);
+        String passwordMD5 = SecurityUtil.md5(password);
+        AppUserGroup userGroup = AppUserGroup.APP_USER;
+        AppUserStatus status = AppUserStatus.NEW;
+        AppUser newUser = new AppUser(phone, email, passwordMD5, userGroup, status);
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
 
-            Integer userId = (Integer) writeSession.save(newUser);
-            tx.commit();
-            return Response.status(200).entity(userId).build();
-    }
-
-    private String md5(String password) {
-        try {
-            byte[] bytes = password.getBytes("UTF-8");
-            byte[] digest = MessageDigest.getInstance("MD5").digest(bytes);
-            return digest.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        Integer userId = (Integer) writeSession.save(newUser);
+        tx.commit();
+        return Response.status(Response.Status.OK).entity(userId).build();
     }
 
     @GET
@@ -77,50 +60,80 @@ public class AppUserResource {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
         AppUser user = (AppUser) session.get(AppUser.class, userId);
+        user.setApiToken("hidden");
+        user.setPassword_md5("hidden");
+        user.setVerificationString("hidden");
         tx.commit();
-        return Response.status(200).entity(ReflectionToStringBuilder.toString(user)).build();
+        return Response.status(Response.Status.OK).entity(ReflectionToStringBuilder.toString(user)).build();
+    }
+
+    @GET
+    @Path("/{userId}/admin")
+    public Response getUserAdmin(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
+        TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN, userId);
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Transaction tx = session.beginTransaction();
+        AppUser user = (AppUser) session.get(AppUser.class, userId);
+        tx.commit();
+        return Response.status(Response.Status.OK).entity(ReflectionToStringBuilder.toString(user)).build();
     }
 
     @POST
     @Path("/{userId}")
     public Response changeUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
-        return Response.status(200).build();
+        return Response.status(Response.Status.OK).build();
     }
 
     @POST
     @Path("/{userId}/activation")
-    public Response sendActivationVerification(@PathParam("userId") Integer userId, @QueryParam("token") String token){
-        TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        return Response.status(200).build();
-    }
-
-    @POST
-    @Path("/{userId}/activation/{verificationCode}")
-    public Response activate(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, @QueryParam("token") String token) throws DependentServiceException {
+    public Response sendActivationVerification(@PathParam("userId") Integer userId, @QueryParam("token") String token) throws DependentServiceException {
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
 
-        SecureRandom randomGenerator = new SecureRandom();
-        String randomVerification = new BigInteger(130, randomGenerator).toString(32);
+        String randomVerification = SecurityUtil.generateSecureVerificationCode();
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
             AppUser user = (AppUser) writeSession.get(AppUser.class, userId);
-            user.setUserStatus("PENDING_VERIFY_REGISTER");
+            user.setUserStatus(AppUserStatus.PENDING_VERIFICATION_REGISTER);
             user.setVerificationString(randomVerification);
             writeSession.update(user);
             tx.commit();
 
             String smsBody = buildRegistrationVerificationMessage(user.getFirstName(), user.getLastName(), randomVerification);
             new TwilioSMSClient().sendSMS(user.getPhone(), smsBody);
-            return Response.status(200).entity("Verification sent for " + user.getEmail() + " to " + user.getPhone()).build();
+            return Response.status(Response.Status.OK).entity("Register verification sent for " + user.getEmail() + " to " + user.getPhone()).build();
 
         } finally {
             writeSession.close();
         }
+    }
 
+    @POST
+    @Path("/{userId}/activation/{verificationCode}")
+    public Response activate(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, @QueryParam("token") String token) {
+        TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
+
+        Session writeSession = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = writeSession.beginTransaction();
+        try {
+            AppUser user = (AppUser) writeSession.get(AppUser.class, userId);
+
+            if (!user.getUserStatus().equals(AppUserStatus.PENDING_VERIFICATION_REGISTER)) {
+                return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("User is not pending verification").build();
+            } else if (user.getVerificationString().equals(verificationCode)) {
+                user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
+                user.setUserStatus(AppUserStatus.ACTIVE);
+                writeSession.update(user);
+                tx.commit();
+                return Response.status(Response.Status.OK).entity("User activated").build();
+            } else {
+                return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Verification code not accepted").build();
+            }
+        } finally {
+            writeSession.close();
+        }
     }
 
     private String buildRegistrationVerificationMessage(String firstName, String lastName, String randomVerification) {
@@ -129,21 +142,76 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}/resetPassword")
-    public Response sendChangePasswordVerification(@PathParam("userId") Integer userId){
+    public Response sendChangePasswordVerification(@PathParam("userId") Integer userId) throws DependentServiceException {
         ThrottleSecurity.getInstance().throttle(userId);
-        //issue verify code
 
+        String randomVerification = SecurityUtil.generateSecureVerificationCode();
+        Session writeSession = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = writeSession.beginTransaction();
+        try {
+            AppUser user = (AppUser) writeSession.get(AppUser.class, userId);
+            if (user.getUserStatus().equals(AppUserStatus.DISABLED)) {
+                return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("Cannot request password change of disabled user").build();
+            } else {
+                user.setVerificationString(randomVerification);
+                writeSession.update(user);
+                tx.commit();
 
-        return Response.status(200).build();
+                String smsBody = buildRegistrationVerificationMessage(user.getFirstName(), user.getLastName(), randomVerification);
+                new TwilioSMSClient().sendSMS(user.getPhone(), smsBody);
+                return Response.status(Response.Status.OK).entity("Password verification sent for " + user.getEmail() + " to " + user.getPhone()).build();
+            }
+        } finally {
+            writeSession.close();
+        }
     }
 
 
     @POST
     @Path("/{userId}/resetPassword/{verificationCode}")
-    public Response changePassword(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, String password){
-        //verify verification code
-        //update user
+    public Response changePassword(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, String password) {
+        ThrottleSecurity.getInstance().throttle(userId);
 
-        return Response.status(200).build();
+        Session writeSession = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = writeSession.beginTransaction();
+        try {
+            AppUser user = (AppUser) writeSession.get(AppUser.class, userId);
+
+            if (user.getUserStatus().equals(AppUserStatus.DISABLED)) {
+                return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("Cannot request password change of disabled user").build();
+            } else if (user.getVerificationString().equals(verificationCode)) {
+                user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
+                user.setPassword_md5(SecurityUtil.md5(password));
+                user.setApiToken(SecurityUtil.generateSecureToken());
+                writeSession.update(user);
+                tx.commit();
+                return Response.status(Response.Status.OK).entity("Password changed, token refreshed").build();
+            } else {
+                return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Verification code not accepted").build();
+            }
+        } finally {
+            writeSession.close();
+        }
+    }
+
+    @DELETE
+    @Path("/{userId}")
+    public Response disableUser(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
+        TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN);
+        Session writeSession = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = writeSession.beginTransaction();
+        try {
+            AppUser user = (AppUser) writeSession.get(AppUser.class, userId);
+
+            user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
+            user.setPassword_md5(SecurityUtil.md5(SecurityUtil.generateSecureToken()));
+            user.setApiToken(SecurityUtil.generateSecureToken());
+            user.setUserStatus(AppUserStatus.DISABLED);
+            writeSession.update(user);
+            tx.commit();
+            return Response.status(Response.Status.OK).entity("Password changed, token refreshed").build();
+        } finally {
+            writeSession.close();
+        }
     }
 }

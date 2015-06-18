@@ -72,6 +72,36 @@ public class Shipment {
     @Column(name = "HANDLER")
     private String handler;
 
+    public Shipment() {
+    }
+
+    public Shipment(AppUser clientId, DateTime orderDate, Integer height, Integer width, Integer length, Integer weight, BigDecimal estimateCost, BigDecimal finalCost, String fromAddress, String fromCity, String fromProvince, String fromCode, String fromCountry, String toAddress, String toCity, String toProvince, String toCode, String toCountry, ShipmentService shipmentServiceId, String trackingNumber, String trackingDocumentType, String handler) {
+        this.clientId = clientId;
+        this.orderDate = orderDate;
+        this.height = height;
+        this.width = width;
+        this.length = length;
+        this.weight = weight;
+        this.estimateCost = estimateCost;
+        this.finalCost = finalCost;
+        this.fromAddress = fromAddress;
+        this.fromCity = fromCity;
+
+        this.fromProvince = fromProvince;
+
+        this.fromCode = fromCode;
+        this.fromCountry = fromCountry;
+        this.toAddress = toAddress;
+        this.toCity = toCity;
+        this.toProvince = toProvince;
+        this.toCode = toCode;
+        this.toCountry = toCountry;
+        this.shipmentServiceId = shipmentServiceId;
+        this.trackingNumber = trackingNumber;
+        this.trackingDocumentType = trackingDocumentType;
+        this.handler = handler;
+    }
+
     public AppUser getClientId() {
         return clientId;
     }
@@ -84,16 +114,16 @@ public class Shipment {
         return orderDate;
     }
 
+    public void setOrderDate(DateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public void setOrderDate(DateTime orderDate) {
-        this.orderDate = orderDate;
     }
 
     public Integer getHeight() {
@@ -123,7 +153,6 @@ public class Shipment {
     public Integer getWeight() {
         return weight;
     }
-
 
     public void setWeight(Integer weight) {
 
@@ -230,7 +259,8 @@ public class Shipment {
         return shipmentServiceId;
     }
 
-    public Shipment() {
+    public void setShipmentServiceId(ShipmentService shipmentServiceId) {
+        this.shipmentServiceId = shipmentServiceId;
     }
 
     @Override
@@ -299,37 +329,6 @@ public class Shipment {
         result = 31 * result + (trackingDocumentType != null ? trackingDocumentType.hashCode() : 0);
         result = 31 * result + (handler != null ? handler.hashCode() : 0);
         return result;
-    }
-
-    public Shipment(AppUser clientId, DateTime orderDate, Integer height, Integer width, Integer length, Integer weight, BigDecimal estimateCost, BigDecimal finalCost, String fromAddress, String fromCity, String fromProvince, String fromCode, String fromCountry, String toAddress, String toCity, String toProvince, String toCode, String toCountry, ShipmentService shipmentServiceId, String trackingNumber, String trackingDocumentType, String handler) {
-        this.clientId = clientId;
-        this.orderDate = orderDate;
-        this.height = height;
-        this.width = width;
-        this.length = length;
-        this.weight = weight;
-        this.estimateCost = estimateCost;
-        this.finalCost = finalCost;
-        this.fromAddress = fromAddress;
-        this.fromCity = fromCity;
-
-        this.fromProvince = fromProvince;
-
-        this.fromCode = fromCode;
-        this.fromCountry = fromCountry;
-        this.toAddress = toAddress;
-        this.toCity = toCity;
-        this.toProvince = toProvince;
-        this.toCode = toCode;
-        this.toCountry = toCountry;
-        this.shipmentServiceId = shipmentServiceId;
-        this.trackingNumber = trackingNumber;
-        this.trackingDocumentType = trackingDocumentType;
-        this.handler = handler;
-    }
-
-    public void setShipmentServiceId(ShipmentService shipmentServiceId) {
-        this.shipmentServiceId = shipmentServiceId;
     }
 
     public String getTrackingNumber() {
