@@ -5,7 +5,7 @@ import com.longmendelivery.lib.security.SecurityUtil;
 import com.longmendelivery.lib.security.ThrottleSecurity;
 import com.longmendelivery.lib.security.TokenSecurity;
 import com.longmendelivery.persistence.HibernateUtil;
-import com.longmendelivery.persistence.model.AppUser;
+import com.longmendelivery.persistence.entity.AppUserEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
@@ -22,7 +22,7 @@ public class LoginResource {
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
-            AppUser user = (AppUser) writeSession.createCriteria(AppUser.class).add(Restrictions.eq("EMAIL", email)).uniqueResult();
+            AppUserEntity user = (AppUserEntity) writeSession.createCriteria(AppUserEntity.class).add(Restrictions.eq("EMAIL", email)).uniqueResult();
 
             if (user == null) {
                 return Response.status(Response.Status.FORBIDDEN).entity("Incorrect combination of email and password").build();
@@ -50,7 +50,7 @@ public class LoginResource {
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
-            AppUser user = (AppUser) writeSession.get(AppUser.class, userId);
+            AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
             user.setApiToken(SecurityUtil.generateSecureToken());
             writeSession.update(user);
             tx.commit();

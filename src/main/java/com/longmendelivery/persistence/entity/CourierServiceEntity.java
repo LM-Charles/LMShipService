@@ -1,4 +1,4 @@
-package com.longmendelivery.persistence.model;
+package com.longmendelivery.persistence.entity;
 
 import javax.persistence.*;
 
@@ -6,8 +6,8 @@ import javax.persistence.*;
  * Created by  rabiddesireon 04/06/15.
  */
 @Entity
-@Table(name = "SHIPMENT_SERVICE")
-public class ShipmentService {
+@Table(name = "CARRIER_SERVICE")
+public class CourierServiceEntity {
 
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,10 @@ public class ShipmentService {
     @Column(name = "LM_CATEGORY_CODE", nullable = false)
     String lmCategoryCode;
 
-    public ShipmentService() {
+    public CourierServiceEntity() {
     }
 
-    public ShipmentService(String courierName, String serviceName, String serviceCode, String apiProvider, String lmCategoryCode) {
+    public CourierServiceEntity(String courierName, String serviceName, String serviceCode, String apiProvider, String lmCategoryCode) {
 
         this.courierName = courierName;
         this.serviceName = serviceName;
@@ -51,7 +51,7 @@ public class ShipmentService {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ShipmentService that = (ShipmentService) o;
+        CourierServiceEntity that = (CourierServiceEntity) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (courierName != null ? !courierName.equals(that.courierName) : that.courierName != null) return false;

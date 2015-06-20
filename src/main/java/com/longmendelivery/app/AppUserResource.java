@@ -7,9 +7,9 @@ import com.longmendelivery.lib.security.SecurityUtil;
 import com.longmendelivery.lib.security.ThrottleSecurity;
 import com.longmendelivery.lib.security.TokenSecurity;
 import com.longmendelivery.persistence.HibernateUtil;
-import com.longmendelivery.persistence.model.AppUser;
-import com.longmendelivery.persistence.model.AppUserGroup;
-import com.longmendelivery.persistence.model.AppUserStatus;
+import com.longmendelivery.persistence.entity.AppUserEntity;
+import com.longmendelivery.persistence.entity.AppUserGroupEntity;
+import com.longmendelivery.persistence.entity.AppUserStatusEntity;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -27,7 +27,7 @@ public class AppUserResource {
         TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN);
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
-        List<AppUser> users = session.createCriteria(AppUser.class).list();
+        List<AppUserEntity> users = session.createCriteria(AppUserEntity.class).list();
         tx.commit();
         return Response.status(Response.Status.OK).entity(ReflectionToStringBuilder.toString(users)).build();
     }
@@ -41,9 +41,9 @@ public class AppUserResource {
                              @FormParam("lastName") String lastName) {
         ThrottleSecurity.getInstance().throttle();
         String passwordMD5 = SecurityUtil.md5(password);
-        AppUserGroup userGroup = AppUserGroup.APP_USER;
-        AppUserStatus status = AppUserStatus.NEW;
-        AppUser newUser = new AppUser(phone, email, passwordMD5, userGroup, status);
+        AppUserGroupEntity userGroup = AppUserGroupEntity.APP_USER;
+        AppUserStatusEntity status = AppUserStatusEntity.NEW;
+        AppUserEntity newUser = new AppUserEntity(phone, email, passwordMD5, userGroup, status);
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
@@ -59,7 +59,7 @@ public class AppUserResource {
         TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, userId);
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
-        AppUser user = (AppUser) session.get(AppUser.class, userId);
+        AppUserEntity user = (AppUserEntity) session.get(AppUserEntity.class, userId);
         user.setApiToken("hidden");
         user.setPassword_md5("hidden");
         user.setVerificationString("hidden");
@@ -73,7 +73,7 @@ public class AppUserResource {
         TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN, userId);
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
-        AppUser user = (AppUser) session.get(AppUser.class, userId);
+        AppUserEntity user = (AppUserEntity) session.get(AppUserEntity.class, userId);
         tx.commit();
         return Response.status(Response.Status.OK).entity(ReflectionToStringBuilder.toString(user)).build();
     }
@@ -95,8 +95,8 @@ public class AppUserResource {
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
-            AppUser user = (AppUser) writeSession.get(AppUser.class, userId);
-            user.setUserStatus(AppUserStatus.PENDING_VERIFICATION_REGISTER);
+            AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
+            user.setUserStatus(AppUserStatusEntity.PENDING_VERIFICATION_REGISTER);
             user.setVerificationString(randomVerification);
             writeSession.update(user);
             tx.commit();
@@ -118,13 +118,13 @@ public class AppUserResource {
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
-            AppUser user = (AppUser) writeSession.get(AppUser.class, userId);
+            AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
 
-            if (!user.getUserStatus().equals(AppUserStatus.PENDING_VERIFICATION_REGISTER)) {
+            if (!user.getUserStatus().equals(AppUserStatusEntity.PENDING_VERIFICATION_REGISTER)) {
                 return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("User is not pending verification").build();
             } else if (user.getVerificationString().equals(verificationCode)) {
                 user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
-                user.setUserStatus(AppUserStatus.ACTIVE);
+                user.setUserStatus(AppUserStatusEntity.ACTIVE);
                 writeSession.update(user);
                 tx.commit();
                 return Response.status(Response.Status.OK).entity("User activated").build();
@@ -149,8 +149,8 @@ public class AppUserResource {
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
-            AppUser user = (AppUser) writeSession.get(AppUser.class, userId);
-            if (user.getUserStatus().equals(AppUserStatus.DISABLED)) {
+            AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
+            if (user.getUserStatus().equals(AppUserStatusEntity.DISABLED)) {
                 return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("Cannot request password change of disabled user").build();
             } else {
                 user.setVerificationString(randomVerification);
@@ -175,9 +175,9 @@ public class AppUserResource {
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
-            AppUser user = (AppUser) writeSession.get(AppUser.class, userId);
+            AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
 
-            if (user.getUserStatus().equals(AppUserStatus.DISABLED)) {
+            if (user.getUserStatus().equals(AppUserStatusEntity.DISABLED)) {
                 return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("Cannot request password change of disabled user").build();
             } else if (user.getVerificationString().equals(verificationCode)) {
                 user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
@@ -201,12 +201,12 @@ public class AppUserResource {
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
-            AppUser user = (AppUser) writeSession.get(AppUser.class, userId);
+            AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
 
             user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
             user.setPassword_md5(SecurityUtil.md5(SecurityUtil.generateSecureToken()));
             user.setApiToken(SecurityUtil.generateSecureToken());
-            user.setUserStatus(AppUserStatus.DISABLED);
+            user.setUserStatus(AppUserStatusEntity.DISABLED);
             writeSession.update(user);
             tx.commit();
             return Response.status(Response.Status.OK).entity("Password changed, token refreshed").build();
