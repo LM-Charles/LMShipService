@@ -1,4 +1,4 @@
-package com.longmendelivery.persistence.model;
+package com.longmendelivery.persistence.entity;
 
 import javax.persistence.*;
 
@@ -6,15 +6,15 @@ import javax.persistence.*;
  * Created by desmond on 04/06/15.
  */
 @Entity
-@Table(name = "SHIPMENT_STATUS_HISTORY")
-class ShipmentStatusHistory {
+@Table(name = "ORDER_STATUS_HISTORY")
+class OrderStatusHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "SHIPMENT_ID")
-    Shipment shipmentId;
+    @JoinColumn(name = "ORDER_ID")
+    OrderEntity orderId;
 
     @Column(name = "STATUS", nullable = false)
     String status;
@@ -25,31 +25,32 @@ class ShipmentStatusHistory {
     @Column(name = "HANDLER")
     String handler;
 
-    public ShipmentStatusHistory(Integer id, Shipment shipmentId, String status, String statusDescription, String handler) {
+    public OrderStatusHistoryEntity(Integer id, OrderEntity orderId, String status, String statusDescription, String handler) {
         this.id = id;
-        this.shipmentId = shipmentId;
+        this.orderId = orderId;
         this.status = status;
         this.statusDescription = statusDescription;
         this.handler = handler;
     }
 
-    public ShipmentStatusHistory() {
+    public OrderStatusHistoryEntity() {
     }
 
     public Integer getId() {
         return id;
     }
 
+
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public Shipment getShipmentId() {
-        return shipmentId;
+    public OrderEntity getOrderId() {
+        return orderId;
     }
 
-    public void setShipmentId(Shipment shipment) {
-        this.shipmentId = shipment;
+    public void setOrderId(OrderEntity order) {
+        this.orderId = order;
     }
 
     public String getStatus() {
@@ -65,10 +66,10 @@ class ShipmentStatusHistory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ShipmentStatusHistory that = (ShipmentStatusHistory) o;
+        OrderStatusHistoryEntity that = (OrderStatusHistoryEntity) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (shipmentId != null ? !shipmentId.equals(that.shipmentId) : that.shipmentId != null) return false;
+        if (orderId != null ? !orderId.equals(that.orderId) : that.orderId != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (statusDescription != null ? !statusDescription.equals(that.statusDescription) : that.statusDescription != null)
             return false;
@@ -79,7 +80,7 @@ class ShipmentStatusHistory {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (shipmentId != null ? shipmentId.hashCode() : 0);
+        result = 31 * result + (orderId != null ? orderId.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (statusDescription != null ? statusDescription.hashCode() : 0);
         result = 31 * result + (handler != null ? handler.hashCode() : 0);

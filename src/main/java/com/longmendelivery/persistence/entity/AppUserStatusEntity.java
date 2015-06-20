@@ -1,8 +1,8 @@
-package com.longmendelivery.persistence.model;
+package com.longmendelivery.persistence.entity;
 
 /**
  * Created by desmond on 17/06/15.
  */
-public enum AppUserStatus {
+public enum AppUserStatusEntity {
     NEW, PENDING_VERIFICATION_REGISTER, ACTIVE, DISABLED
 }

@@ -22,7 +22,7 @@ public class TokenSecurity {
 
     }
 
-    public void authorize(String token, SecurityPower requestedPower, Integer userId) {
+    public void authorize(String token, SecurityPower requestedPower, Integer userId) throws NotAuthorizedException {
 
     }
 
