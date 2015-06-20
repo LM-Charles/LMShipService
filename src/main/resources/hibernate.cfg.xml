@@ -25,11 +25,13 @@
         <property name="hibernate.current_session_context_class">thread</property>
 
         <!-- Persistence Models using the annotation based mapping -->
-        <mapping class="com.longmendelivery.persistence.model.AppUser"/>
-        <mapping class="com.longmendelivery.persistence.model.AppUserActionHistory"/>
-        <mapping class="com.longmendelivery.persistence.model.Shipment"/>
-        <mapping class="com.longmendelivery.persistence.model.ShipmentService"/>
-        <mapping class="com.longmendelivery.persistence.model.ShipmentStatusHistory"/>
+        <mapping class="com.longmendelivery.persistence.entity.AppUserEntity"/>
+        <mapping class="com.longmendelivery.persistence.entity.AppUserActionHistoryEntity"/>
+        <mapping class="com.longmendelivery.persistence.entity.OrderEntity"/>
+        <mapping class="com.longmendelivery.persistence.entity.CourierServiceEntity"/>
+        <mapping class="com.longmendelivery.persistence.entity.OrderStatusHistoryEntity"/>
+        <mapping class="com.longmendelivery.persistence.entity.ShipmentEntity"/>
+
 
     </session-factory>
 </hibernate-configuration>

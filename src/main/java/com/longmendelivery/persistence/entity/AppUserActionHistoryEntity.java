@@ -1,4 +1,4 @@
-package com.longmendelivery.persistence.model;
+package com.longmendelivery.persistence.entity;
 
 import javax.persistence.*;
 
@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "APP_USER_ACTION_HISTORY")
-class AppUserActionHistory {
+class AppUserActionHistoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +16,7 @@ class AppUserActionHistory {
 
     @ManyToOne
     @JoinColumn(name = "APP_USER_ID", nullable = false)
-    AppUser appUserId;
+    AppUserEntity appUserId;
 
     @Column(name = "ACTION", nullable = false)
     String action;
@@ -24,10 +24,10 @@ class AppUserActionHistory {
     @Column(name = "ACTION_DESCRIPTION", nullable = false)
     String actionDescription;
 
-    public AppUserActionHistory() {
+    public AppUserActionHistoryEntity() {
     }
 
-    public AppUserActionHistory(Integer id, AppUser appUserId, String action, String actionDescription) {
+    public AppUserActionHistoryEntity(Integer id, AppUserEntity appUserId, String action, String actionDescription) {
 
         this.id = id;
         this.appUserId = appUserId;
@@ -48,7 +48,7 @@ class AppUserActionHistory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AppUserActionHistory that = (AppUserActionHistory) o;
+        AppUserActionHistoryEntity that = (AppUserActionHistoryEntity) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (appUserId != null ? !appUserId.equals(that.appUserId) : that.appUserId != null) return false;
@@ -66,11 +66,11 @@ class AppUserActionHistory {
         return result;
     }
 
-    public AppUser getAppUserId() {
+    public AppUserEntity getAppUserId() {
         return appUserId;
     }
 
-    public void setAppUserId(AppUser appUserId) {
+    public void setAppUserId(AppUserEntity appUserId) {
         this.appUserId = appUserId;
     }
 
