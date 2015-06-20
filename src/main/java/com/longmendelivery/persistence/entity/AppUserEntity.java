@@ -1,13 +1,14 @@
-package com.longmendelivery.persistence.model;
+package com.longmendelivery.persistence.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by  rabiddesireon 04/06/15.
  */
 @Entity
 @Table(name = "APP_USER")
-public class AppUser {
+public class AppUserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -21,10 +22,10 @@ public class AppUser {
     private String password_md5;
     @Column(name = "USER_GROUP", nullable = false)
     @Enumerated(EnumType.STRING)
-    private AppUserGroup userGroup;
+    private AppUserGroupEntity userGroup;
     @Column(name = "USER_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
-    private AppUserStatus userStatus;
+    private AppUserStatusEntity userStatus;
     @Column(name = "API_TOKEN")
     private String apiToken;
     @Column(name = "VERIFICATION_STRING")
@@ -42,7 +43,10 @@ public class AppUser {
     @Column(name = "COUNTRY")
     private String country;
 
-    public AppUser(String phone, String email, String password_md5, AppUserGroup userGroup, AppUserStatus userStatus) {
+    @OneToMany(mappedBy = "client")
+    private Set<OrderEntity> orders;
+
+    public AppUserEntity(String phone, String email, String password_md5, AppUserGroupEntity userGroup, AppUserStatusEntity userStatus) {
         this.phone = phone;
         this.email = email;
         this.password_md5 = password_md5;
@@ -51,7 +55,7 @@ public class AppUser {
     }
 
 
-    public AppUser(Integer id, String phone, String email, String password_md5, AppUserGroup userGroup, AppUserStatus userStatus, String apiToken, String verificationString, String firstName, String lastName, String address, String city, String province, String country) {
+    public AppUserEntity(Integer id, String phone, String email, String password_md5, AppUserGroupEntity userGroup, AppUserStatusEntity userStatus, String apiToken, String verificationString, String firstName, String lastName, String address, String city, String province, String country, Set<OrderEntity> orders) {
         this.id = id;
         this.phone = phone;
         this.email = email;
@@ -66,26 +70,50 @@ public class AppUser {
         this.city = city;
         this.province = province;
         this.country = country;
+        this.orders = orders;
     }
 
-    public AppUser() {
+    public AppUserEntity() {
 
     }
 
     @Override
+    public String
+    toString() {
+        return "AppUserEntity{" +
+                "id=" + id +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", password_md5='" + password_md5 + '\'' +
+                ", userGroup=" + userGroup +
+                ", userStatus=" + userStatus +
+                ", apiToken='" + apiToken + '\'' +
+                ", verificationString='" + verificationString + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", province='" + province + '\'' +
+                ", country='" + country + '\'' +
+                ", orders=" + orders +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AppUser appUser = (AppUser) o;
+        AppUserEntity appUser = (AppUserEntity) o;
 
         if (id != null ? !id.equals(appUser.id) : appUser.id != null) return false;
         if (phone != null ? !phone.equals(appUser.phone) : appUser.phone != null) return false;
         if (email != null ? !email.equals(appUser.email) : appUser.email != null) return false;
         if (password_md5 != null ? !password_md5.equals(appUser.password_md5) : appUser.password_md5 != null)
             return false;
-        if (userGroup != null ? !userGroup.equals(appUser.userGroup) : appUser.userGroup != null) return false;
-        if (userStatus != null ? !userStatus.equals(appUser.userStatus) : appUser.userStatus != null) return false;
+        if (userGroup != appUser.userGroup) return false;
+        if (userStatus != appUser.userStatus) return false;
         if (apiToken != null ? !apiToken.equals(appUser.apiToken) : appUser.apiToken != null) return false;
         if (verificationString != null ? !verificationString.equals(appUser.verificationString) : appUser.verificationString != null)
             return false;
@@ -94,7 +122,8 @@ public class AppUser {
         if (address != null ? !address.equals(appUser.address) : appUser.address != null) return false;
         if (city != null ? !city.equals(appUser.city) : appUser.city != null) return false;
         if (province != null ? !province.equals(appUser.province) : appUser.province != null) return false;
-        return !(country != null ? !country.equals(appUser.country) : appUser.country != null);
+        if (country != null ? !country.equals(appUser.country) : appUser.country != null) return false;
+        return !(orders != null ? !orders.equals(appUser.orders) : appUser.orders != null);
 
     }
 
@@ -114,6 +143,7 @@ public class AppUser {
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (province != null ? province.hashCode() : 0);
         result = 31 * result + (country != null ? country.hashCode() : 0);
+        result = 31 * result + (orders != null ? orders.hashCode() : 0);
         return result;
     }
 
@@ -149,19 +179,19 @@ public class AppUser {
         this.password_md5 = password_md5;
     }
 
-    public AppUserGroup getUserGroup() {
+    public AppUserGroupEntity getUserGroup() {
         return userGroup;
     }
 
-    public void setUserGroup(AppUserGroup userGroup) {
+    public void setUserGroup(AppUserGroupEntity userGroup) {
         this.userGroup = userGroup;
     }
 
-    public AppUserStatus getUserStatus() {
+    public AppUserStatusEntity getUserStatus() {
         return userStatus;
     }
 
-    public void setUserStatus(AppUserStatus userStatus) {
+    public void setUserStatus(AppUserStatusEntity userStatus) {
         this.userStatus = userStatus;
     }
 
@@ -227,5 +257,13 @@ public class AppUser {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public Set<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<OrderEntity> orders) {
+        this.orders = orders;
     }
 }
