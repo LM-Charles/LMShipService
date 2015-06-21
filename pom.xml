@@ -15,7 +15,6 @@
             <artifactId>hibernate-core</artifactId>
             <version>4.3.10.Final</version>
         </dependency>
-
         <!-- Hibernate uses slf4j for logging, for our purposes here use the simple backend -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -50,6 +49,13 @@
             <artifactId>jersey-container-servlet</artifactId>
             <version>2.10.1</version>
         </dependency>
+        <!-- Servlet-API For Application Context Listener, resolve conflict  -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- Twilio SMS -->
         <dependency>
@@ -58,27 +64,6 @@
             <version>3.4.5</version>
         </dependency>
 
-        <!-- Facebook Java API -->
-        <dependency>
-            <groupId>com.restfb</groupId>
-            <artifactId>restfb</artifactId>
-            <version>1.11.0</version>
-        </dependency>
-
-        <!-- Helper Utility -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.7</version>
-        </dependency>
-
-        <!-- Servlet-API For Application Context Listener, resolve conflict  -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- Dozer for programmatic recursive mapping between DAO and DTO -->
         <dependency>
             <groupId>net.sf.dozer</groupId>
@@ -97,14 +82,13 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.5.4</version>
         </dependency>
-
-        <!-- You need Jackson's JAX-RS provider! -->
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
             <artifactId>jackson-jaxrs-json-provider</artifactId>
             <version>2.5.4</version>
         </dependency>
 
+        <!-- Joda -->
         <!-- Joda Serialization -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -112,13 +96,17 @@
             <version>2.1.1</version>
         </dependency>
 
-        <!-- Joda Hibernate -->
+        <!-- Joda and its Hibernate adapters -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.7</version>
+        </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time-hibernate</artifactId>
             <version>1.4</version>
         </dependency>
-
         <!-- Jadira framework for Joda Hibernate work-around a compatibility problem-->
         <dependency>
             <groupId>org.jadira.usertype</groupId>
