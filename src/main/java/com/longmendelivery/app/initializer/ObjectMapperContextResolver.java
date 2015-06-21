@@ -1,4 +1,4 @@
-package com.longmendelivery.app.model;
+package com.longmendelivery.app.initializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;

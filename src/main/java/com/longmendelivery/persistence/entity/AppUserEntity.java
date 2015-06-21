@@ -1,5 +1,7 @@
 package com.longmendelivery.persistence.entity;
 
+import com.longmendelivery.lib.conversion.DAOEntity;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -8,7 +10,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "APP_USER")
-public class AppUserEntity {
+public class AppUserEntity implements DAOEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

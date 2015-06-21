@@ -1,11 +1,12 @@
 package com.longmendelivery.app.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.longmendelivery.lib.conversion.Model;
 
 /**
  * Created by desmond on 20/06/15.
  */
-public class ShipmentModel {
+public class ShipmentModel implements Model {
     @JsonProperty
     private Integer height;
     @JsonProperty
