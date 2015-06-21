@@ -1,6 +1,7 @@
 package com.longmendelivery.app.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.longmendelivery.lib.conversion.Model;
 import com.longmendelivery.persistence.entity.AppUserGroupEntity;
 import com.longmendelivery.persistence.entity.AppUserStatusEntity;
 import com.longmendelivery.persistence.entity.OrderEntity;
@@ -10,7 +11,7 @@ import java.util.Set;
 /**
  * Created by  rabiddesireon 04/06/15.
  */
-public class AppUserModel {
+public class AppUserModel implements Model {
 
     @JsonProperty
     private Integer id;

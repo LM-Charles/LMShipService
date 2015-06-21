@@ -1,6 +1,7 @@
 package com.longmendelivery.app.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.longmendelivery.lib.conversion.Model;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
@@ -9,7 +10,7 @@ import java.util.Set;
 /**
  * Created by  rabiddesireon 20/06/15.
  */
-public class OrderModel {
+public class OrderModel implements Model {
     @JsonProperty
     private Integer id;
     @JsonProperty

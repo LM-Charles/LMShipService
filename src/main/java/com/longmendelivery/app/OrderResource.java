@@ -112,10 +112,9 @@ public class OrderResource {
             writeSession.save(orderEntity);
 
             OrderModel orderModel = DozerBeanMapperSingletonWrapper.getInstance().map(orderEntity, OrderModel.class);
-
+            tx.commit();
             return Response.status(Response.Status.OK).entity(orderModel).build();
         } finally {
-            tx.rollback();
             writeSession.close();
         }
     }

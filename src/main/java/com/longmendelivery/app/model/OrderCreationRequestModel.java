@@ -1,6 +1,7 @@
 package com.longmendelivery.app.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.longmendelivery.lib.conversion.Model;
 import org.joda.time.DateTime;
 
 import java.util.Set;
@@ -8,7 +9,7 @@ import java.util.Set;
 /**
  * Created by  rabiddesireon 20/06/15.
  */
-public class OrderCreationRequestModel {
+public class OrderCreationRequestModel implements Model {
     @JsonProperty
     private Integer userId;
 
