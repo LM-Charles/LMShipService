@@ -26,8 +26,8 @@
 
         <!-- Persistence Models using the annotation based mapping -->
         <mapping class="com.longmendelivery.persistence.entity.AppUserEntity"/>
-        <mapping class="com.longmendelivery.persistence.entity.AppUserActionHistoryEntity"/>
         <mapping class="com.longmendelivery.persistence.entity.OrderEntity"/>
+        <mapping class="com.longmendelivery.persistence.entity.AppUserActionHistoryEntity"/>
         <mapping class="com.longmendelivery.persistence.entity.CourierServiceEntity"/>
         <mapping class="com.longmendelivery.persistence.entity.OrderStatusHistoryEntity"/>
         <mapping class="com.longmendelivery.persistence.entity.ShipmentEntity"/>

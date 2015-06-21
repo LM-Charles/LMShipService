@@ -15,14 +15,14 @@ import javax.ws.rs.core.Response;
 
 @Path("/login")
 public class LoginResource {
-    @GET
+    @POST
     public Response login(@QueryParam("email") String email, @QueryParam("password") String password) {
         ThrottleSecurity.getInstance().throttle(email);
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
-            AppUserEntity user = (AppUserEntity) writeSession.createCriteria(AppUserEntity.class).add(Restrictions.eq("EMAIL", email)).uniqueResult();
+            AppUserEntity user = (AppUserEntity) writeSession.createCriteria(AppUserEntity.class).add(Restrictions.eq("email", email)).uniqueResult();
 
             if (user == null) {
                 return Response.status(Response.Status.FORBIDDEN).entity("Incorrect combination of email and password").build();
@@ -33,7 +33,7 @@ public class LoginResource {
                     writeSession.update(user);
                     tx.commit();
                 }
-                return Response.status(Response.Status.OK).entity(user.getId() + "@" + user.getApiToken()).build();
+                return Response.status(Response.Status.OK).entity(user.getId() + "     :     " + user.getApiToken()).build();
             } else {
                 return Response.status(Response.Status.FORBIDDEN).entity("Incorrect combination of email and password").build();
             }
@@ -45,7 +45,11 @@ public class LoginResource {
     @DELETE
     @Path("/{userId}")
     public Response logout(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
-        TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
+        try {
+            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
+        } catch (com.longmendelivery.lib.security.NotAuthorizedException e) {
+            ResourceResponseUtil.generateErrorResponse(e);
+        }
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
@@ -54,7 +58,7 @@ public class LoginResource {
             user.setApiToken(SecurityUtil.generateSecureToken());
             writeSession.update(user);
             tx.commit();
-            return Response.status(Response.Status.OK).entity(user.getApiToken()).build();
+            return Response.status(Response.Status.OK).entity("successfully logged out").build();
         } finally {
             writeSession.close();
         }

@@ -24,7 +24,7 @@ public class SecurityUtil {
         try {
             byte[] bytes = password.getBytes("UTF-8");
             byte[] digest = MessageDigest.getInstance("MD5").digest(bytes);
-            return digest.toString();
+            return new String(digest, "UTF-8");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
