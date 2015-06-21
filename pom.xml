@@ -86,6 +86,26 @@
             <version>5.5.1</version>
         </dependency>
 
+        <!-- Jackson for Json -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.5.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.5.4</version>
+        </dependency>
+
+        <!-- You need Jackson's JAX-RS provider! -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>2.5.4</version>
+        </dependency>
+
+
     </dependencies>
     <build>
         <finalName>LMShipService</finalName>
