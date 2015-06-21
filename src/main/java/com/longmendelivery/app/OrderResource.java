@@ -1,11 +1,9 @@
 package com.longmendelivery.app;
 
 import com.longmendelivery.app.behavior.OrderCalculatorProvider;
-import com.longmendelivery.app.model.OrderCreationRequestModel;
-import com.longmendelivery.app.model.OrderModel;
-import com.longmendelivery.app.model.OrderStatusRequestModel;
-import com.longmendelivery.app.model.ShipmentModel;
+import com.longmendelivery.app.model.*;
 import com.longmendelivery.app.util.ResourceResponseUtil;
+import com.longmendelivery.lib.business.OrderStatusCalculator;
 import com.longmendelivery.lib.security.NotAuthorizedException;
 import com.longmendelivery.lib.security.SecurityPower;
 import com.longmendelivery.lib.security.TokenSecurity;
@@ -81,8 +79,8 @@ public class OrderResource {
                     orderCreationRequestModel.getToProvince(),
                     orderCreationRequestModel.getToCountry(),
                     orderCreationRequestModel.getToCode(),
-                    courierService, handler
-            );
+                    courierService, handler,
+                    null);
 
             writeSession.save(orderEntity);
 
@@ -139,6 +137,27 @@ public class OrderResource {
         }
     }
 
+    @GET
+    @Path("/{orderId}/status")
+    public Response getOrderStatus(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) {
+        Session writeSession = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = writeSession.beginTransaction();
+        try {
+            OrderEntity order = (OrderEntity) writeSession.get(OrderEntity.class, orderId);
+            if (order == null) {
+                return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
+            }
+            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
+            OrderStatusModel orderStatusModel = OrderStatusCalculator.calculate(order);
+            return Response.status(Response.Status.OK).entity(orderStatusModel).build();
+        } catch (NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e);
+        } finally {
+            tx.rollback();
+            writeSession.close();
+        }
+    }
+
     @POST
     @Path("/{orderId}/status")
     public Response updateOrderStatus(@PathParam("orderId") Integer orderId, OrderStatusRequestModel status, @QueryParam("backendUser") Integer backendUser, @QueryParam("token") String token) {
@@ -167,7 +186,7 @@ public class OrderResource {
 
     @POST
     @Path("/{orderId}/tracking/{shipmentId}")
-    public Response addTrackingNumber(@PathParam("orderId") String orderId, @PathParam("shipmentId") String shipmentId, @FormParam(("trackingNumber")) String trackingNumber, @FormParam("trackingDocument") String trackingDocumentType, @QueryParam("token") String token) {
+    public Response addTrackingNumber(@PathParam("orderId") Integer orderId, @PathParam("shipmentId") Integer shipmentId, @FormParam(("trackingNumber")) String trackingNumber, @FormParam("trackingDocument") String trackingDocumentType, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE);
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
