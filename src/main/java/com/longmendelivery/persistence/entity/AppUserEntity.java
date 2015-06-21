@@ -16,7 +16,6 @@ public class AppUserEntity {
     @Column(name = "PHONE", nullable = false)
     private String phone;
     @Column(name = "EMAIL", nullable = false, unique = true)
-
     private String email;
     @Column(name = "PASSWORD_MD5", nullable = false)
     private String password_md5;
@@ -43,7 +42,7 @@ public class AppUserEntity {
     @Column(name = "COUNTRY")
     private String country;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<OrderEntity> orders;
 
     public AppUserEntity(String phone, String email, String password_md5, AppUserGroupEntity userGroup, AppUserStatusEntity userStatus) {

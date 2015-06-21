@@ -10,7 +10,7 @@ import java.util.Set;
  * Created by desmond on 04/06/15.
  */
 @Entity
-@Table(name = "ORDER")
+@Table(name = "ORDER_")
 public class OrderEntity {
 
     @Id
@@ -23,7 +23,7 @@ public class OrderEntity {
 
     @Column(name = "ORDER_DATE", nullable = false)
     private DateTime orderDate;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private Set<ShipmentEntity> shipments;
     @Column(name = "ESTIMATE_COST")
     private BigDecimal estimateCost;
@@ -49,7 +49,7 @@ public class OrderEntity {
     private String toCode;
     @Column(name = "TO_COUNTRY", nullable = false)
     private String toCountry;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "COURIER_SERVICE_ID", nullable = false)
     private CourierServiceEntity courierServiceId;
     @Column(name = "HANDLER")
