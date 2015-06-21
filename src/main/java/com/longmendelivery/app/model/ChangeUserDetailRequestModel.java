@@ -1,11 +1,12 @@
 package com.longmendelivery.app.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.longmendelivery.lib.conversion.Model;
 
 /**
  * Created by  rabiddesireon 04/06/15.
  */
-public class ChangeUserDetailRequestModel {
+public class ChangeUserDetailRequestModel implements Model {
 
     @JsonProperty
     private String phone;

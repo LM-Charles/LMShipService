@@ -1,5 +1,7 @@
 package com.longmendelivery.persistence.entity;
 
+import com.longmendelivery.lib.conversion.DAOEntity;
+
 import javax.persistence.*;
 
 /**
@@ -7,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "SHIPMENT")
-public class ShipmentEntity {
+public class ShipmentEntity implements DAOEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,20 +45,6 @@ public class ShipmentEntity {
     }
 
     @Override
-    public String toString() {
-        return "ShipmentEntity{" +
-                "id=" + id +
-                ", orderId=" + order +
-                ", height=" + height +
-                ", width=" + width +
-                ", length=" + length +
-                ", weight=" + weight +
-                ", trackingNumber='" + trackingNumber + '\'' +
-                ", trackingDocumentType='" + trackingDocumentType + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -78,7 +66,7 @@ public class ShipmentEntity {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (order != null ? order.hashCode() : 0);
+        result = 31 * result + (order != null ? order.getId().hashCode() : 0);
         result = 31 * result + (height != null ? height.hashCode() : 0);
         result = 31 * result + (width != null ? width.hashCode() : 0);
         result = 31 * result + (length != null ? length.hashCode() : 0);

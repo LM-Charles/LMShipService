@@ -1,5 +1,6 @@
 package com.longmendelivery.persistence.entity;
 
+import com.longmendelivery.lib.conversion.DAOEntity;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -12,7 +13,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "ORDER_")
-public class OrderEntity {
+public class OrderEntity implements DAOEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,30 +83,6 @@ public class OrderEntity {
     }
 
     @Override
-    public String toString() {
-        return "OrderEntity{" +
-                "id=" + id +
-                ", clientId=" + client +
-                ", orderDate=" + orderDate +
-                ", shipments=" + shipments +
-                ", estimateCost=" + estimateCost +
-                ", finalCost=" + finalCost +
-                ", fromAddress='" + fromAddress + '\'' +
-                ", fromCity='" + fromCity + '\'' +
-                ", fromProvince='" + fromProvince + '\'' +
-                ", fromCode='" + fromCode + '\'' +
-                ", fromCountry='" + fromCountry + '\'' +
-                ", toAddress='" + toAddress + '\'' +
-                ", toCity='" + toCity + '\'' +
-                ", toProvince='" + toProvince + '\'' +
-                ", toCode='" + toCode + '\'' +
-                ", toCountry='" + toCountry + '\'' +
-                ", courierServiceId=" + courierServiceId +
-                ", handler='" + handler + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -137,7 +114,7 @@ public class OrderEntity {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (client != null ? client.hashCode() : 0);
+        result = 31 * result + (client != null ? client.getId().hashCode() : 0);
         result = 31 * result + (orderDate != null ? orderDate.hashCode() : 0);
         result = 31 * result + (shipments != null ? shipments.hashCode() : 0);
         result = 31 * result + (estimateCost != null ? estimateCost.hashCode() : 0);

@@ -1,5 +1,7 @@
 package com.longmendelivery.persistence.entity;
 
+import com.longmendelivery.lib.conversion.DAOEntity;
+
 import javax.persistence.*;
 
 /**
@@ -8,7 +10,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "APP_USER_ACTION_HISTORY")
-class AppUserActionHistoryEntity {
+class AppUserActionHistoryEntity implements DAOEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
