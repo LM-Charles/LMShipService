@@ -4,6 +4,7 @@ import com.longmendelivery.app.behavior.OrderCalculatorProvider;
 import com.longmendelivery.app.model.OrderCreationRequestModel;
 import com.longmendelivery.app.model.OrderModel;
 import com.longmendelivery.app.model.ShipmentModel;
+import com.longmendelivery.app.util.ResourceResponseUtil;
 import com.longmendelivery.lib.security.NotAuthorizedException;
 import com.longmendelivery.lib.security.SecurityPower;
 import com.longmendelivery.lib.security.TokenSecurity;
@@ -29,7 +30,7 @@ public class OrderResource {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, userId);
         } catch (NotAuthorizedException e) {
-            ResourceResponseUtil.generateErrorResponse(e);
+            ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
@@ -51,7 +52,7 @@ public class OrderResource {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, orderCreationRequestModel.getUserId());
         } catch (NotAuthorizedException e) {
-            return ResourceResponseUtil.generateErrorResponse(e);
+            return ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
@@ -129,7 +130,7 @@ public class OrderResource {
             DozerBeanMapperSingletonWrapper.getInstance().map(order, orderModel);
             return Response.status(Response.Status.OK).entity(orderModel).build();
         } catch (NotAuthorizedException e) {
-            return ResourceResponseUtil.generateErrorResponse(e);
+            return ResourceResponseUtil.generateForbiddenMessage(e);
         } finally {
             tx.rollback();
             writeSession.close();
