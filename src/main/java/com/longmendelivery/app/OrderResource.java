@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Path("/order")
+@Produces("application/json")
 public class OrderResource {
     @GET
     public Response listOrdersForUser(@QueryParam("userId") Integer userId, @QueryParam("token") String token) {
@@ -39,7 +40,10 @@ public class OrderResource {
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
             Set<OrderEntity> ordersEntity = user.getOrders();
             Set<OrderModel> ordersModel = new HashSet<>();
-            DozerBeanMapperSingletonWrapper.getInstance().map(ordersEntity, ordersModel);
+            for (OrderEntity orderEntity : ordersEntity) {
+                ordersModel.add(DozerBeanMapperSingletonWrapper.getInstance().map(orderEntity, OrderModel.class));
+            }
+
             return Response.status(Response.Status.OK).entity(ordersModel).build();
         } finally {
             tx.rollback();
@@ -82,7 +86,7 @@ public class OrderResource {
                     courierService, handler
             );
 
-            orderEntity = (OrderEntity) writeSession.save(orderEntity);
+            writeSession.save(orderEntity);
 
             Set<ShipmentEntity> shipmentEntities = new HashSet<>();
             for (ShipmentModel shipmentModel : orderCreationRequestModel.getShipments()) {
@@ -105,10 +109,9 @@ public class OrderResource {
             }
 
             orderEntity.setShipments(shipmentEntities);
-            orderEntity = (OrderEntity) writeSession.save(orderEntity);
+            writeSession.save(orderEntity);
 
-            OrderModel orderModel = new OrderModel();
-            DozerBeanMapperSingletonWrapper.getInstance().map(orderEntity, orderModel);
+            OrderModel orderModel = DozerBeanMapperSingletonWrapper.getInstance().map(orderEntity, OrderModel.class);
 
             return Response.status(Response.Status.OK).entity(orderModel).build();
         } finally {
@@ -126,8 +129,7 @@ public class OrderResource {
         try {
             OrderEntity order = (OrderEntity) writeSession.get(OrderEntity.class, orderId);
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
-            OrderModel orderModel = new OrderModel();
-            DozerBeanMapperSingletonWrapper.getInstance().map(order, orderModel);
+            OrderModel orderModel = DozerBeanMapperSingletonWrapper.getInstance().map(order, OrderModel.class);
             return Response.status(Response.Status.OK).entity(orderModel).build();
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e);
