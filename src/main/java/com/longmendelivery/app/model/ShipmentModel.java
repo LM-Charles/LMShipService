@@ -1,15 +1,24 @@
 package com.longmendelivery.app.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by  rabiddesireon 20/06/15.
  */
 public class ShipmentModel {
+    @JsonProperty
     private Integer height;
+    @JsonProperty
     private Integer width;
+    @JsonProperty
     private Integer length;
+    @JsonProperty
     private Integer weight;
 
+    @JsonProperty
+
     private String trackingNumber;
+    @JsonProperty
     private String trackingDocumentType;
 
     public ShipmentModel() {

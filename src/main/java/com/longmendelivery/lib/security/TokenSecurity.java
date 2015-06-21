@@ -23,6 +23,9 @@ public class TokenSecurity {
     }
 
     public void authorize(String token, SecurityPower requestedPower, Integer userId) throws NotAuthorizedException {
+        if (token == null || userId == null) {
+            throw new NotAuthorizedException("Must have a token and user to validate this request");
+        }
 
     }
 

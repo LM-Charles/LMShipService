@@ -105,6 +105,26 @@
             <version>2.5.4</version>
         </dependency>
 
+        <!-- Joda Serialization -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-joda</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+        <!-- Joda Hibernate -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time-hibernate</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <!-- Jadira framework for Joda Hibernate work-around a compatibility problem-->
+        <dependency>
+            <groupId>org.jadira.usertype</groupId>
+            <artifactId>usertype.core</artifactId>
+            <version>3.1.0.CR1</version>
+        </dependency>
 
     </dependencies>
     <build>
