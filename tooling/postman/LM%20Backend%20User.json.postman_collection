@@ -102,21 +102,23 @@
 			"synced": false
 		},
 		{
-			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"id": "4baa01d0-bc31-438d-c85c-521d6d95ea9d",
-			"name": "debug database",
-			"description": "",
-			"url": "{{path}}/rest/debug/testDB",
-			"method": "GET",
 			"headers": "",
+			"url": "{{path}}/rest/debug/testDB",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
 			"data": [],
 			"dataMode": "params",
-			"timestamp": 0,
-			"responses": [],
 			"version": 2,
-			"owner": 0,
-			"preRequestScript": "",
 			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1434858451312,
+			"name": "debug database",
+			"description": "",
+			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
+			"responses": [],
 			"synced": false
 		},
 		{
@@ -215,48 +217,25 @@
 			"rawModeData": ""
 		},
 		{
-			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"id": "ef4613be-b178-16fe-85f7-20751521231c",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{path}}/rest/user?token=admin",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "PUT",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1434861442885,
 			"name": "users put",
 			"description": "",
-			"url": "{{path}}/rest/user?token=admin",
-			"method": "PUT",
-			"headers": "",
-			"data": [
-				{
-					"key": "phone",
-					"value": "6047821542",
-					"type": "text"
-				},
-				{
-					"key": "email",
-					"value": "desmond007@gmail.com",
-					"type": "text"
-				},
-				{
-					"key": "password",
-					"value": "password",
-					"type": "text"
-				},
-				{
-					"key": "firstName",
-					"value": "Desmond",
-					"type": "text"
-				},
-				{
-					"key": "lastName",
-					"value": "Zhou",
-					"type": "text"
-				}
-			],
-			"dataMode": "urlencoded",
-			"timestamp": 0,
+			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"responses": [],
-			"version": 2,
-			"owner": 0,
-			"preRequestScript": "",
-			"tests": "",
-			"synced": false
+			"synced": false,
+			"rawModeData": "{\n    \"phone\" : \"6047821542\",\n    \"email\" : \"desmond007@gmail.com\",\n    \"password\" : \"password\"\n}"
 		},
 		{
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",

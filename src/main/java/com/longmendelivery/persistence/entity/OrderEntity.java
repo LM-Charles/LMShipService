@@ -1,5 +1,6 @@
 package com.longmendelivery.persistence.entity;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class OrderEntity {
     private AppUserEntity client;
 
     @Column(name = "ORDER_DATE", nullable = false)
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime orderDate;
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private Set<ShipmentEntity> shipments;
