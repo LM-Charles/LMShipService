@@ -16,7 +16,7 @@ https://s.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop/re
 
 Then import the test requests at:
 
-https://github.com/LM-Charles/LMShipService/blob/master/tooling/postman/postman.json
+https://github.com/LM-Charles/LMShipService/tree/master/tooling/postman
 
 All security is not enforced for the current release.
 
