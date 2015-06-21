@@ -9,26 +9,25 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "ORDER_STATUS_HISTORY")
-class OrderStatusHistoryEntity implements DAOEntity {
+public class OrderStatusHistoryEntity implements DAOEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
+
+    @Column(name = "STATUS", nullable = false)
+    String status;
 
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
     OrderEntity orderId;
 
-    @Column(name = "STATUS", nullable = false)
-    String status;
-
     @Column(name = "STATUS_DESCRIPTION", nullable = false)
     String statusDescription;
 
     @Column(name = "HANDLER")
-    String handler;
+    Integer handler;
 
-    public OrderStatusHistoryEntity(Integer id, OrderEntity orderId, String status, String statusDescription, String handler) {
-        this.id = id;
+    public OrderStatusHistoryEntity(OrderEntity orderId, String status, String statusDescription, Integer handler) {
         this.orderId = orderId;
         this.status = status;
         this.statusDescription = statusDescription;
@@ -97,11 +96,11 @@ class OrderStatusHistoryEntity implements DAOEntity {
         this.statusDescription = statusDescription;
     }
 
-    public String getHandler() {
+    public Integer getHandler() {
         return handler;
     }
 
-    public void setHandler(String handler) {
+    public void setHandler(Integer handler) {
         this.handler = handler;
     }
 }
