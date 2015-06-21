@@ -3,16 +3,14 @@ package com.longmendelivery.app;
 import com.longmendelivery.app.behavior.OrderCalculatorProvider;
 import com.longmendelivery.app.model.OrderCreationRequestModel;
 import com.longmendelivery.app.model.OrderModel;
+import com.longmendelivery.app.model.OrderStatusRequestModel;
 import com.longmendelivery.app.model.ShipmentModel;
 import com.longmendelivery.app.util.ResourceResponseUtil;
 import com.longmendelivery.lib.security.NotAuthorizedException;
 import com.longmendelivery.lib.security.SecurityPower;
 import com.longmendelivery.lib.security.TokenSecurity;
 import com.longmendelivery.persistence.HibernateUtil;
-import com.longmendelivery.persistence.entity.AppUserEntity;
-import com.longmendelivery.persistence.entity.CourierServiceEntity;
-import com.longmendelivery.persistence.entity.OrderEntity;
-import com.longmendelivery.persistence.entity.ShipmentEntity;
+import com.longmendelivery.persistence.entity.*;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -122,11 +120,14 @@ public class OrderResource {
 
     @GET
     @Path("/{orderId}")
-    public Response getOrderDetails(@PathParam("orderId") String orderId, @QueryParam("token") String token) {
+    public Response getOrderDetails(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) {
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
             OrderEntity order = (OrderEntity) writeSession.get(OrderEntity.class, orderId);
+            if (order == null) {
+                return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
+            }
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
             OrderModel orderModel = DozerBeanMapperSingletonWrapper.getInstance().map(order, OrderModel.class);
             return Response.status(Response.Status.OK).entity(orderModel).build();
@@ -140,11 +141,28 @@ public class OrderResource {
 
     @POST
     @Path("/{orderId}/status")
-    public Response updateOrderStatus(@PathParam("orderId") String orderId, String status, @QueryParam("token") String token) {
-        TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE);
+    public Response updateOrderStatus(@PathParam("orderId") Integer orderId, OrderStatusRequestModel status, @QueryParam("backendUser") Integer backendUser, @QueryParam("token") String token) {
+        try {
+            TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE, backendUser);
+        } catch (NotAuthorizedException e) {
+            ResourceResponseUtil.generateForbiddenMessage(e);
+        }
 
-        return Response.status(200).build();
+        Session writeSession = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = writeSession.beginTransaction();
+        try {
+            OrderEntity order = (OrderEntity) writeSession.get(OrderEntity.class, orderId);
+            if (order == null) {
+                return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
+            }
+            OrderStatusHistoryEntity orderStatusHistoryEntity = new OrderStatusHistoryEntity(order, status.getStatus(), status.getStatusDescription(), backendUser);
+            writeSession.save(orderStatusHistoryEntity);
+            tx.commit();
 
+            return ResourceResponseUtil.generateOKMessage("order updated");
+        } finally {
+            writeSession.close();
+        }
     }
 
     @POST
