@@ -1,5 +1,6 @@
 package com.longmendelivery.app;
 
+import com.longmendelivery.app.model.AppUserModel;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.lib.security.NotAuthorizedException;
@@ -8,7 +9,7 @@ import com.longmendelivery.persistence.HibernateUtil;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.entity.AppUserGroupEntity;
 import com.longmendelivery.persistence.entity.AppUserStatusEntity;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -18,7 +19,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/user")
-@Produces("text/plain")
+@Produces("application/json")
 public class AppUserResource {
     @SuppressWarnings("unchecked")
     @GET
@@ -81,8 +82,10 @@ public class AppUserResource {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
         AppUserEntity user = (AppUserEntity) session.get(AppUserEntity.class, userId);
+        AppUserModel userModel = DozerBeanMapperSingletonWrapper.getInstance().map(user, AppUserModel.class);
+
         tx.commit();
-        return Response.status(Response.Status.OK).entity(ReflectionToStringBuilder.toString(user)).build();
+        return Response.status(Response.Status.OK).entity(userModel).build();
     }
 
     @POST
