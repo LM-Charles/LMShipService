@@ -1,5 +1,7 @@
 package com.longmendelivery.persistence.entity;
 
+import com.longmendelivery.lib.conversion.DAOEntity;
+
 import javax.persistence.*;
 
 /**
@@ -7,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "CARRIER_SERVICE")
-public class CourierServiceEntity {
+public class CourierServiceEntity implements DAOEntity {
 
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
