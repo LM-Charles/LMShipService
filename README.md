@@ -12,7 +12,7 @@ All endpoints documented as sample requests.
 
 To use, please download Postman Chrome Plugin at:
 
-https://s.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop/related
+https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop
 
 Then import the test requests at:
 
