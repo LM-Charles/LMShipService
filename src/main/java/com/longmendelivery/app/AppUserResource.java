@@ -1,6 +1,9 @@
 package com.longmendelivery.app;
 
 import com.longmendelivery.app.model.AppUserModel;
+import com.longmendelivery.app.model.ChangeUserDetailRequestModel;
+import com.longmendelivery.app.model.RegisterRequestModel;
+import com.longmendelivery.app.util.ResourceResponseUtil;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.lib.security.NotAuthorizedException;
@@ -14,8 +17,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/user")
@@ -26,31 +29,37 @@ public class AppUserResource {
     public Response listUsers(@QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN);
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx = session.beginTransaction();
-        List<AppUserEntity> users = session.createCriteria(AppUserEntity.class).list();
-        tx.commit();
-        return Response.status(Response.Status.OK).entity(users.toString()).build();
+        try {
+            Transaction tx = session.beginTransaction();
+            List<AppUserEntity> users = session.createCriteria(AppUserEntity.class).list();
+            List<AppUserModel> usersModel = new ArrayList<>();
+            for (AppUserEntity user : users) {
+                usersModel.add(DozerBeanMapperSingletonWrapper.getInstance().map(user, AppUserModel.class));
+            }
+            return Response.status(Response.Status.OK).entity(usersModel).build();
+        } finally {
+            session.close();
+        }
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response register(@FormParam("phone") String phone,
-                             @FormParam("email") String email,
-                             @FormParam("password") String password,
-                             @FormParam("firstName") String firstName,
-                             @FormParam("lastName") String lastName) {
+    @Consumes("application/json")
+    public Response register(RegisterRequestModel registerRequestModel) {
         ThrottleSecurity.getInstance().throttle();
-        String passwordMD5 = SecurityUtil.md5(password);
+        String passwordMD5 = SecurityUtil.md5(registerRequestModel.getPassword());
         AppUserGroupEntity userGroup = AppUserGroupEntity.APP_USER;
         AppUserStatusEntity status = AppUserStatusEntity.NEW;
-        AppUserEntity newUser = new AppUserEntity(phone, email, passwordMD5, userGroup, status);
+        AppUserEntity newUser = new AppUserEntity(registerRequestModel.getPhone(), registerRequestModel.getEmail(), passwordMD5, userGroup, status);
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = writeSession.beginTransaction();
-
-        Integer userId = (Integer) writeSession.save(newUser);
-        tx.commit();
-        return Response.status(Response.Status.OK).entity(userId.toString()).build();
+        try {
+            Transaction tx = writeSession.beginTransaction();
+            Integer userId = (Integer) writeSession.save(newUser);
+            tx.commit();
+            return Response.status(Response.Status.OK).entity(userId).build();
+        } finally {
+            writeSession.close();
+        }
     }
 
     @GET
@@ -61,14 +70,15 @@ public class AppUserResource {
         } catch (NotAuthorizedException e) {
             e.printStackTrace();
         }
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
         AppUserEntity user = (AppUserEntity) session.get(AppUserEntity.class, userId);
         user.setApiToken("hidden");
         user.setPassword_md5("hidden");
         user.setVerificationString("hidden");
+        AppUserModel userModel = DozerBeanMapperSingletonWrapper.getInstance().map(user, AppUserModel.class);
         tx.rollback();
-        return Response.status(Response.Status.OK).entity(user.toString()).build();
+        return Response.status(Response.Status.OK).entity(userModel).build();
     }
 
     @GET
@@ -77,24 +87,28 @@ public class AppUserResource {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN, userId);
         } catch (NotAuthorizedException e) {
-            ResourceResponseUtil.generateErrorResponse(e);
+            ResourceResponseUtil.generateForbiddenMessage(e);
         }
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        Transaction tx = session.beginTransaction();
-        AppUserEntity user = (AppUserEntity) session.get(AppUserEntity.class, userId);
-        AppUserModel userModel = DozerBeanMapperSingletonWrapper.getInstance().map(user, AppUserModel.class);
 
-        tx.commit();
-        return Response.status(Response.Status.OK).entity(userModel).build();
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            Transaction tx = session.beginTransaction();
+            AppUserEntity user = (AppUserEntity) session.get(AppUserEntity.class, userId);
+            AppUserModel userModel = DozerBeanMapperSingletonWrapper.getInstance().map(user, AppUserModel.class);
+            tx.rollback();
+            return Response.status(Response.Status.OK).entity(userModel).build();
+        } finally {
+            session.close();
+        }
     }
 
     @POST
     @Path("/{userId}")
-    public Response changeUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
+    public Response changeUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token, ChangeUserDetailRequestModel request) {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
         } catch (NotAuthorizedException e) {
-            ResourceResponseUtil.generateErrorResponse(e);
+            ResourceResponseUtil.generateForbiddenMessage(e);
         }
         return Response.status(Response.Status.OK).build();
     }
@@ -105,7 +119,7 @@ public class AppUserResource {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
         } catch (NotAuthorizedException e) {
-            ResourceResponseUtil.generateErrorResponse(e);
+            ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
         String randomVerification = SecurityUtil.generateSecureVerificationCode();
@@ -121,8 +135,7 @@ public class AppUserResource {
 
             String smsBody = buildRegistrationVerificationMessage(user.getFirstName(), user.getLastName(), randomVerification);
             new TwilioSMSClient().sendSMS(user.getPhone(), smsBody);
-            return Response.status(Response.Status.OK).entity("Register verification sent for " + user.getEmail() + " to " + user.getPhone()).build();
-
+            return ResourceResponseUtil.generateOKMessage("Register verification sent for " + user.getEmail() + " to " + user.getPhone());
         } finally {
             writeSession.close();
         }
@@ -134,7 +147,7 @@ public class AppUserResource {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
         } catch (NotAuthorizedException e) {
-            ResourceResponseUtil.generateErrorResponse(e);
+            ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
@@ -143,7 +156,7 @@ public class AppUserResource {
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
 
             if (!user.getUserStatus().equals(AppUserStatusEntity.PENDING_VERIFICATION_REGISTER)) {
-                return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("User is not pending verification").build();
+                return ResourceResponseUtil.generateForbiddenMessage("User is not pending verification");
             } else if (user.getVerificationString().equals(verificationCode)) {
                 user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
                 user.setUserStatus(AppUserStatusEntity.ACTIVE);
@@ -151,7 +164,7 @@ public class AppUserResource {
                 tx.commit();
                 return Response.status(Response.Status.OK).entity("User activated").build();
             } else {
-                return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Verification code not accepted").build();
+                return ResourceResponseUtil.generateForbiddenMessage("Verification code not accepted");
             }
         } finally {
             writeSession.close();
@@ -181,7 +194,7 @@ public class AppUserResource {
 
                 String smsBody = buildRegistrationVerificationMessage(user.getFirstName(), user.getLastName(), randomVerification);
                 new TwilioSMSClient().sendSMS(user.getPhone(), smsBody);
-                return Response.status(Response.Status.OK).entity("Password verification sent for " + user.getEmail() + " to " + user.getPhone()).build();
+                return ResourceResponseUtil.generateOKMessage("Password verification sent for " + user.getEmail() + " to " + user.getPhone());
             }
         } finally {
             writeSession.close();
@@ -207,9 +220,9 @@ public class AppUserResource {
                 user.setApiToken(SecurityUtil.generateSecureToken());
                 writeSession.update(user);
                 tx.commit();
-                return Response.status(Response.Status.OK).entity("Password changed, token refreshed").build();
+                return ResourceResponseUtil.generateOKMessage("Password changed, token refreshed");
             } else {
-                return Response.status(Response.Status.FORBIDDEN.getStatusCode()).entity("Verification code not accepted").build();
+                return ResourceResponseUtil.generateForbiddenMessage("Verification code not accepted");
             }
         } finally {
             writeSession.close();
@@ -231,7 +244,7 @@ public class AppUserResource {
             user.setUserStatus(AppUserStatusEntity.DISABLED);
             writeSession.update(user);
             tx.commit();
-            return Response.status(Response.Status.OK).entity("Password changed, token refreshed").build();
+            return ResourceResponseUtil.generateOKMessage("Password changed, token refreshed");
         } finally {
             writeSession.close();
         }

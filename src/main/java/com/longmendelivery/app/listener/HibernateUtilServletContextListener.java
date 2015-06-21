@@ -1,4 +1,4 @@
-package com.longmendelivery.app;
+package com.longmendelivery.app.listener;
 
 import com.longmendelivery.persistence.HibernateUtil;
 
