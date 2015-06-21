@@ -1,0 +1,62 @@
+{
+	"id": "e51f0241-fcf7-3cc0-e018-eb06de3a9994",
+	"name": "LM Backend Order",
+	"description": "",
+	"order": [
+		"48804e21-ac20-cb3e-77fe-3b0e55078341",
+		"906e33ff-394e-01d2-4400-388059b51951"
+	],
+	"folders": [],
+	"timestamp": 1434858336408,
+	"owner": 0,
+	"remoteLink": "",
+	"public": false,
+	"createdAt": 1434858336408,
+	"updatedAt": 1434858336408,
+	"synced": false,
+	"requests": [
+		{
+			"id": "48804e21-ac20-cb3e-77fe-3b0e55078341",
+			"headers": "",
+			"url": "{{path}}/rest/order?userId=1&token=userToken",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "e51f0241-fcf7-3cc0-e018-eb06de3a9994",
+			"data": [],
+			"dataMode": "params",
+			"name": "order get user 1",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1434858480986,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"collectionOwner": 0,
+			"synced": false
+		},
+		{
+			"id": "906e33ff-394e-01d2-4400-388059b51951",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{path}}/rest/order?token=userToken",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1434859406220,
+			"name": "order put",
+			"description": "",
+			"collectionId": "e51f0241-fcf7-3cc0-e018-eb06de3a9994",
+			"responses": [],
+			"synced": false,
+			"rawModeData": "{\n    \"userId\" : 1,\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : \"8000 Delsom Way\",\n    \"fromCity\" : \"Delta\",\n    \"fromProvince\" : \"BC\",\n    \"fromCode\" : \"V4C0A9\",\n    \"fromCountry\" : \"Canada\",\n    \"toAddress\" : \"9188 Hemlock Drive\",\n    \"toCity\" : \"Richmond\",\n    \"toProvince\" : \"BC\",\n    \"toCode\" : \"V7C2X4\",\n    \"toCountry\" : \"Canada\",\n    \"courierServiceId\" : \"1\",\n    \"shipments\" : [\n        {\n            \"height\" : 100,\n            \"width\" : 100,\n            \"length\" : 100,\n            \"weight\" : 100\n        }\n    ]\n}"
+		}
+	]
+}
