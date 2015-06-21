@@ -58,10 +58,14 @@ public class OrderEntity implements DAOEntity {
     @Column(name = "HANDLER")
     private String handler;
 
+    @OneToMany(mappedBy = "orderId", fetch = FetchType.EAGER)
+    private Set<OrderStatusHistoryEntity> orderStatus;
+
+
     public OrderEntity() {
     }
 
-    public OrderEntity(AppUserEntity client, DateTime orderDate, Set<ShipmentEntity> shipments, BigDecimal estimateCost, BigDecimal finalCost, String fromAddress, String fromCity, String fromProvince, String fromCode, String fromCountry, String toAddress, String toCity, String toProvince, String toCode, String toCountry, CourierServiceEntity courierServiceId, String handler) {
+    public OrderEntity(AppUserEntity client, DateTime orderDate, Set<ShipmentEntity> shipments, BigDecimal estimateCost, BigDecimal finalCost, String fromAddress, String fromCity, String fromProvince, String fromCode, String fromCountry, String toAddress, String toCity, String toProvince, String toCode, String toCountry, CourierServiceEntity courierServiceId, String handler, Set<OrderStatusHistoryEntity> orderStatus) {
 
         this.client = client;
         this.orderDate = orderDate;
@@ -80,62 +84,10 @@ public class OrderEntity implements DAOEntity {
         this.toCountry = toCountry;
         this.courierServiceId = courierServiceId;
         this.handler = handler;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        OrderEntity order = (OrderEntity) o;
-
-        if (id != null ? !id.equals(order.id) : order.id != null) return false;
-        if (client != null ? !client.equals(order.client) : order.client != null) return false;
-        if (orderDate != null ? !orderDate.equals(order.orderDate) : order.orderDate != null) return false;
-        if (shipments != null ? !shipments.equals(order.shipments) : order.shipments != null) return false;
-        if (estimateCost != null ? !estimateCost.equals(order.estimateCost) : order.estimateCost != null) return false;
-        if (finalCost != null ? !finalCost.equals(order.finalCost) : order.finalCost != null) return false;
-        if (fromAddress != null ? !fromAddress.equals(order.fromAddress) : order.fromAddress != null) return false;
-        if (fromCity != null ? !fromCity.equals(order.fromCity) : order.fromCity != null) return false;
-        if (fromProvince != null ? !fromProvince.equals(order.fromProvince) : order.fromProvince != null) return false;
-        if (fromCode != null ? !fromCode.equals(order.fromCode) : order.fromCode != null) return false;
-        if (fromCountry != null ? !fromCountry.equals(order.fromCountry) : order.fromCountry != null) return false;
-        if (toAddress != null ? !toAddress.equals(order.toAddress) : order.toAddress != null) return false;
-        if (toCity != null ? !toCity.equals(order.toCity) : order.toCity != null) return false;
-        if (toProvince != null ? !toProvince.equals(order.toProvince) : order.toProvince != null) return false;
-        if (toCode != null ? !toCode.equals(order.toCode) : order.toCode != null) return false;
-        if (toCountry != null ? !toCountry.equals(order.toCountry) : order.toCountry != null) return false;
-        if (courierServiceId != null ? !courierServiceId.equals(order.courierServiceId) : order.courierServiceId != null)
-            return false;
-        return !(handler != null ? !handler.equals(order.handler) : order.handler != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (client != null ? client.getId().hashCode() : 0);
-        result = 31 * result + (orderDate != null ? orderDate.hashCode() : 0);
-        result = 31 * result + (shipments != null ? shipments.hashCode() : 0);
-        result = 31 * result + (estimateCost != null ? estimateCost.hashCode() : 0);
-        result = 31 * result + (finalCost != null ? finalCost.hashCode() : 0);
-        result = 31 * result + (fromAddress != null ? fromAddress.hashCode() : 0);
-        result = 31 * result + (fromCity != null ? fromCity.hashCode() : 0);
-        result = 31 * result + (fromProvince != null ? fromProvince.hashCode() : 0);
-        result = 31 * result + (fromCode != null ? fromCode.hashCode() : 0);
-        result = 31 * result + (fromCountry != null ? fromCountry.hashCode() : 0);
-        result = 31 * result + (toAddress != null ? toAddress.hashCode() : 0);
-        result = 31 * result + (toCity != null ? toCity.hashCode() : 0);
-        result = 31 * result + (toProvince != null ? toProvince.hashCode() : 0);
-        result = 31 * result + (toCode != null ? toCode.hashCode() : 0);
-        result = 31 * result + (toCountry != null ? toCountry.hashCode() : 0);
-        result = 31 * result + (courierServiceId != null ? courierServiceId.hashCode() : 0);
-        result = 31 * result + (handler != null ? handler.hashCode() : 0);
-        return result;
+        this.orderStatus = orderStatus;
     }
 
     public Integer getId() {
-
         return id;
     }
 
@@ -277,5 +229,13 @@ public class OrderEntity implements DAOEntity {
 
     public void setHandler(String handler) {
         this.handler = handler;
+    }
+
+    public Set<OrderStatusHistoryEntity> getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(Set<OrderStatusHistoryEntity> orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }
