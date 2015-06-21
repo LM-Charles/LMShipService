@@ -2,10 +2,8 @@ package com.longmendelivery.app;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
-import com.longmendelivery.lib.security.SecurityPower;
-import com.longmendelivery.lib.security.SecurityUtil;
-import com.longmendelivery.lib.security.ThrottleSecurity;
-import com.longmendelivery.lib.security.TokenSecurity;
+import com.longmendelivery.lib.security.NotAuthorizedException;
+import com.longmendelivery.lib.security.*;
 import com.longmendelivery.persistence.HibernateUtil;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.entity.AppUserGroupEntity;
@@ -20,6 +18,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/user")
+@Produces("text/plain")
 public class AppUserResource {
     @SuppressWarnings("unchecked")
     @GET
@@ -29,7 +28,7 @@ public class AppUserResource {
         Transaction tx = session.beginTransaction();
         List<AppUserEntity> users = session.createCriteria(AppUserEntity.class).list();
         tx.commit();
-        return Response.status(Response.Status.OK).entity(ReflectionToStringBuilder.toString(users)).build();
+        return Response.status(Response.Status.OK).entity(users.toString()).build();
     }
 
     @PUT
@@ -50,13 +49,17 @@ public class AppUserResource {
 
         Integer userId = (Integer) writeSession.save(newUser);
         tx.commit();
-        return Response.status(Response.Status.OK).entity(userId).build();
+        return Response.status(Response.Status.OK).entity(userId.toString()).build();
     }
 
     @GET
     @Path("/{userId}")
     public Response getUser(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
-        TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, userId);
+        try {
+            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, userId);
+        } catch (NotAuthorizedException e) {
+            e.printStackTrace();
+        }
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
         AppUserEntity user = (AppUserEntity) session.get(AppUserEntity.class, userId);
@@ -64,13 +67,17 @@ public class AppUserResource {
         user.setPassword_md5("hidden");
         user.setVerificationString("hidden");
         tx.rollback();
-        return Response.status(Response.Status.OK).entity(ReflectionToStringBuilder.toString(user)).build();
+        return Response.status(Response.Status.OK).entity(user.toString()).build();
     }
 
     @GET
     @Path("/{userId}/admin")
     public Response getUserAdmin(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
-        TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN, userId);
+        try {
+            TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN, userId);
+        } catch (NotAuthorizedException e) {
+            ResourceResponseUtil.generateErrorResponse(e);
+        }
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
         AppUserEntity user = (AppUserEntity) session.get(AppUserEntity.class, userId);
@@ -81,14 +88,22 @@ public class AppUserResource {
     @POST
     @Path("/{userId}")
     public Response changeUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
-        TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
+        try {
+            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
+        } catch (NotAuthorizedException e) {
+            ResourceResponseUtil.generateErrorResponse(e);
+        }
         return Response.status(Response.Status.OK).build();
     }
 
     @POST
     @Path("/{userId}/activation")
     public Response sendActivationVerification(@PathParam("userId") Integer userId, @QueryParam("token") String token) throws DependentServiceException {
-        TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
+        try {
+            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
+        } catch (NotAuthorizedException e) {
+            ResourceResponseUtil.generateErrorResponse(e);
+        }
 
         String randomVerification = SecurityUtil.generateSecureVerificationCode();
 
@@ -113,7 +128,11 @@ public class AppUserResource {
     @POST
     @Path("/{userId}/activation/{verificationCode}")
     public Response activate(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, @QueryParam("token") String token) {
-        TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
+        try {
+            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
+        } catch (NotAuthorizedException e) {
+            ResourceResponseUtil.generateErrorResponse(e);
+        }
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
@@ -169,7 +188,7 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}/resetPassword/{verificationCode}")
-    public Response changePassword(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, String password) {
+    public Response changePassword(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, @QueryParam("newPassword") String password) {
         ThrottleSecurity.getInstance().throttle(userId);
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
