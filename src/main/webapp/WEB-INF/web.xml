@@ -6,7 +6,7 @@
     <display-name>LMShipService</display-name>
     <listener>
         <listener-class>
-            com.longmendelivery.app.HibernateUtilServletContextListener
+            com.longmendelivery.app.listener.HibernateUtilServletContextListener
         </listener-class>
     </listener>
     <servlet>

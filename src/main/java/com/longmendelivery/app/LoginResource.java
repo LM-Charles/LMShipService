@@ -1,5 +1,7 @@
 package com.longmendelivery.app;
 
+import com.longmendelivery.app.model.LoginResponseModel;
+import com.longmendelivery.app.util.ResourceResponseUtil;
 import com.longmendelivery.lib.security.SecurityPower;
 import com.longmendelivery.lib.security.SecurityUtil;
 import com.longmendelivery.lib.security.ThrottleSecurity;
@@ -14,6 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/login")
+@Produces("application/json")
 public class LoginResource {
     @POST
     public Response login(@QueryParam("email") String email, @QueryParam("password") String password) {
@@ -25,7 +28,7 @@ public class LoginResource {
             AppUserEntity user = (AppUserEntity) writeSession.createCriteria(AppUserEntity.class).add(Restrictions.eq("email", email)).uniqueResult();
 
             if (user == null) {
-                return Response.status(Response.Status.FORBIDDEN).entity("Incorrect combination of email and password").build();
+                return ResourceResponseUtil.generateForbiddenMessage("Incorrect combination of email and password");
             } else if (user.getPassword_md5().equals(SecurityUtil.md5(password))) {
                 if (user.getApiToken() == null) {
                     String token = SecurityUtil.generateSecureToken();
@@ -33,9 +36,9 @@ public class LoginResource {
                     writeSession.update(user);
                     tx.commit();
                 }
-                return Response.status(Response.Status.OK).entity(user.getId() + "     :     " + user.getApiToken()).build();
+                return Response.status(Response.Status.OK).entity(new LoginResponseModel(user.getId(), user.getApiToken())).build();
             } else {
-                return Response.status(Response.Status.FORBIDDEN).entity("Incorrect combination of email and password").build();
+                return ResourceResponseUtil.generateForbiddenMessage("Incorrect combination of email and password");
             }
         } finally {
             writeSession.close();
@@ -48,7 +51,7 @@ public class LoginResource {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
         } catch (com.longmendelivery.lib.security.NotAuthorizedException e) {
-            ResourceResponseUtil.generateErrorResponse(e);
+            ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
@@ -58,7 +61,7 @@ public class LoginResource {
             user.setApiToken(SecurityUtil.generateSecureToken());
             writeSession.update(user);
             tx.commit();
-            return Response.status(Response.Status.OK).entity("successfully logged out").build();
+            return ResourceResponseUtil.generateOKMessage("successfully logged out");
         } finally {
             writeSession.close();
         }

@@ -23,6 +23,7 @@
 
 
         <property name="hibernate.current_session_context_class">thread</property>
+        <property name="hibernate.connection.autocommit">false</property>
 
         <!-- Persistence Models using the annotation based mapping -->
         <mapping class="com.longmendelivery.persistence.entity.AppUserEntity"/>
