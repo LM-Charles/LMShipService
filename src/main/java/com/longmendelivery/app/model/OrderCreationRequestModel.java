@@ -1,5 +1,6 @@
 package com.longmendelivery.app.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.DateTime;
 
 import java.util.Set;
@@ -8,19 +9,39 @@ import java.util.Set;
  * Created by desmond on 20/06/15.
  */
 public class OrderCreationRequestModel {
+    @JsonProperty
     private Integer userId;
+
+    @JsonProperty
     private DateTime orderDate;
+    @JsonProperty
     private String fromAddress;
+
+    public OrderCreationRequestModel() {
+    }
+
+    @JsonProperty
+
     private String fromCity;
+    @JsonProperty
     private String fromProvince;
+    @JsonProperty
     private String fromCode;
+    @JsonProperty
     private String fromCountry;
+    @JsonProperty
     private String toAddress;
+    @JsonProperty
     private String toCity;
+    @JsonProperty
     private String toProvince;
+    @JsonProperty
     private String toCode;
+    @JsonProperty
     private String toCountry;
+    @JsonProperty
     private Integer courierServiceId;
+    @JsonProperty
     private Set<ShipmentModel> shipments;
 
     public OrderCreationRequestModel(Integer userId, DateTime orderDate, String fromAddress, String fromCity, String fromProvince, String fromCode, String fromCountry, String toAddress, String toCity, String toProvince, String toCode, String toCountry, Integer courierServiceId, Set<ShipmentModel> shipments) {
