@@ -6,7 +6,7 @@
     <display-name>LMShipService</display-name>
     <listener>
         <listener-class>
-            com.longmendelivery.app.initializer.HibernateUtilServletContextListener
+            com.longmendelivery.service.initializer.HibernateUtilServletContextListener
         </listener-class>
     </listener>
     <servlet>
@@ -19,7 +19,7 @@
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>
-                com.jersey.jaxb,com.fasterxml.jackson.jaxrs.json,com.longmendelivery.app
+                com.jersey.jaxb,com.fasterxml.jackson.jaxrs.json,com.longmendelivery.service
             </param-value>
         </init-param>
     </servlet>

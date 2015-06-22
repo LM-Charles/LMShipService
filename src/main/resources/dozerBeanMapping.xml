@@ -6,12 +6,12 @@
 
     <mapping type="one-way">
         <class-a>com.longmendelivery.persistence.entity.AppUserEntity</class-a>
-        <class-b>com.longmendelivery.app.model.AppUserModel</class-b>
+        <class-b>com.longmendelivery.service.model.AppUserModel</class-b>
     </mapping>
 
     <mapping type="one-way">
         <class-a>com.longmendelivery.persistence.entity.OrderEntity</class-a>
-        <class-b>com.longmendelivery.app.model.OrderModel</class-b>
+        <class-b>com.longmendelivery.service.model.OrderModel</class-b>
 
         <field custom-converter="com.longmendelivery.lib.conversion.EntityToIdCustomConverter">
             <a>client</a>
