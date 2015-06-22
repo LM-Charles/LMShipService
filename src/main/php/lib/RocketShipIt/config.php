@@ -209,7 +209,7 @@ return array(
 
         // Your UPS Developer license
         // your UPS XML Access Key TODO: Insert link to get one
-        'license' => 'LICENSE',
+        'license' => '0CF224653F2240B5',
 
         // your UPS Developer username
         // This is tied to all shipments for tracking purposes when
@@ -218,7 +218,7 @@ return array(
         'username' => 'desmondzhou',
 
         // your ups Developer password
-        'password' => 'PASSWORD',
+        'password' => 'Qwerty!1',
 
         // Make sure addresses are valid before label creation
         // validate, nonvalidate
