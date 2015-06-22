@@ -28,34 +28,34 @@ return array(
         // Default timezone
         // You can find out which timezones are available here: 
         // http://php.net/manual/en/timezones.php
-        'timezone' => 'America/Denver',
+        'timezone' => 'America/Vancouver',
 
         // Your company name
-        'shipper' => '',
+        'shipper' => 'CBE',
 
         // Key shipping contact individual at your company
-        'shipContact' => '',
+        'shipContact' => 'Desmond Zhou',
 
-        'shipAddr1' => '',
+        'shipAddr1' => '9188 Hemlock Drive',
         'shipAddr2' => '',
-        'shipCity' => '',
+        'shipCity' => 'Richmond',
 
         // the two-letter State or Province code
         // ex. MT => Montana, ON => Ontario
-        'shipState' => '',
+        'shipState' => 'BC',
 
         // The Zip or Postal code
-        'shipCode' => '',
+        'shipCode' => 'V4C0A9',
 
         // The two-letter country code
-        'shipCountry' => '',
+        'shipCountry' => 'CA',
 
         // Phone number in this format: 1234567890
         'shipPhone' => '1231231234',
         'toCountry' => '',
 
         // General currency for things like COD
-        'currency' => 'USD',
+        'currency' => 'CAD',
 
     ),
     //}}
@@ -209,16 +209,16 @@ return array(
 
         // Your UPS Developer license
         // your UPS XML Access Key TODO: Insert link to get one
-        'license' => '',
+        'license' => 'LICENSE',
 
         // your UPS Developer username
         // This is tied to all shipments for tracking purposes when
         // tracking by reference values or when viewing shipments
         // on the UPS website.
-        'username' => '',
+        'username' => 'desmondzhou',
 
         // your ups Developer password
-        'password' => '',
+        'password' => 'PASSWORD',
 
         // Make sure addresses are valid before label creation
         // validate, nonvalidate
@@ -251,7 +251,7 @@ return array(
         // They typically don't change from shipment to shipment, although,
         // you may set any of them directly.
         // Your UPS Account number
-        'accountNumber' => '',
+        'accountNumber' => '0X0Y74',
 
         // Options
         // 01 - Daily Pickup
@@ -264,16 +264,16 @@ return array(
         'PickupType' => '',
 
         // LBS or KGS
-        'weightUnit' => '',
+        'weightUnit' => 'KGS',
 
         // IN, or CM
-        'lengthUnit' => '',
+        'lengthUnit' => 'CM',
 
         // See the ups manual for a list of all currency types
-        'insuredCurrency' => 'USD',
+        'insuredCurrency' => 'CAD',
 
         // two-letter country code
-        'toCountryCode' => 'US',
+        'toCountryCode' => 'CA',
 
         // The following variables set the defaults for individual shipments
         // you may set them here to save time, or you may set them explicitly
