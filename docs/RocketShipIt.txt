@@ -1,0 +1,6 @@
+Setting up the environment to use RocketShipIt
+http://docs.rocketship.it/php/1-0/getting-started.html
+
+sudo apt-get install php5-cli
+sudo apt-get install php-soap
+sudo apt-get install php5-curl
