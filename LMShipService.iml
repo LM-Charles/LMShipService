@@ -98,15 +98,8 @@
     <orderEntry type="library" name="Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec:1.0.0.Final" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jadira.usertype:usertype.spi:3.1.0.CR1" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/third-party-lib" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/third-party-lib" recursive="false" />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" scope="PROVIDED" name="Maven: php-java-bridge:JavaBridge:1.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: php-java-bridge:php-script:1.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: php-java-bridge:php-servlet:1.0.0" level="project" />
   </component>
 </module>
