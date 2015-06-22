@@ -7,6 +7,16 @@
     <version>1.0-SNAPSHOT</version>
     <name>LMShipService Maven</name>
     <url>http://maven.apache.org</url>
+
+    <repositories>
+        <!-- Local Project Repository in attached directory-->
+        <repository>
+            <id>maven-local-repository</id>
+            <name>Local Project Repository</name>
+            <url>file://${project.basedir}/maven-local</url>
+        </repository>
+    </repositories>
+
     <dependencies>
 
         <!-- Hibernate for DB -->
@@ -114,7 +124,24 @@
             <version>3.1.0.CR1</version>
         </dependency>
 
+        <!-- Local repository for php Java bridge jar -->
+        <dependency>
+            <groupId>php-java-bridge</groupId>
+            <artifactId>JavaBridge</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>php-java-bridge</groupId>
+            <artifactId>php-script</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>php-java-bridge</groupId>
+            <artifactId>php-servlet</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
+
     <build>
         <finalName>LMShipService</finalName>
         <plugins>
