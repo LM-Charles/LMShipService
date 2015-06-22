@@ -1,6 +1,7 @@
 package com.longmendelivery.service;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
+import com.longmendelivery.lib.client.shipment.rocketshipit.RocketShipItJavaRunner;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.util.ResourceResponseUtil;
@@ -18,16 +19,24 @@ public class DebugResource {
     @PUT
     @Path("testSMS")
     @Produces("text/plain")
-    public Response getMessage(@QueryParam("to") String to, @QueryParam("body") String body) throws DependentServiceException {
+    public Response testSMS(@QueryParam("to") String to, @QueryParam("body") String body) throws DependentServiceException {
         String output = "Testing SMS to : " + to + " with body: " + body;
         new TwilioSMSClient().sendSMS(to, body);
         return ResourceResponseUtil.generateOKMessage(output);
     }
 
+    @PUT
+    @Path("testPHP")
+    @Produces("text/plain")
+    public Response testPHP() throws DependentServiceException {
+        new RocketShipItJavaRunner().runLibrary();
+        return ResourceResponseUtil.generateOKMessage("executed");
+    }
+
     @GET
     @Path("testDB")
     @Produces("text/plain")
-    public Response getMessage() throws DependentServiceException {
+    public Response testDB() throws DependentServiceException {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Map<String, ClassMetadata> map = sessionFactory.getAllClassMetadata();
         StringBuilder builder = new StringBuilder();
