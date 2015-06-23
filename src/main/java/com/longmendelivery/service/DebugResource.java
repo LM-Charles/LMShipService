@@ -10,14 +10,13 @@ import org.hibernate.internal.SessionFactoryImpl;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
+import javax.script.ScriptException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Map;
 
 @Path("/debug")
+@Produces("application/json")
 public class DebugResource {
     @PUT
     @Path("testSMS")
@@ -27,11 +26,12 @@ public class DebugResource {
         return ResourceResponseUtil.generateOKMessage(output);
     }
 
-    @GET
+    @POST
     @Path("testPHP")
-    public Response testPHP() throws DependentServiceException {
-        new RocketShipItJavaRunner().runLibrary();
-        return ResourceResponseUtil.generateOKMessage("executed");
+    @Consumes("text/plain")
+    public Response testPHP(String script) throws DependentServiceException, ScriptException {
+        String message = new RocketShipItJavaRunner().runLibrary(script);
+        return ResourceResponseUtil.generateOKMessage(message);
     }
 
     @GET
