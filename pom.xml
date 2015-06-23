@@ -125,6 +125,7 @@
         </dependency>
 
         <!-- Local repository for php Java bridge jar -->
+
         <dependency>
             <groupId>php-java-bridge</groupId>
             <artifactId>JavaBridge</artifactId>
