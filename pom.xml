@@ -25,7 +25,6 @@
             <artifactId>hibernate-core</artifactId>
             <version>4.3.10.Final</version>
         </dependency>
-
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
@@ -124,11 +123,18 @@
             <artifactId>joda-time-hibernate</artifactId>
             <version>1.4</version>
         </dependency>
+
         <!-- Jadira framework for Joda Hibernate work-around a compatibility problem-->
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
             <version>3.1.0.CR1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate.javax.persistence</groupId>
+                    <artifactId>hibernate-jpa-2.0-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Local repository for php Java bridge jar -->
