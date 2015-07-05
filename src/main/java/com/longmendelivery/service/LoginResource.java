@@ -6,7 +6,7 @@ import com.longmendelivery.lib.security.ThrottleSecurity;
 import com.longmendelivery.lib.security.TokenSecurity;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.util.HibernateUtil;
-import com.longmendelivery.service.model.LoginResponseModel;
+import com.longmendelivery.service.model.response.LoginResponseModel;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

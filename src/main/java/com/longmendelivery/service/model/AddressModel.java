@@ -1,35 +1,32 @@
 package com.longmendelivery.service.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.longmendelivery.lib.conversion.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
- * Created by desmond on 20/06/15.
+ * Created by desmond on 05/07/15.
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShipmentModel implements Model {
+public class AddressModel {
     @JsonProperty
     @NonNull
-    private Integer height;
+    private String address = "";
     @JsonProperty
     @NonNull
-    private Integer width;
+    private String city = "";
     @JsonProperty
     @NonNull
-    private Integer length;
+    private String province = "";
     @JsonProperty
     @NonNull
-    private Integer weight;
-
+    private String country = "";
     @JsonProperty
-    private String trackingNumber;
-    @JsonProperty
-    private String trackingDocumentType;
+    @NonNull
+    private String postal = "";
 
 }

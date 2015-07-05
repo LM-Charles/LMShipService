@@ -1,11 +1,15 @@
-package com.longmendelivery.service.model;
+package com.longmendelivery.service.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.longmendelivery.lib.conversion.Model;
+import com.longmendelivery.service.model.AddressModel;
+import com.longmendelivery.service.model.ShipmentModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+
+import java.util.Set;
 
 /**
  * Created by desmond on 20/06/15.
@@ -13,23 +17,16 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShipmentModel implements Model {
+public class RateRequestModel implements Model {
     @JsonProperty
     @NonNull
-    private Integer height;
-    @JsonProperty
-    @NonNull
-    private Integer width;
-    @JsonProperty
-    @NonNull
-    private Integer length;
-    @JsonProperty
-    @NonNull
-    private Integer weight;
+    private AddressModel toAddress;
 
     @JsonProperty
-    private String trackingNumber;
-    @JsonProperty
-    private String trackingDocumentType;
+    @NonNull
+    private AddressModel fromAddress;
 
+    @JsonProperty
+    @NonNull
+    private Set<ShipmentModel> shipments;
 }
