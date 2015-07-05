@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/"
-           xmlns:ns="http://fedex.com/ws/track/v6"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://fedex.com/ws/track/v6"
+           xmlns="http://schemas.xmlsoap.org/wsdl/"
            attributeFormDefault="qualified" elementFormDefault="qualified"
            targetNamespace="http://fedex.com/ws/track/v6">
     <xs:element name="SignatureProofOfDeliveryFaxReply" type="ns:SignatureProofOfDeliveryFaxReply"/>

@@ -1,9 +1,9 @@
 package com.longmendelivery.service;
 
-import com.longmendelivery.lib.security.ThrottleSecurity;
-import com.longmendelivery.service.behavior.DummyRateCalculator;
+import com.longmendelivery.service.behavior.rate.shipment.DummyRateCalculator;
 import com.longmendelivery.service.model.request.RateRequestModel;
 import com.longmendelivery.service.model.response.RateResponseModel;
+import com.longmendelivery.service.security.ThrottleSecurity;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

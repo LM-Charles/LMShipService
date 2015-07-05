@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="TrackingService" targetNamespace="http://purolator.com/pws/service/v1"
-                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:tns="http://purolator.com/pws/service/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl">
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" name="TrackingService"
+                  targetNamespace="http://purolator.com/pws/service/v1">
     <wsdl:types>
-        <xsd:schema elementFormDefault="qualified" targetNamespace="http://purolator.com/pws/datatypes/v1"
-                    xmlns:tns="http://purolator.com/pws/datatypes/v1">
+        <xsd:schema xmlns:tns="http://purolator.com/pws/datatypes/v1" elementFormDefault="qualified"
+                    targetNamespace="http://purolator.com/pws/datatypes/v1">
             <xsd:complexType name="TrackPackagesByPinRequestContainer">
                 <xsd:annotation>
                     <xsd:appinfo/>
@@ -935,9 +935,9 @@
             <xsd:element name="GetDeliveryDetailsResponse" nillable="true"
                          type="tns:GetDeliveryDetailsResponseContainer"/>
         </xsd:schema>
-        <xsd:schema elementFormDefault="qualified"
-                    targetNamespace="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation"
-                    xmlns:tns="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation">
+        <xsd:schema xmlns:tns="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation"
+                    elementFormDefault="qualified"
+                    targetNamespace="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation">
             <xsd:complexType name="ValidationFault">
                 <xsd:annotation>
                     <xsd:appinfo/>
@@ -946,8 +946,10 @@
                     </xsd:documentation>
                 </xsd:annotation>
                 <xsd:sequence>
-                    <xsd:element minOccurs="0" name="Details" nillable="true" type="q1:ArrayOfValidationDetail"
-                                 xmlns:q1="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF">
+                    <xsd:element
+                            xmlns:q1="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF"
+                            minOccurs="0" name="Details" nillable="true"
+                            type="q1:ArrayOfValidationDetail">
                         <xsd:annotation>
                             <xsd:appinfo/>
                             <xsd:documentation/>
@@ -957,9 +959,10 @@
             </xsd:complexType>
             <xsd:element name="ValidationFault" nillable="true" type="tns:ValidationFault"/>
         </xsd:schema>
-        <xsd:schema elementFormDefault="qualified"
-                    targetNamespace="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF"
-                    xmlns:tns="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF">
+        <xsd:schema
+                xmlns:tns="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF"
+                elementFormDefault="qualified"
+                targetNamespace="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF">
             <xsd:complexType name="ArrayOfValidationDetail">
                 <xsd:sequence>
                     <xsd:element minOccurs="0" maxOccurs="unbounded" name="ValidationDetail" nillable="true"
@@ -1002,62 +1005,62 @@
         </xsd:schema>
     </wsdl:types>
     <wsdl:message name="TrackPackagesByPinRequest">
-        <wsdl:part name="TrackPackagesByPinRequest" element="q2:TrackPackagesByPinRequest"
-                   xmlns:q2="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q2="http://purolator.com/pws/datatypes/v1" name="TrackPackagesByPinRequest"
+                   element="q2:TrackPackagesByPinRequest"/>
     </wsdl:message>
     <wsdl:message name="TrackPackagesByPinRequest_Headers">
-        <wsdl:part name="RequestContext" element="q3:RequestContext" xmlns:q3="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q3="http://purolator.com/pws/datatypes/v1" name="RequestContext" element="q3:RequestContext"/>
     </wsdl:message>
     <wsdl:message name="TrackPackagesByPinResponse">
-        <wsdl:part name="TrackPackagesByPinResponse" element="q4:TrackPackagesByPinResponse"
-                   xmlns:q4="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q4="http://purolator.com/pws/datatypes/v1" name="TrackPackagesByPinResponse"
+                   element="q4:TrackPackagesByPinResponse"/>
     </wsdl:message>
     <wsdl:message name="TrackPackagesByPinResponse_Headers">
-        <wsdl:part name="ResponseContext" element="q5:ResponseContext"
-                   xmlns:q5="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q5="http://purolator.com/pws/datatypes/v1" name="ResponseContext"
+                   element="q5:ResponseContext"/>
     </wsdl:message>
     <wsdl:message name="TrackingServiceContract_TrackPackagesByPin_ValidationFaultFault_FaultMessage">
-        <wsdl:part name="detail" element="q6:ValidationFault"
-                   xmlns:q6="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation"/>
+        <wsdl:part xmlns:q6="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation" name="detail"
+                   element="q6:ValidationFault"/>
     </wsdl:message>
     <wsdl:message name="TrackPackagesByReferenceRequest">
-        <wsdl:part name="TrackPackagesByReferenceRequest" element="q7:TrackPackagesByReferenceRequest"
-                   xmlns:q7="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q7="http://purolator.com/pws/datatypes/v1" name="TrackPackagesByReferenceRequest"
+                   element="q7:TrackPackagesByReferenceRequest"/>
     </wsdl:message>
     <wsdl:message name="TrackPackagesByReferenceRequest_Headers">
-        <wsdl:part name="RequestContext" element="q8:RequestContext" xmlns:q8="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q8="http://purolator.com/pws/datatypes/v1" name="RequestContext" element="q8:RequestContext"/>
     </wsdl:message>
     <wsdl:message name="TrackPackagesByReferenceResponse">
-        <wsdl:part name="TrackPackagesByReferenceResponse" element="q9:TrackPackagesByReferenceResponse"
-                   xmlns:q9="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q9="http://purolator.com/pws/datatypes/v1" name="TrackPackagesByReferenceResponse"
+                   element="q9:TrackPackagesByReferenceResponse"/>
     </wsdl:message>
     <wsdl:message name="TrackPackagesByReferenceResponse_Headers">
-        <wsdl:part name="ResponseContext" element="q10:ResponseContext"
-                   xmlns:q10="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q10="http://purolator.com/pws/datatypes/v1" name="ResponseContext"
+                   element="q10:ResponseContext"/>
     </wsdl:message>
     <wsdl:message name="TrackingServiceContract_TrackPackagesByReference_ValidationFaultFault_FaultMessage">
-        <wsdl:part name="detail" element="q11:ValidationFault"
-                   xmlns:q11="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation"/>
+        <wsdl:part xmlns:q11="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation" name="detail"
+                   element="q11:ValidationFault"/>
     </wsdl:message>
     <wsdl:message name="GetDeliveryDetailsRequest">
-        <wsdl:part name="GetDeliveryDetailsRequest" element="q12:GetDeliveryDetailsRequest"
-                   xmlns:q12="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q12="http://purolator.com/pws/datatypes/v1" name="GetDeliveryDetailsRequest"
+                   element="q12:GetDeliveryDetailsRequest"/>
     </wsdl:message>
     <wsdl:message name="GetDeliveryDetailsRequest_Headers">
-        <wsdl:part name="RequestContext" element="q13:RequestContext"
-                   xmlns:q13="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q13="http://purolator.com/pws/datatypes/v1" name="RequestContext"
+                   element="q13:RequestContext"/>
     </wsdl:message>
     <wsdl:message name="GetDeliveryDetailsResponse">
-        <wsdl:part name="GetDeliveryDetailsResponse" element="q14:GetDeliveryDetailsResponse"
-                   xmlns:q14="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q14="http://purolator.com/pws/datatypes/v1" name="GetDeliveryDetailsResponse"
+                   element="q14:GetDeliveryDetailsResponse"/>
     </wsdl:message>
     <wsdl:message name="GetDeliveryDetailsResponse_Headers">
-        <wsdl:part name="ResponseContext" element="q15:ResponseContext"
-                   xmlns:q15="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q15="http://purolator.com/pws/datatypes/v1" name="ResponseContext"
+                   element="q15:ResponseContext"/>
     </wsdl:message>
     <wsdl:message name="TrackingServiceContract_GetDeliveryDetails_ValidationFaultFault_FaultMessage">
-        <wsdl:part name="detail" element="q16:ValidationFault"
-                   xmlns:q16="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation"/>
+        <wsdl:part xmlns:q16="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation" name="detail"
+                   element="q16:ValidationFault"/>
     </wsdl:message>
     <wsdl:portType name="TrackingServiceContract">
         <wsdl:documentation>Service Contract Class - TrackingServiceContract</wsdl:documentation>

@@ -1,4 +1,4 @@
-package com.longmendelivery.service.behavior;
+package com.longmendelivery.service.behavior.rate;
 
 import com.longmendelivery.service.model.request.OrderCreationRequestModel;
 

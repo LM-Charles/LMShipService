@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/"
-           xmlns:ns="http://fedex.com/ws/rate/v16"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://fedex.com/ws/rate/v16"
+           xmlns="http://schemas.xmlsoap.org/wsdl/"
            attributeFormDefault="qualified" elementFormDefault="qualified"
            targetNamespace="http://fedex.com/ws/rate/v16">
     <xs:element name="RateReply" type="ns:RateReply"/>

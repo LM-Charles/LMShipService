@@ -2,8 +2,6 @@ package com.longmendelivery.service;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
-import com.longmendelivery.lib.security.NotAuthorizedException;
-import com.longmendelivery.lib.security.*;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.entity.AppUserGroupEntity;
 import com.longmendelivery.persistence.entity.AppUserStatusEntity;
@@ -11,6 +9,8 @@ import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.model.AppUserModel;
 import com.longmendelivery.service.model.request.ChangeUserDetailRequestModel;
 import com.longmendelivery.service.model.request.RegisterRequestModel;
+import com.longmendelivery.service.security.NotAuthorizedException;
+import com.longmendelivery.service.security.*;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.hibernate.Session;
