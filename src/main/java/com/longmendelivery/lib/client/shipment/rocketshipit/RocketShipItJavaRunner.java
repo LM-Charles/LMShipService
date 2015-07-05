@@ -1,38 +1,38 @@
 package com.longmendelivery.lib.client.shipment.rocketshipit;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.longmendelivery.lib.client.shipment.rocketshipit.model.UPSRateResponseEntry;
 import php.java.script.InteractivePhpScriptEngineFactory;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by  rabiddesireon 21/06/15.
  */
 public class RocketShipItJavaRunner {
-    public String runLibrary(String script) throws ScriptException {
-        String code =
-                "require 'autoload.php'; // This autoloads RocketShipIt classes\n" +
-                        "\n" +
-                        "$rate = new \\RocketShipIt\\Rate('UPS');\n" +
-                        "\n" +
-                        "$rate->setParameter('shipCode','V4C0A9');\n" +
-                        "$rate->setParameter('shipCountry','CA');\n" +
-                        "$rate->setParameter('toCode','V7C2X4');\n" +
-                        "$rate->setParameter('toCountry','CA');\n" +
-                        "$rate->setParameter('weight','5');\n" +
-                        "$rate->setParameter('residentialAddressIndicator','0');\n" +
-                        "$rate->setParameter('packagingType','02');\n" +
-                        "\n" +
-                        "$response = $rate->getsimplerates();\n" +
-                        "print_r($response);\n";
-
+    public List<UPSRateResponseEntry> runLibrary(String script) throws ScriptException {
         ScriptEngine engine = new InteractivePhpScriptEngineFactory().getScriptEngine();
         try {
             String value = (String) engine.eval(script);
-            return value;
+            List<UPSRateResponseEntry> response = new ObjectMapper().readValue(value, new TypeReference<List<UPSRateResponseEntry>>() {
+            });
+            return response;
         } catch (ScriptException ex) {
             ex.printStackTrace();
             throw ex;
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 }
