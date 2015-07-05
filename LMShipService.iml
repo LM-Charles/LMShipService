@@ -100,5 +100,6 @@
     <orderEntry type="library" name="Maven: php-java-bridge:JavaBridge:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: php-java-bridge:php-script:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: php-java-bridge:php-servlet:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.16.4" level="project" />
   </component>
 </module>
