@@ -1,14 +1,15 @@
-package com.longmendelivery.service.model;
+package com.longmendelivery.service.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.longmendelivery.lib.conversion.Model;
+import com.longmendelivery.service.model.AddressModel;
+import com.longmendelivery.service.model.ShipmentModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.joda.time.DateTime;
 
-import java.math.BigDecimal;
 import java.util.Set;
 
 /**
@@ -17,34 +18,29 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderModel implements Model {
+public class OrderCreationRequestModel implements Model {
     @JsonProperty
     @NonNull
-    private Integer id;
-    @JsonProperty
-    @NonNull
-    private Integer client;
+    private Integer userId;
+
     @JsonProperty
     @NonNull
     private DateTime orderDate;
-    @JsonProperty
-    @NonNull
-    private Integer courierServiceId;
-    @JsonProperty
-    @NonNull
-    private Set<Integer> shipments;
-    @JsonProperty
-    @NonNull
-    private BigDecimal estimateCost;
-    @JsonProperty
-    @NonNull
-    private BigDecimal finalCost;
-    @JsonProperty
-    @NonNull
-    private AddressModel fromAddress;
+
     @JsonProperty
     @NonNull
     private AddressModel toAddress;
+
     @JsonProperty
-    private String handler;
+    @NonNull
+    private AddressModel fromAddress;
+
+    @JsonProperty
+    @NonNull
+    private Integer courierServiceId;
+
+    @JsonProperty
+    @NonNull
+    private Set<ShipmentModel> shipments;
+
 }

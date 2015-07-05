@@ -1,6 +1,6 @@
 package com.longmendelivery.service.behavior;
 
-import com.longmendelivery.service.model.OrderCreationRequestModel;
+import com.longmendelivery.service.model.request.OrderCreationRequestModel;
 
 import java.math.BigDecimal;
 
