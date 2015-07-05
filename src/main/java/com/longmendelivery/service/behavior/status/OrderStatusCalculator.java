@@ -1,4 +1,4 @@
-package com.longmendelivery.service.behavior;
+package com.longmendelivery.service.behavior.status;
 
 import com.longmendelivery.persistence.entity.OrderEntity;
 import com.longmendelivery.service.model.OrderStatusModel;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XML Spy v4.1 U (http://www.xmlspy.com) by pck6xmx (UPS GACOR850393,) -->
-<xsd:schema targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Rate/v1.1"
-            xmlns:rate="http://www.ups.com/XMLSchema/XOLTWS/Rate/v1.1" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" elementFormDefault="qualified">
+<xsd:schema xmlns:rate="http://www.ups.com/XMLSchema/XOLTWS/Rate/v1.1"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0"
+            targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Rate/v1.1" elementFormDefault="qualified">
     <xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" schemaLocation="common.xsd"/>
     <!--Rate Request Element-->
     <xsd:element name="RateRequest">

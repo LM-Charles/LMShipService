@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://www.dhl.com/ratingdatatypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:dhl="http://www.dhl.com/datatypes" elementFormDefault="unqualified"
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dhl="http://www.dhl.com/datatypes"
+            targetNamespace="http://www.dhl.com/ratingdatatypes" elementFormDefault="unqualified"
             attributeFormDefault="unqualified">
     <xsd:import namespace="http://www.dhl.com/datatypes"
                 schemaLocation="datatypes.xsd"/>

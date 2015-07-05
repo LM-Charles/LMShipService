@@ -1,7 +1,7 @@
 package com.longmendelivery.service.util;
 
-import com.longmendelivery.lib.security.NotAuthorizedException;
 import com.longmendelivery.service.model.response.MessageResponseModel;
+import com.longmendelivery.service.security.NotAuthorizedException;
 
 import javax.ws.rs.core.Response;
 

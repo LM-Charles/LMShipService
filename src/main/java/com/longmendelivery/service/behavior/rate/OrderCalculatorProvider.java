@@ -1,4 +1,4 @@
-package com.longmendelivery.service.behavior;
+package com.longmendelivery.service.behavior.rate;
 
 /**
  * Created by desmond on 20/06/15.

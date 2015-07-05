@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://www.dhl.com/datatypes_EA" xmlns="http://www.dhl.com/datatypes_EA"
-            xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified"
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.dhl.com/datatypes_EA"
+            xmlns="http://www.dhl.com/datatypes_EA" elementFormDefault="unqualified"
             attributeFormDefault="unqualified">
     <xsd:element name="DataTypes">
         <xsd:annotation>

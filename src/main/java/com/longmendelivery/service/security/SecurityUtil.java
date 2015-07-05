@@ -1,4 +1,4 @@
-package com.longmendelivery.lib.security;
+package com.longmendelivery.service.security;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;

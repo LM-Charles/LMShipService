@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<xsd:schema targetNamespace="http://www.dhl.com" xmlns:dhl="http://www.dhl.com/datatypes_global"
-            xmlns="http://www.dhl.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified">
+<xsd:schema xmlns:dhl="http://www.dhl.com/datatypes_global" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.dhl.com" xmlns="http://www.dhl.com" elementFormDefault="unqualified">
     <xsd:import namespace="http://www.dhl.com/datatypes_global" schemaLocation="datatypes_global.xsd"/>
     <xsd:element name="ShipmentRequest">
         <xsd:annotation>
