@@ -1,6 +1,6 @@
-<xs:schema attributeFormDefault="qualified" elementFormDefault="qualified"
-           targetNamespace="http://fedex.com/ws/locator/v1" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:ns="http://fedex.com/ws/locator/v1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://fedex.com/ws/locator/v1"
+           attributeFormDefault="qualified" elementFormDefault="qualified"
+           targetNamespace="http://fedex.com/ws/locator/v1">
     <xs:element name="FedExLocatorRequest" type="ns:FedExLocatorRequest">
         <xs:annotation>
             <xs:documentation>The descriptive data sent to search for the nearest FedEx location.</xs:documentation>

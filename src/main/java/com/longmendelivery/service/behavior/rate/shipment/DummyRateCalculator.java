@@ -1,4 +1,4 @@
-package com.longmendelivery.service.behavior;
+package com.longmendelivery.service.behavior.rate.shipment;
 
 import com.longmendelivery.service.model.RateEntryModel;
 import com.longmendelivery.service.model.request.RateRequestModel;

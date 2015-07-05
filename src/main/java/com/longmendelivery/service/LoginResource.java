@@ -1,12 +1,12 @@
 package com.longmendelivery.service;
 
-import com.longmendelivery.lib.security.SecurityPower;
-import com.longmendelivery.lib.security.SecurityUtil;
-import com.longmendelivery.lib.security.ThrottleSecurity;
-import com.longmendelivery.lib.security.TokenSecurity;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.model.response.LoginResponseModel;
+import com.longmendelivery.service.security.SecurityPower;
+import com.longmendelivery.service.security.SecurityUtil;
+import com.longmendelivery.service.security.ThrottleSecurity;
+import com.longmendelivery.service.security.TokenSecurity;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -50,7 +50,7 @@ public class LoginResource {
     public Response logout(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
-        } catch (com.longmendelivery.lib.security.NotAuthorizedException e) {
+        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
             ResourceResponseUtil.generateForbiddenMessage(e);
         }
 

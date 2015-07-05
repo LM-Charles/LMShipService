@@ -13,7 +13,9 @@ public class ObjectMapperContextResolver implements ContextResolver<ObjectMapper
     final ObjectMapper mapper = new ObjectMapper();
 
     public ObjectMapperContextResolver() {
+        System.out.println("MapperContextListener registering JodaModule...");
         mapper.registerModule(new JodaModule());
+        System.out.println("MapperContextListener registered JodaModule.");
     }
 
     @Override

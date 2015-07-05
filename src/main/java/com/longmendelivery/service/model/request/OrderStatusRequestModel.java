@@ -7,7 +7,19 @@ import com.longmendelivery.lib.conversion.Model;
  * Created by desmond on 21/06/15.
  */
 public class OrderStatusRequestModel implements Model {
+    @JsonProperty
+
+    String status;
+    @JsonProperty
+    String statusDescription;
+
     public OrderStatusRequestModel() {
+    }
+
+    public OrderStatusRequestModel(String status, String statusDescription) {
+
+        this.status = status;
+        this.statusDescription = statusDescription;
     }
 
     public String getStatus() {
@@ -26,18 +38,6 @@ public class OrderStatusRequestModel implements Model {
     public void setStatusDescription(String statusDescription) {
         this.statusDescription = statusDescription;
     }
-
-    public OrderStatusRequestModel(String status, String statusDescription) {
-
-        this.status = status;
-        this.statusDescription = statusDescription;
-    }
-
-    @JsonProperty
-
-    String status;
-    @JsonProperty
-    String statusDescription;
 
 
 }
