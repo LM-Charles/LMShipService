@@ -1,6 +1,6 @@
 package com.longmendelivery.lib.client.shipment;
 
-import com.longmendelivery.lib.client.shipment.model.*;
+import com.longmendelivery.lib.client.shipment.rocketshipit.model.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
