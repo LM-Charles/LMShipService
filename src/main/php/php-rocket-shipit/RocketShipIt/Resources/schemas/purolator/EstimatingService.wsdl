@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="EstimatingService" targetNamespace="http://purolator.com/pws/service/v1"
-                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:tns="http://purolator.com/pws/service/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl">
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" name="EstimatingService"
+                  targetNamespace="http://purolator.com/pws/service/v1">
     <wsdl:types>
-        <xsd:schema elementFormDefault="qualified" targetNamespace="http://purolator.com/pws/datatypes/v1"
-                    xmlns:tns="http://purolator.com/pws/datatypes/v1">
+        <xsd:schema xmlns:tns="http://purolator.com/pws/datatypes/v1" elementFormDefault="qualified"
+                    targetNamespace="http://purolator.com/pws/datatypes/v1">
             <xsd:complexType name="GetQuickEstimateRequestContainer">
                 <xsd:annotation>
                     <xsd:appinfo/>
@@ -1631,9 +1631,9 @@
                          type="tns:GetFullEstimateResponseContainer"/>
             <xsd:element name="GetFullEstimateResponse" nillable="true" type="tns:GetFullEstimateResponseContainer"/>
         </xsd:schema>
-        <xsd:schema elementFormDefault="qualified"
-                    targetNamespace="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation"
-                    xmlns:tns="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation">
+        <xsd:schema xmlns:tns="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation"
+                    elementFormDefault="qualified"
+                    targetNamespace="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation">
             <xsd:complexType name="ValidationFault">
                 <xsd:annotation>
                     <xsd:appinfo/>
@@ -1642,8 +1642,10 @@
                     </xsd:documentation>
                 </xsd:annotation>
                 <xsd:sequence>
-                    <xsd:element minOccurs="0" name="Details" nillable="true" type="q1:ArrayOfValidationDetail"
-                                 xmlns:q1="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF">
+                    <xsd:element
+                            xmlns:q1="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF"
+                            minOccurs="0" name="Details" nillable="true"
+                            type="q1:ArrayOfValidationDetail">
                         <xsd:annotation>
                             <xsd:appinfo/>
                             <xsd:documentation/>
@@ -1653,9 +1655,10 @@
             </xsd:complexType>
             <xsd:element name="ValidationFault" nillable="true" type="tns:ValidationFault"/>
         </xsd:schema>
-        <xsd:schema elementFormDefault="qualified"
-                    targetNamespace="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF"
-                    xmlns:tns="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF">
+        <xsd:schema
+                xmlns:tns="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF"
+                elementFormDefault="qualified"
+                targetNamespace="http://schemas.datacontract.org/2004/07/Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF">
             <xsd:complexType name="ArrayOfValidationDetail">
                 <xsd:sequence>
                     <xsd:element minOccurs="0" maxOccurs="unbounded" name="ValidationDetail" nillable="true"
@@ -1698,42 +1701,42 @@
         </xsd:schema>
     </wsdl:types>
     <wsdl:message name="GetQuickEstimateRequest">
-        <wsdl:part name="GetQuickEstimateRequest" element="q2:GetQuickEstimateRequest"
-                   xmlns:q2="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q2="http://purolator.com/pws/datatypes/v1" name="GetQuickEstimateRequest"
+                   element="q2:GetQuickEstimateRequest"/>
     </wsdl:message>
     <wsdl:message name="GetQuickEstimateRequest_Headers">
-        <wsdl:part name="RequestContext" element="q3:RequestContext" xmlns:q3="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q3="http://purolator.com/pws/datatypes/v1" name="RequestContext" element="q3:RequestContext"/>
     </wsdl:message>
     <wsdl:message name="GetQuickEstimateResponse">
-        <wsdl:part name="GetQuickEstimateResponse" element="q4:GetQuickEstimateResponse"
-                   xmlns:q4="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q4="http://purolator.com/pws/datatypes/v1" name="GetQuickEstimateResponse"
+                   element="q4:GetQuickEstimateResponse"/>
     </wsdl:message>
     <wsdl:message name="GetQuickEstimateResponse_Headers">
-        <wsdl:part name="ResponseContext" element="q5:ResponseContext"
-                   xmlns:q5="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q5="http://purolator.com/pws/datatypes/v1" name="ResponseContext"
+                   element="q5:ResponseContext"/>
     </wsdl:message>
     <wsdl:message name="EstimatingServiceContract_GetQuickEstimate_ValidationFaultFault_FaultMessage">
-        <wsdl:part name="detail" element="q6:ValidationFault"
-                   xmlns:q6="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation"/>
+        <wsdl:part xmlns:q6="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation" name="detail"
+                   element="q6:ValidationFault"/>
     </wsdl:message>
     <wsdl:message name="GetFullEstimateRequest">
-        <wsdl:part name="GetFullEstimateRequest" element="q7:GetFullEstimateRequest"
-                   xmlns:q7="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q7="http://purolator.com/pws/datatypes/v1" name="GetFullEstimateRequest"
+                   element="q7:GetFullEstimateRequest"/>
     </wsdl:message>
     <wsdl:message name="GetFullEstimateRequest_Headers">
-        <wsdl:part name="RequestContext" element="q8:RequestContext" xmlns:q8="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q8="http://purolator.com/pws/datatypes/v1" name="RequestContext" element="q8:RequestContext"/>
     </wsdl:message>
     <wsdl:message name="GetFullEstimateResponse">
-        <wsdl:part name="GetFullEstimateResponse" element="q9:GetFullEstimateResponse"
-                   xmlns:q9="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q9="http://purolator.com/pws/datatypes/v1" name="GetFullEstimateResponse"
+                   element="q9:GetFullEstimateResponse"/>
     </wsdl:message>
     <wsdl:message name="GetFullEstimateResponse_Headers">
-        <wsdl:part name="ResponseContext" element="q10:ResponseContext"
-                   xmlns:q10="http://purolator.com/pws/datatypes/v1"/>
+        <wsdl:part xmlns:q10="http://purolator.com/pws/datatypes/v1" name="ResponseContext"
+                   element="q10:ResponseContext"/>
     </wsdl:message>
     <wsdl:message name="EstimatingServiceContract_GetFullEstimate_ValidationFaultFault_FaultMessage">
-        <wsdl:part name="detail" element="q11:ValidationFault"
-                   xmlns:q11="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation"/>
+        <wsdl:part xmlns:q11="http://www.microsoft.com/practices/EnterpriseLibrary/2007/01/wcf/validation" name="detail"
+                   element="q11:ValidationFault"/>
     </wsdl:message>
     <wsdl:portType name="EstimatingServiceContract">
         <wsdl:documentation>Service Contract Class - EstimatingServiceContract</wsdl:documentation>

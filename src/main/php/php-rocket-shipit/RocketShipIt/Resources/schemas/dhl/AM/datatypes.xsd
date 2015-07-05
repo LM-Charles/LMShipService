@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://www.dhl.com/datatypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.dhl.com/datatypes"
             xmlns="http://www.dhl.com/datatypes" elementFormDefault="unqualified" attributeFormDefault="unqualified">
     <xsd:element name="DataTypes">
         <xsd:annotation>

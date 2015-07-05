@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://www.dhl.com/pickupdatatypes" xmlns:dhl="http://www.dhl.com/datatypes"
-            xmlns:dhlPickup="http://www.dhl.com/pickupdatatypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+<xsd:schema xmlns:dhl="http://www.dhl.com/datatypes" xmlns:dhlPickup="http://www.dhl.com/pickupdatatypes"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.dhl.com/pickupdatatypes"
             elementFormDefault="unqualified" attributeFormDefault="unqualified">
     <xsd:import namespace="http://www.dhl.com/datatypes" schemaLocation="datatypes.xsd"/>
     <xsd:complexType name="LargestPiece">

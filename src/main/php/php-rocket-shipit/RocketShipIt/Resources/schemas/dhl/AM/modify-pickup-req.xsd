@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<xsd:schema targetNamespace="http://www.dhl.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.dhl.com"
-            xmlns:dhl="http://www.dhl.com/datatypes" xmlns:dhlPickup="http://www.dhl.com/pickupdatatypes"
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dhl="http://www.dhl.com/datatypes"
+            xmlns:dhlPickup="http://www.dhl.com/pickupdatatypes"
+            targetNamespace="http://www.dhl.com" xmlns="http://www.dhl.com"
             elementFormDefault="unqualified">
     <xsd:import namespace="http://www.dhl.com/datatypes"
                 schemaLocation="datatypes.xsd"/>

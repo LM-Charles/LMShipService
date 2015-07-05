@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<xsd:schema targetNamespace="http://www.dhl.com" xmlns:dhlRating="http://www.dhl.com/ratingdatatypes"
-            xmlns:dhl="http://www.dhl.com/datatypes" xmlns="http://www.dhl.com"
-            xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified">
+<xsd:schema xmlns:dhlRating="http://www.dhl.com/ratingdatatypes" xmlns:dhl="http://www.dhl.com/datatypes"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.dhl.com"
+            xmlns="http://www.dhl.com" elementFormDefault="unqualified">
     <xsd:import namespace="http://www.dhl.com/datatypes" schemaLocation="datatypes.xsd"/>
     <xsd:import namespace="http://www.dhl.com/ratingdatatypes" schemaLocation="ratingdatatypes.xsd"/>
     <xsd:element name="ShipmentRatingResponse">

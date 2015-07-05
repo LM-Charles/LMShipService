@@ -1,17 +1,17 @@
 package com.longmendelivery.service;
 
-import com.longmendelivery.lib.security.NotAuthorizedException;
-import com.longmendelivery.lib.security.SecurityPower;
-import com.longmendelivery.lib.security.TokenSecurity;
 import com.longmendelivery.persistence.entity.*;
 import com.longmendelivery.persistence.util.HibernateUtil;
-import com.longmendelivery.service.behavior.OrderCalculatorProvider;
-import com.longmendelivery.service.behavior.OrderStatusCalculator;
+import com.longmendelivery.service.behavior.rate.OrderCalculatorProvider;
+import com.longmendelivery.service.behavior.status.OrderStatusCalculator;
 import com.longmendelivery.service.model.OrderModel;
 import com.longmendelivery.service.model.OrderStatusModel;
 import com.longmendelivery.service.model.ShipmentModel;
 import com.longmendelivery.service.model.request.OrderCreationRequestModel;
 import com.longmendelivery.service.model.request.OrderStatusRequestModel;
+import com.longmendelivery.service.security.NotAuthorizedException;
+import com.longmendelivery.service.security.SecurityPower;
+import com.longmendelivery.service.security.TokenSecurity;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.hibernate.Session;

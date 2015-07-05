@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0"
-            xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns:ups="http://www.ups.com/XMLSchema"
-            xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xsd:schema xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0"
+            xmlns:ups="http://www.ups.com/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" elementFormDefault="qualified">
     <xsd:element name="Request" type="common:RequestType"/>
     <xsd:element name="Response" type="common:ResponseType"/>
     <xsd:element name="ClientInformation" type="common:ClientInformationType"/>

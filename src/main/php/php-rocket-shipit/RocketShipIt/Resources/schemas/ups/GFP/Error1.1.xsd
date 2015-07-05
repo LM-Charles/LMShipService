@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1"
-            xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:error="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1"
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:error="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1"
+            targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1"
             elementFormDefault="qualified">
     <xsd:element name="Errors">
         <xsd:complexType>

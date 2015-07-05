@@ -1,4 +1,4 @@
-package com.longmendelivery.lib.security;
+package com.longmendelivery.service.security;
 
 /**
  * Created by  rabiddesireon 20/06/15.
