@@ -7,7 +7,11 @@ import com.longmendelivery.persistence.entity.*;
 import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.behavior.OrderCalculatorProvider;
 import com.longmendelivery.service.behavior.OrderStatusCalculator;
-import com.longmendelivery.service.model.*;
+import com.longmendelivery.service.model.OrderModel;
+import com.longmendelivery.service.model.OrderStatusModel;
+import com.longmendelivery.service.model.ShipmentModel;
+import com.longmendelivery.service.model.request.OrderCreationRequestModel;
+import com.longmendelivery.service.model.request.OrderStatusRequestModel;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.hibernate.Session;
@@ -69,16 +73,16 @@ public class OrderResource {
                     orderCreationRequestModel.getOrderDate(),
                     null,
                     estimatedCost, finalCost,
-                    orderCreationRequestModel.getFromAddress(),
-                    orderCreationRequestModel.getFromCity(),
-                    orderCreationRequestModel.getFromProvince(),
-                    orderCreationRequestModel.getFromCode(),
-                    orderCreationRequestModel.getFromCountry(),
-                    orderCreationRequestModel.getToAddress(),
-                    orderCreationRequestModel.getToCity(),
-                    orderCreationRequestModel.getToProvince(),
-                    orderCreationRequestModel.getToCountry(),
-                    orderCreationRequestModel.getToCode(),
+                    orderCreationRequestModel.getFromAddress().getAddress(),
+                    orderCreationRequestModel.getFromAddress().getCity(),
+                    orderCreationRequestModel.getFromAddress().getProvince(),
+                    orderCreationRequestModel.getFromAddress().getCountry(),
+                    orderCreationRequestModel.getFromAddress().getPostal(),
+                    orderCreationRequestModel.getToAddress().getAddress(),
+                    orderCreationRequestModel.getToAddress().getCity(),
+                    orderCreationRequestModel.getToAddress().getProvince(),
+                    orderCreationRequestModel.getToAddress().getCountry(),
+                    orderCreationRequestModel.getToAddress().getPostal(),
                     courierService, handler,
                     null);
 
