@@ -1,0 +1,50 @@
+package com.longmendelivery.lib.client.shipment.rocketshipit;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.longmendelivery.lib.client.exceptions.DependentServiceException;
+import php.java.script.InteractivePhpScriptEngineFactory;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
+import java.io.IOException;
+
+/**
+ * Created by  rabiddesireon 21/06/15.
+ */
+public class WrappedScriptEngine {
+    private ScriptEngine engine;
+    private ObjectMapper objectMapper;
+
+    public WrappedScriptEngine() {
+        engine = new InteractivePhpScriptEngineFactory().getScriptEngine();
+        objectMapper = new ObjectMapper();
+    }
+
+    public WrappedScriptEngine(ScriptEngine engine, ObjectMapper objectMapper) {
+        this.engine = engine;
+        this.objectMapper = objectMapper;
+    }
+
+    public <T> T executeScript(String script, TypeReference<T> valueTypeRef) throws DependentServiceException {
+        try {
+            String value = (String) engine.eval(script);
+            T response = objectMapper.readValue(value, valueTypeRef);
+            return response;
+        } catch (ScriptException e) {
+            e.printStackTrace();
+            throw new DependentServiceException(e);
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+            throw new DependentServiceException(e);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+            throw new DependentServiceException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new DependentServiceException(e);
+        }
+    }
+}
