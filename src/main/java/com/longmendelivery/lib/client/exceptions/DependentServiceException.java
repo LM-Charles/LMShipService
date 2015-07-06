@@ -1,12 +1,10 @@
 package com.longmendelivery.lib.client.exceptions;
 
-import com.twilio.sdk.TwilioRestException;
-
 /**
  * Created by desmond on 04/06/15.
  */
 public class DependentServiceException extends Exception {
-    public DependentServiceException(TwilioRestException e) {
+    public DependentServiceException(Throwable e) {
         super(e);
     }
 }
