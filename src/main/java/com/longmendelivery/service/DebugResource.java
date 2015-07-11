@@ -2,6 +2,7 @@ package com.longmendelivery.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
+import com.longmendelivery.lib.client.exceptions.DependentServiceRequestException;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.UPSRateResponseEntry;
 import com.longmendelivery.lib.client.shipment.rocketshipit.scripts.RocketShipScriptEngine;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
@@ -25,7 +26,11 @@ public class DebugResource {
     @Path("testSMS")
     public Response testSMS(@QueryParam("to") String to, @QueryParam("body") String body) throws DependentServiceException {
         String output = "Testing SMS to : " + to + " with body: " + body;
-        new TwilioSMSClient().sendSMS(to, body);
+        try {
+            new TwilioSMSClient().sendSMS(to, body);
+        } catch (DependentServiceRequestException e) {
+            ResourceResponseUtil.generateBadRequestMessage("invalid phone number: " + to);
+        }
         return ResourceResponseUtil.generateOKMessage(output);
     }
 
@@ -54,6 +59,6 @@ public class DebugResource {
             builder.append("Entity: ").append(entityName).append(" mapped to table: ").append(tableName);
             builder.append("\n");
         }
-        return Response.status(200).entity(builder.toString()).build();
+        return Response.status(Response.Status.OK).entity(builder.toString()).build();
     }
 }
