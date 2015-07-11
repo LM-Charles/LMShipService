@@ -24,4 +24,8 @@ public class ResourceResponseUtil {
     public static Response generateNotFoundMessage(String message) {
         return Response.status(Response.Status.NOT_FOUND).entity(new MessageResponseModel(message)).build();
     }
+
+    public static Response generateBadRequestMessage(String message) {
+        return Response.status(Response.Status.BAD_REQUEST).entity(new MessageResponseModel(message)).build();
+    }
 }

@@ -1,6 +1,7 @@
 package com.longmendelivery.service;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
+import com.longmendelivery.lib.client.exceptions.DependentServiceRequestException;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.entity.AppUserGroupEntity;
@@ -117,12 +118,14 @@ public class AppUserResource {
         } catch (NotAuthorizedException e) {
             ResourceResponseUtil.generateForbiddenMessage(e);
         }
+
+
         return Response.status(Response.Status.OK).build();
     }
 
     @POST
     @Path("/{userId}/activation")
-    public Response sendActivationVerification(@PathParam("userId") Integer userId, @QueryParam("token") String token) throws DependentServiceException {
+    public Response sendActivationVerification(@PathParam("userId") Integer userId, @QueryParam("phone") String phone, @QueryParam("token") String token) throws DependentServiceException {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
         } catch (NotAuthorizedException e) {
@@ -134,17 +137,26 @@ public class AppUserResource {
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
+            TwilioSMSClient twilioSMSClient = new TwilioSMSClient();
+
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
             if (user == null) {
                 return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            }
+            if (phone != null && !phone.equals(user.getPhone())) {
+                user.setPhone(phone);
             }
             user.setUserStatus(AppUserStatusEntity.PENDING_VERIFICATION_REGISTER);
             user.setVerificationString(randomVerification);
             writeSession.update(user);
             tx.commit();
 
-            String smsBody = buildRegistrationVerificationMessage(user.getFirstName(), user.getLastName(), randomVerification);
-            new TwilioSMSClient().sendSMS(user.getPhone(), smsBody);
+            String smsBody = buildRegistrationVerificationMessage(user.getEmail(), randomVerification);
+            try {
+                twilioSMSClient.sendSMS(user.getPhone(), smsBody);
+            } catch (DependentServiceRequestException e) {
+                return ResourceResponseUtil.generateBadRequestMessage("Unable to activate due to invalid phone number: " + phone);
+            }
             return ResourceResponseUtil.generateOKMessage("Register verification sent for " + user.getEmail() + " to " + user.getPhone());
         } finally {
             writeSession.close();
@@ -184,13 +196,13 @@ public class AppUserResource {
         }
     }
 
-    private String buildRegistrationVerificationMessage(String firstName, String lastName, String randomVerification) {
-        return new StringBuilder().append("Dear ").append(firstName).append(" ").append(lastName).append(" ,").append("your verification code is: ").append(randomVerification).toString();
+    private String buildRegistrationVerificationMessage(String username, String randomVerification) {
+        return new StringBuilder().append("Dear customer (").append(username).append("), your verification code is: ").append(randomVerification).toString();
     }
 
     @POST
     @Path("/{userId}/resetPassword")
-    public Response sendChangePasswordVerification(@PathParam("userId") Integer userId) throws DependentServiceException {
+    public Response sendChangePasswordVerification(@PathParam("userId") Integer userId) throws DependentServiceException, DependentServiceRequestException {
         ThrottleSecurity.getInstance().throttle(userId);
 
         String randomVerification = SecurityUtil.generateSecureVerificationCode();
@@ -208,7 +220,7 @@ public class AppUserResource {
                 writeSession.update(user);
                 tx.commit();
 
-                String smsBody = buildRegistrationVerificationMessage(user.getFirstName(), user.getLastName(), randomVerification);
+                String smsBody = buildRegistrationVerificationMessage(user.getEmail(), randomVerification);
                 new TwilioSMSClient().sendSMS(user.getPhone(), smsBody);
                 return ResourceResponseUtil.generateOKMessage("Password verification sent for " + user.getEmail() + " to " + user.getPhone());
             }
