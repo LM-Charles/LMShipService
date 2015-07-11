@@ -1,6 +1,9 @@
 package com.longmendelivery.lib.client.shipment;
 
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.*;
+import com.longmendelivery.lib.client.shipment.rocketshipit.model.ShippingAddress;
+import com.longmendelivery.lib.client.shipment.rocketshipit.model.ShippingDimension;
+import com.longmendelivery.lib.client.shipment.rocketshipit.model.ShippingService;
+import com.longmendelivery.lib.client.shipment.rocketshipit.model.TrackingRecord;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -18,7 +21,7 @@ public class DummyShipmentClient implements ShipmentClient {
     }
 
     @Override
-    public TrackingRecord getTracking(String trackingNumber, TrackingDocumentType trackingDocumentType) {
-        return null;
+    public TrackingRecord getTracking(String trackingNumber) {
+        return new TrackingRecord();
     }
 }
