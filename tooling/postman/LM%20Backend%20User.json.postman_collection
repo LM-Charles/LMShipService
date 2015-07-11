@@ -12,19 +12,19 @@
 		"88a50783-31e2-3d2d-a50f-1746517d381d",
 		"3f228a63-99e8-b7c2-2bb3-eb7809951cce",
 		"6efa450f-e4fa-d26b-eaf8-0073e40f1891",
+		"b6c737aa-9955-2fd6-3c23-7633cc75f8ca",
+		"cfa41acb-3e5a-6e0b-5be1-1ef41e1f73d6",
 		"14c1b777-64d7-50db-bbd8-dd0e03b138df",
 		"f6afe20e-39e1-a2df-05be-9873f4fee314",
 		"b0cfa5d3-234e-ad23-00c0-022236d1b464",
-		"a38d0686-9e93-56f5-86e6-f2c0f39c97d0"
+		"a38d0686-9e93-56f5-86e6-f2c0f39c97d0",
+		"5e929a99-5dc2-7fe4-65c3-2ef960fde7a2"
 	],
 	"folders": [],
 	"timestamp": 1434838203281,
-	"owner": 0,
+	"owner": "59825",
 	"remoteLink": "",
 	"public": false,
-	"createdAt": null,
-	"updatedAt": null,
-	"synced": false,
 	"requests": [
 		{
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
@@ -39,10 +39,8 @@
 			"timestamp": 0,
 			"responses": [],
 			"version": 2,
-			"owner": 0,
 			"preRequestScript": "",
 			"tests": "",
-			"synced": false,
 			"rawModeData": ""
 		},
 		{
@@ -58,10 +56,8 @@
 			"timestamp": 0,
 			"responses": [],
 			"version": 2,
-			"owner": 0,
 			"preRequestScript": "",
 			"tests": "",
-			"synced": false,
 			"rawModeData": ""
 		},
 		{
@@ -103,10 +99,8 @@
 			"timestamp": 0,
 			"responses": [],
 			"version": 2,
-			"owner": 0,
 			"preRequestScript": "",
-			"tests": "",
-			"synced": false
+			"tests": ""
 		},
 		{
 			"id": "4baa01d0-bc31-438d-c85c-521d6d95ea9d",
@@ -125,8 +119,7 @@
 			"name": "debug database",
 			"description": "",
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
-			"responses": [],
-			"synced": false
+			"responses": []
 		},
 		{
 			"id": "4faacd6f-b59c-e98c-d41e-9924dfd308cb",
@@ -141,31 +134,51 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1435044664377,
+			"time": 1436125062703,
 			"name": "debug php",
 			"description": "",
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"responses": [],
-			"synced": false,
-			"rawModeData": "require './src/main/php/php-rocket-shipit/autoload.php';\n\n$rate = new \\RocketShipIt\\Rate('UPS');\n\n$rate->setParameter('shipCode','V4C0A9');\n$rate->setParameter('shipCountry','CA');\n$rate->setParameter('toCode','V7C2X4');\n$rate->setParameter('toCountry','CA');\n$rate->setParameter('weight','5');\n$rate->setParameter('residentialAddressIndicator','0');\n$rate->setParameter('packagingType','02');\n\n$response = $rate->getSimpleRates();\necho serialize($response);\n"
+			"rawModeData": "require './src/main/php/php-rocket-shipit/autoload.php';\n\n$rate = new \\RocketShipIt\\Rate('UPS');\n\n$rate->setParameter('shipCode','V4C0A9');\n$rate->setParameter('shipCountry','CA');\n$rate->setParameter('toCode','V7C2X4');\n$rate->setParameter('toCountry','CA');\n$rate->setParameter('weight','5');\n$rate->setParameter('residentialAddressIndicator','0');\n$rate->setParameter('packagingType','02');\n\n$response = $rate->getSimpleRates();\necho json_encode($response);\n"
 		},
 		{
-			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
-			"id": "6efa450f-e4fa-d26b-eaf8-0073e40f1891",
-			"name": "users post 1 activation",
-			"description": "",
-			"url": "{{path}}/rest/user/1/activation",
+			"id": "5e929a99-5dc2-7fe4-65c3-2ef960fde7a2",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{path}}/rest/rate/",
+			"preRequestScript": "",
+			"pathVariables": {},
 			"method": "POST",
-			"headers": "",
 			"data": [],
 			"dataMode": "raw",
-			"timestamp": 0,
-			"responses": [],
 			"version": 2,
-			"owner": 0,
-			"preRequestScript": "",
 			"tests": "",
-			"synced": false,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1436652476853,
+			"name": "rate",
+			"description": "",
+			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
+			"responses": [],
+			"rawModeData": "{\n    \"toAddress\" : {\n        \"address\" : \"\",\n        \"city\" : \"\",\n        \"province\" : \"\",\n        \"country \" : \"\",\n        \"postal\" : \"\",\n        \"residential\" : false\n    },\n    \"fromAddress\" : {\n        \"address\" : \"\",\n        \"city\" : \"\",\n        \"province\" : \"\",\n        \"country \" : \"\",\n        \"postal\" : \"\",\n        \"residential\" : false\n    },\n    \"shipments\" : [\n       {\n           \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 10\n       },\n              {\n           \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 10\n       }\n    ]\n}\n"
+		},
+		{
+			"id": "6efa450f-e4fa-d26b-eaf8-0073e40f1891",
+			"headers": "",
+			"url": "{{path}}/rest/user/2/activation?token=UserToken",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1436652573263,
+			"name": "users post 1 activation",
+			"description": "",
+			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
+			"responses": [],
 			"rawModeData": ""
 		},
 		{
@@ -181,10 +194,8 @@
 			"timestamp": 0,
 			"responses": [],
 			"version": 2,
-			"owner": 0,
 			"preRequestScript": "",
 			"tests": "",
-			"synced": false,
 			"rawModeData": ""
 		},
 		{
@@ -200,10 +211,8 @@
 			"timestamp": 0,
 			"responses": [],
 			"version": 2,
-			"owner": 0,
 			"preRequestScript": "",
 			"tests": "",
-			"synced": false,
 			"rawModeData": ""
 		},
 		{
@@ -219,10 +228,8 @@
 			"timestamp": 0,
 			"responses": [],
 			"version": 2,
-			"owner": 0,
 			"preRequestScript": "",
 			"tests": "",
-			"synced": false,
 			"rawModeData": ""
 		},
 		{
@@ -238,10 +245,48 @@
 			"timestamp": 0,
 			"responses": [],
 			"version": 2,
-			"owner": 0,
 			"preRequestScript": "",
 			"tests": "",
-			"synced": false,
+			"rawModeData": ""
+		},
+		{
+			"id": "b6c737aa-9955-2fd6-3c23-7633cc75f8ca",
+			"headers": "",
+			"url": "{{path}}/rest/user/2/activation?token=UserToken&phone=16047821542",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1436654052117,
+			"name": "users post 1 activation with phone",
+			"description": "",
+			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
+			"responses": [],
+			"rawModeData": ""
+		},
+		{
+			"id": "cfa41acb-3e5a-6e0b-5be1-1ef41e1f73d6",
+			"headers": "",
+			"url": "{{path}}/rest/user/2/activation?token=UserToken&phone=1604",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1436654124148,
+			"name": "users post 1 activation with phone error",
+			"description": "",
+			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
+			"responses": [],
 			"rawModeData": ""
 		},
 		{
@@ -262,7 +307,6 @@
 			"description": "",
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"responses": [],
-			"synced": false,
 			"rawModeData": "echo getcwd();"
 		},
 		{
@@ -283,7 +327,6 @@
 			"description": "",
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"responses": [],
-			"synced": false,
 			"rawModeData": "{\n    \"phone\" : \"6047821542\",\n    \"email\" : \"desmond007@gmail.com\",\n    \"password\" : \"password\"\n}"
 		},
 		{
@@ -299,10 +342,8 @@
 			"timestamp": 0,
 			"responses": [],
 			"version": 2,
-			"owner": 0,
 			"preRequestScript": "",
 			"tests": "",
-			"synced": false,
 			"rawModeData": ""
 		}
 	]
