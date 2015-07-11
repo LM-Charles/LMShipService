@@ -73,6 +73,9 @@ public class AppUserResource {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
         AppUserEntity user = (AppUserEntity) session.get(AppUserEntity.class, userId);
+        if (user == null) {
+            return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+        }
         user.setApiToken("hidden");
         user.setPassword_md5("hidden");
         user.setVerificationString("hidden");
@@ -80,6 +83,7 @@ public class AppUserResource {
         tx.rollback();
         return Response.status(Response.Status.OK).entity(userModel).build();
     }
+
 
     @GET
     @Path("/{userId}/admin")
@@ -94,6 +98,9 @@ public class AppUserResource {
         try {
             Transaction tx = session.beginTransaction();
             AppUserEntity user = (AppUserEntity) session.get(AppUserEntity.class, userId);
+            if (user == null) {
+                return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            }
             AppUserModel userModel = DozerBeanMapperSingletonWrapper.getInstance().map(user, AppUserModel.class);
             tx.rollback();
             return Response.status(Response.Status.OK).entity(userModel).build();
@@ -157,6 +164,9 @@ public class AppUserResource {
         Transaction tx = writeSession.beginTransaction();
         try {
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
+            if (user == null) {
+                return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            }
 
             if (!user.getUserStatus().equals(AppUserStatusEntity.PENDING_VERIFICATION_REGISTER)) {
                 return ResourceResponseUtil.generateForbiddenMessage("User is not pending verification");
@@ -188,6 +198,9 @@ public class AppUserResource {
         Transaction tx = writeSession.beginTransaction();
         try {
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
+            if (user == null) {
+                return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            }
             if (user.getUserStatus().equals(AppUserStatusEntity.DISABLED)) {
                 return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("Cannot request password change of disabled user").build();
             } else {
@@ -214,6 +227,9 @@ public class AppUserResource {
         Transaction tx = writeSession.beginTransaction();
         try {
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
+            if (user == null) {
+                return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            }
 
             if (user.getUserStatus().equals(AppUserStatusEntity.DISABLED)) {
                 return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("Cannot request password change of disabled user").build();
@@ -240,6 +256,9 @@ public class AppUserResource {
         Transaction tx = writeSession.beginTransaction();
         try {
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
+            if (user == null) {
+                return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            }
 
             user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
             user.setPassword_md5(SecurityUtil.md5(SecurityUtil.generateSecureToken()));
