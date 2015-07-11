@@ -2,8 +2,8 @@ package com.longmendelivery.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
-import com.longmendelivery.lib.client.shipment.rocketshipit.WrappedScriptEngine;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.UPSRateResponseEntry;
+import com.longmendelivery.lib.client.shipment.rocketshipit.scripts.RocketShipScriptEngine;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.util.ResourceResponseUtil;
@@ -33,7 +33,7 @@ public class DebugResource {
     @Path("testPHP")
     @Consumes("text/plain")
     public Response testPHP(String script) throws DependentServiceException, ScriptException {
-        List<UPSRateResponseEntry> message = new WrappedScriptEngine().executeScript(script, new TypeReference<List<UPSRateResponseEntry>>() {
+        List<UPSRateResponseEntry> message = new RocketShipScriptEngine().executeScript(script, new TypeReference<List<UPSRateResponseEntry>>() {
         });
 
         return Response.status(Response.Status.OK).entity(message).build();
