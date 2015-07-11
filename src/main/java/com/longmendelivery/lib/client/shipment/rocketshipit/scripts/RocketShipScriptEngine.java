@@ -1,4 +1,4 @@
-package com.longmendelivery.lib.client.shipment.rocketshipit;
+package com.longmendelivery.lib.client.shipment.rocketshipit.scripts;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -14,16 +14,16 @@ import java.io.IOException;
 /**
  * Created by desmond on 21/06/15.
  */
-public class WrappedScriptEngine {
+public class RocketShipScriptEngine {
     private ScriptEngine engine;
     private ObjectMapper objectMapper;
 
-    public WrappedScriptEngine() {
+    public RocketShipScriptEngine() {
         engine = new InteractivePhpScriptEngineFactory().getScriptEngine();
         objectMapper = new ObjectMapper();
     }
 
-    public WrappedScriptEngine(ScriptEngine engine, ObjectMapper objectMapper) {
+    public RocketShipScriptEngine(ScriptEngine engine, ObjectMapper objectMapper) {
         this.engine = engine;
         this.objectMapper = objectMapper;
     }
