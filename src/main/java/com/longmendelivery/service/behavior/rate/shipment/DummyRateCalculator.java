@@ -16,8 +16,9 @@ public class DummyRateCalculator implements RateCalculator {
     @Override
     public RateResponseModel calculate(RateRequestModel rateRequestModel) {
         List<RateEntryModel> rates = new ArrayList<>();
-        RateEntryModel dummyModel = new RateEntryModel("", "Dummy", BigDecimal.ONE, "DummyCourier", "DummyService", DateTime.now());
+        RateEntryModel dummyModel = new RateEntryModel("", "LMSameCity", BigDecimal.ZERO, "LongMenDelivery", "LongMenSameCityCourier", DateTime.now());
+        RateEntryModel serviceRate = new RateEntryModel("", "LMSameCity", new BigDecimal("5.00"), "LongMenDelivery", "LongMenSameCityHandling", DateTime.now());
         rates.add(dummyModel);
-        return new RateResponseModel(DateTime.now(), rates);
+        return new RateResponseModel(DateTime.now(), rates, serviceRate);
     }
 }

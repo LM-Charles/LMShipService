@@ -22,5 +22,8 @@ public class RateResponseModel {
     DateTime rateDate;
 
     @NonNull
-    List<RateEntryModel> rates;
+    List<RateEntryModel> courierRates;
+
+    @NonNull
+    RateEntryModel handlingRate;
 }
