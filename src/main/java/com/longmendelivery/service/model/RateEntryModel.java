@@ -21,7 +21,7 @@ public class RateEntryModel {
     private String service_icon_url;
     @JsonProperty
     @NonNull
-    private String LMCategory;
+    private String category;
     @JsonProperty
     @NonNull
     private BigDecimal estimate;
@@ -31,6 +31,7 @@ public class RateEntryModel {
     @JsonProperty
     @NonNull
     private String serviceName;
+
     @JsonProperty
     private DateTime estimatedDelivery;
 }
