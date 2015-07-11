@@ -128,6 +128,9 @@ public class AppUserResource {
         Transaction tx = writeSession.beginTransaction();
         try {
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
+            if (user == null) {
+                return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            }
             user.setUserStatus(AppUserStatusEntity.PENDING_VERIFICATION_REGISTER);
             user.setVerificationString(randomVerification);
             writeSession.update(user);
