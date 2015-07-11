@@ -29,4 +29,7 @@ public class AddressModel {
     @NonNull
     private String postal = "";
 
+    @JsonProperty
+    private Boolean residential = false;
+
 }

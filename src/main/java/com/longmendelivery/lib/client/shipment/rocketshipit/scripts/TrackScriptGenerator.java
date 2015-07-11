@@ -8,13 +8,26 @@ import java.util.EnumSet;
 /**
  * Created by  rabiddesireon 05/07/15.
  */
-public class TrackScript {
+public class TrackScriptGenerator {
     public static final EnumSet<CourierType> SUPPORTED = EnumSet.of(CourierType.FEDEX, CourierType.UPS, CourierType.CANADA_POST);
 
-    String generate(final CourierType courierType, final String track) {
+    private final CourierType courierType;
+    private String trackingNumber;
+
+    public TrackScriptGenerator(CourierType courierType) {
         validate(courierType);
+        this.courierType = courierType;
+    }
+
+    public TrackScriptGenerator withTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
+        return this;
+    }
+
+
+    public String generate() {
         String script = "$t = new \\RocketShipIt\\Track('" + courierType + "');\n" +
-                "$response = $t->track('" + track + "');\n" +
+                "$response = $t->track('" + trackingNumber + "');\n" +
                 "echo json_encode($response);";
         return script;
     }
