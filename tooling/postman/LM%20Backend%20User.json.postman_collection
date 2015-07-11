@@ -154,12 +154,12 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1436652476853,
+			"time": 1436654464761,
 			"name": "rate",
 			"description": "",
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"responses": [],
-			"rawModeData": "{\n    \"toAddress\" : {\n        \"address\" : \"\",\n        \"city\" : \"\",\n        \"province\" : \"\",\n        \"country \" : \"\",\n        \"postal\" : \"\",\n        \"residential\" : false\n    },\n    \"fromAddress\" : {\n        \"address\" : \"\",\n        \"city\" : \"\",\n        \"province\" : \"\",\n        \"country \" : \"\",\n        \"postal\" : \"\",\n        \"residential\" : false\n    },\n    \"shipments\" : [\n       {\n           \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 10\n       },\n              {\n           \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 10\n       }\n    ]\n}\n"
+			"rawModeData": "{\n    \"toAddress\" : {\n        \"address\" : \"8355 Delsom Way\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"country\" : \"CA\",\n        \"postal\" : \"V4C0A9\",\n        \"residential\" : true\n    },\n    \"fromAddress\" : {\n        \"address\" : \"8355 Delsom Way\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"country\" : \"CA\",\n        \"postal\" : \"V4C0A9\",\n        \"residential\" : true\n    },\n    \"shipments\" : [\n       {\n           \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 10\n       },\n              {\n           \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 10\n       }\n    ]\n}\n"
 		},
 		{
 			"id": "6efa450f-e4fa-d26b-eaf8-0073e40f1891",
