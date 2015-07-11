@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
  */
 public class ResourceResponseUtil {
     public static Response generateForbiddenMessage(NotAuthorizedException e) {
-        return Response.status(Response.Status.FORBIDDEN).entity(new MessageResponseModel(e.getResponseMessage())).build();
+        return Response.status(Response.Status.FORBIDDEN).entity(new MessageResponseModel(e.getLocalizedMessage())).build();
     }
 
     public static Response generateForbiddenMessage(String message) {
