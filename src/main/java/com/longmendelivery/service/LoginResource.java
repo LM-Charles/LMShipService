@@ -58,6 +58,10 @@ public class LoginResource {
         Transaction tx = writeSession.beginTransaction();
         try {
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
+            if (user == null) {
+                return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            }
+
             user.setApiToken(SecurityUtil.generateSecureToken());
             writeSession.update(user);
             tx.commit();
