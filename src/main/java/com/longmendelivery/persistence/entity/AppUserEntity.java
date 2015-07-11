@@ -84,8 +84,8 @@ public class AppUserEntity implements DAOEntity {
         return "AppUserEntity{" +
                 "id=" + id +
                 ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
                 ", password_md5='" + password_md5 + '\'' +
+                ", email='" + email + '\'' +
                 ", userGroup=" + userGroup +
                 ", userStatus=" + userStatus +
                 ", apiToken='" + apiToken + '\'' +
