@@ -28,4 +28,8 @@ public class ResourceResponseUtil {
     public static Response generateBadRequestMessage(String message) {
         return Response.status(Response.Status.BAD_REQUEST).entity(new MessageResponseModel(message)).build();
     }
+
+    public static Response generateConflictMessage(String message) {
+        return Response.status(Response.Status.CONFLICT).entity(new MessageResponseModel(message)).build();
+    }
 }
