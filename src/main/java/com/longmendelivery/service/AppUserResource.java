@@ -8,6 +8,7 @@ import com.longmendelivery.persistence.entity.AppUserGroupEntity;
 import com.longmendelivery.persistence.entity.AppUserStatusEntity;
 import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.model.AppUserModel;
+import com.longmendelivery.service.model.VerificationCodeModel;
 import com.longmendelivery.service.model.request.ChangeUserDetailRequestModel;
 import com.longmendelivery.service.model.request.RegisterRequestModel;
 import com.longmendelivery.service.security.NotAuthorizedException;
@@ -16,6 +17,8 @@ import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
+import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -55,12 +58,24 @@ public class AppUserResource {
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         try {
             Transaction tx = writeSession.beginTransaction();
-            Integer userId = (Integer) writeSession.save(newUser);
+            try {
+                Integer userId = (Integer) writeSession.save(newUser);
+            } catch (ConstraintViolationException e) {
+                return ResourceResponseUtil.generateConflictMessage("user already registered");
+            }
             tx.commit();
-            return Response.status(Response.Status.OK).entity(userId).build();
+            AppUserModel newUserModel = DozerBeanMapperSingletonWrapper.getInstance().map(newUser, AppUserModel.class);
+            sanitizeUserModel(newUserModel);
+            return Response.status(Response.Status.OK).entity(newUserModel).build();
         } finally {
             writeSession.close();
         }
+    }
+
+    private void sanitizeUserModel(AppUserModel newUserModel) {
+        newUserModel.setApiToken("hidden");
+        newUserModel.setPassword_md5("hidden");
+        newUserModel.setVerificationCode(new VerificationCodeModel("hidden", DateTime.now()));
     }
 
     @GET
@@ -77,11 +92,8 @@ public class AppUserResource {
         if (user == null) {
             return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
         }
-        user.setApiToken("hidden");
-        user.setPassword_md5("hidden");
-        user.setVerificationString("hidden");
         AppUserModel userModel = DozerBeanMapperSingletonWrapper.getInstance().map(user, AppUserModel.class);
-        tx.rollback();
+        sanitizeUserModel(userModel);
         return Response.status(Response.Status.OK).entity(userModel).build();
     }
 
