@@ -1,0 +1,34 @@
+{
+	"id": "4b10a446-ceba-dd1d-2955-3d5b4a7926df",
+	"name": "LM Backend Debug",
+	"description": "",
+	"order": [
+		"c24f22a3-a97f-9819-5f5f-1eaac349e7cd"
+	],
+	"folders": [],
+	"timestamp": 1435430360935,
+	"owner": "59825",
+	"remoteLink": "",
+	"public": false,
+	"requests": [
+		{
+			"id": "c24f22a3-a97f-9819-5f5f-1eaac349e7cd",
+			"headers": "",
+			"url": "{{path}}/rest/ping",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1435431564857,
+			"name": "debug ping",
+			"description": "",
+			"collectionId": "4b10a446-ceba-dd1d-2955-3d5b4a7926df",
+			"responses": []
+		}
+	]
+}
