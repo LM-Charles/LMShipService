@@ -39,6 +39,14 @@ public class DebugResource {
         return ResourceResponseUtil.generateOKMessage(message);
     }
 
+    @POST
+    @Path("testEnvironment")
+    @Consumes("text/plain")
+    public Response testEnvironment(String variable) throws DependentServiceException, ScriptException {
+        String value = System.getProperty(variable);
+        return ResourceResponseUtil.generateOKMessage(value);
+    }
+
     @GET
     @Path("testDB")
     public Response testDB() throws DependentServiceException {
