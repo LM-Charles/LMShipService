@@ -1,9 +1,7 @@
 package com.longmendelivery.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.exceptions.DependentServiceRequestException;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.UPSRateResponseEntry;
 import com.longmendelivery.lib.client.shipment.rocketshipit.scripts.RocketShipScriptEngine;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.persistence.util.HibernateUtil;
@@ -16,7 +14,6 @@ import org.hibernate.persister.entity.AbstractEntityPersister;
 import javax.script.ScriptException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.List;
 import java.util.Map;
 
 @Path("/debug")
@@ -38,10 +35,8 @@ public class DebugResource {
     @Path("testPHP")
     @Consumes("text/plain")
     public Response testPHP(String script) throws DependentServiceException, ScriptException {
-        List<UPSRateResponseEntry> message = new RocketShipScriptEngine().executeScript(script, new TypeReference<List<UPSRateResponseEntry>>() {
-        });
-
-        return Response.status(Response.Status.OK).entity(message).build();
+        String message = new RocketShipScriptEngine().executeScriptToString(script);
+        return ResourceResponseUtil.generateOKMessage(message);
     }
 
     @GET
