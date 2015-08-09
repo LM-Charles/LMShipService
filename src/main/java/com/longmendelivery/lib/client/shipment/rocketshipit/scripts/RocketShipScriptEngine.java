@@ -47,4 +47,14 @@ public class RocketShipScriptEngine {
             throw new DependentServiceException(e);
         }
     }
+
+    public String executeScriptToString(String script) throws DependentServiceException {
+        try {
+            String value = (String) engine.eval(script);
+            return value;
+        } catch (ScriptException e) {
+            e.printStackTrace();
+            throw new DependentServiceException(e);
+        }
+    }
 }
