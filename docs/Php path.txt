@@ -1,0 +1,11 @@
+Desktop PHP Root
+{
+  "message": "/home/desmond/IdeaProjects/LMShipService"
+}
+Script location: /home/desmond/IdeaProjects/LMShipService/src/main/php/php-rocket-shipit/RocketShipIt/Carrier/Usps.php
+
+Devo PHP Root
+{
+  "message": "/usr/share/tomcat7"
+}
+/var/lib/tomcat7/webapps/ROOT/WEB-INF/classes/php-rocket-shipit/RocketShipIt/Service/AddressValidate/Usps.php
