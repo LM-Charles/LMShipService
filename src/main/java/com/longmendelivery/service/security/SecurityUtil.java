@@ -20,7 +20,7 @@ public class SecurityUtil {
     }
 
     public static String generateSecureVerificationCode() {
-        return new BigInteger(70, secureRandom).toString(32);
+        return String.valueOf(secureRandom.nextInt(99999));
     }
 
     public static String md5(String password) {
