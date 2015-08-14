@@ -40,7 +40,7 @@ public class RateResource {
             Map<ShippingService, BigDecimal> packageRate = client.getAllRates(rateRequestModel.getFromAddress(), rateRequestModel.getToAddress(), dimension);
             for (Map.Entry<ShippingService, BigDecimal> entry : packageRate.entrySet()) {
                 BigDecimal oldTotal = totalRates.get(entry.getKey());
-                if (oldTotal.equals(BigDecimal.ZERO)) {
+                if (oldTotal == null) {
                     totalRates.put(entry.getKey(), entry.getValue());
                 } else {
                     totalRates.put(entry.getKey(), oldTotal.add(entry.getValue()));
@@ -55,7 +55,7 @@ public class RateResource {
             rates.add(rateEntry);
         }
 
-        RateResponseModel responseModel = new RateResponseModel(DateTime.now(), rates, null);
+        RateResponseModel responseModel = new RateResponseModel(DateTime.now(), rates, new RateEntryModel("", "HANDLING", BigDecimal.ONE, "HANDLING", "HANDLING", DateTime.now()));
 
         return Response.status(Response.Status.OK).entity(responseModel).build();
     }
