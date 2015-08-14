@@ -2,9 +2,6 @@ package com.longmendelivery.lib.client.shipment.rocketshipit.model;
 
 import java.util.EnumSet;
 
-/**
- * Created by  rabiddesireon 11/07/15.
- */
 public enum CourierType {
     UPS("UPS", "02"), FEDEX("fedex", "01"), CANADA_POST("canada", "");
 
