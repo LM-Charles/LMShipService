@@ -2,8 +2,6 @@ package com.longmendelivery.service;
 
 import com.longmendelivery.persistence.entity.*;
 import com.longmendelivery.persistence.util.HibernateUtil;
-import com.longmendelivery.service.behavior.rate.OrderCalculatorProvider;
-import com.longmendelivery.service.behavior.status.OrderStatusCalculator;
 import com.longmendelivery.service.model.OrderModel;
 import com.longmendelivery.service.model.OrderStatusModel;
 import com.longmendelivery.service.model.ShipmentModel;

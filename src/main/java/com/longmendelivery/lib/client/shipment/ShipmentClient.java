@@ -14,6 +14,5 @@ import java.util.Map;
  */
 public interface ShipmentClient {
     Map<ShippingService, BigDecimal> getAllRates(AddressModel source, AddressModel destination, ShippingDimension dimension) throws DependentServiceException;
-
     TrackingRecord getTracking(CourierType type, String trackingNumber);
 }
