@@ -32,7 +32,7 @@ public class RocketShipShipmentClient implements ShipmentClient {
     public Map<ShippingService, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, ShippingDimension dimension) throws DependentServiceException {
         Map<ShippingService, BigDecimal> rateMap = new TreeMap<>();
 
-        for (CourierType type : CourierType.ALL) {
+        for (CourierType type : CourierType.ENABLED) {
             RateScriptGenerator generator = new RateScriptGenerator(type);
             generator.withSourceAddress(sourceAddress);
             generator.withDestinationAddress(destinationAddress);
@@ -42,7 +42,7 @@ public class RocketShipShipmentClient implements ShipmentClient {
             });
 
             for (UPSRateResponseEntry entry : result) {
-                rateMap.put(ShippingService.getFromServiceCode(entry.getServiceCode()), new BigDecimal(entry.getRate()));
+                rateMap.put(ShippingService.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
             }
         }
 
