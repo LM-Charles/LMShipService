@@ -54,7 +54,8 @@ public class RocketShipShipmentClient implements ShipmentClient {
         TrackScriptGenerator generator = new TrackScriptGenerator(type);
         generator.withTrackingNumber(trackingNumber);
         String script = generator.generate();
-        //XXX
+        System.out.println(script);
+
         return new TrackingRecord();
     }
 }

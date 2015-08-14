@@ -6,7 +6,6 @@ package com.longmendelivery.service.initializer;
 public class EnvironmentUtil {
     public static EnvironmentStage getStage() {
         String ebsStage = System.getProperty("EBS_STAGE");
-        System.out.println(ebsStage);
         if (ebsStage == null || ebsStage.isEmpty()) {
             return EnvironmentStage.DESKTOP;
         }
