@@ -61,7 +61,7 @@ public class RateScriptGenerator {
     public String generate() {
         StringBuilder scriptBuilder = new StringBuilder("$rate = new \\RocketShipIt\\Rate('" + courierType + "');\n");
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
-            scriptBuilder.append("$package->setParameter('" + entry.getKey() + "', " + entry.getValue() + ");");
+            scriptBuilder.append("$rate->setParameter('" + entry.getKey() + "', '" + entry.getValue() + "');\n");
         }
         scriptBuilder.append("$response = $rate->getSimpleRates();\n");
         scriptBuilder.append("echo json_encode($response);");

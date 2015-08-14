@@ -63,7 +63,8 @@ public class OrderResource {
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, orderCreationRequestModel.getUserId());
             CourierServiceEntity courierService = (CourierServiceEntity) writeSession.get(CourierServiceEntity.class, orderCreationRequestModel.getCourierServiceId());
 
-            BigDecimal estimatedCost = OrderCalculatorProvider.provide(orderCreationRequestModel.getCourierServiceId()).estimate(orderCreationRequestModel);
+            //XXX
+            BigDecimal estimatedCost = BigDecimal.ONE;
             BigDecimal finalCost = null;
             String handler = null;
             OrderEntity orderEntity = new OrderEntity(
@@ -150,7 +151,9 @@ public class OrderResource {
                 return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
             }
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
-            OrderStatusModel orderStatusModel = OrderStatusCalculator.calculate(order);
+
+            //XXX
+            OrderStatusModel orderStatusModel = null;
             return Response.status(Response.Status.OK).entity(orderStatusModel).build();
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e);
