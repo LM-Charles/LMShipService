@@ -24,7 +24,7 @@ import java.util.TreeMap;
 public class RocketShipShipmentClient implements ShipmentClient {
     private final RocketShipScriptEngine engine;
 
-    public RocketShipShipmentClient() {
+    public RocketShipShipmentClient() throws DependentServiceException {
         this.engine = new RocketShipScriptEngine();
     }
 

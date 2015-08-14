@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
+import com.longmendelivery.service.initializer.EnvironmentStage;
+import com.longmendelivery.service.initializer.EnvironmentUtil;
 import php.java.script.InteractivePhpScriptEngineFactory;
 
 import javax.script.ScriptEngine;
@@ -15,12 +17,22 @@ import java.io.IOException;
  * Created by  rabiddesireon 21/06/15.
  */
 public class RocketShipScriptEngine {
+    public static String getRocketShipItPath() {
+        if (EnvironmentUtil.getStage().equals(EnvironmentStage.DESKTOP)) {
+            return "'./src/main/php/php-rocket-shipit/autoload.php'";
+        } else {
+            return "'/var/lib/tomcat7/webapps/ROOT/WEB-INF/classes/php-rocket-shipit/autoload.php'";
+        }
+    }
+
     private ScriptEngine engine;
     private ObjectMapper objectMapper;
 
-    public RocketShipScriptEngine() {
+
+    public RocketShipScriptEngine() throws DependentServiceException {
         engine = new InteractivePhpScriptEngineFactory().getScriptEngine();
         objectMapper = new ObjectMapper();
+        String rsiLoadResult = this.executeScriptToString("require " + getRocketShipItPath());
     }
 
     public RocketShipScriptEngine(ScriptEngine engine, ObjectMapper objectMapper) {
@@ -29,6 +41,7 @@ public class RocketShipScriptEngine {
     }
 
     public <T> T executeScript(String script, TypeReference<T> valueTypeRef) throws DependentServiceException {
+        System.out.println(script);
         try {
             String value = (String) engine.eval(script);
             T response = objectMapper.readValue(value, valueTypeRef);

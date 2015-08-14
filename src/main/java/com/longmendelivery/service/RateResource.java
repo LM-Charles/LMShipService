@@ -27,7 +27,7 @@ import java.util.Map;
 public class RateResource {
     private RocketShipShipmentClient client;
 
-    public RateResource() {
+    public RateResource() throws DependentServiceException {
         client = new RocketShipShipmentClient();
     }
     @POST
@@ -47,7 +47,6 @@ public class RateResource {
                 }
 
             }
-
         }
 
         List<RateEntryModel> rates = new ArrayList<>();
@@ -57,7 +56,6 @@ public class RateResource {
         }
 
         RateResponseModel responseModel = new RateResponseModel(DateTime.now(), rates, null);
-
 
         return Response.status(Response.Status.OK).entity(responseModel).build();
     }
