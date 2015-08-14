@@ -6,9 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by  rabiddesireon 05/07/15.
  */
@@ -16,11 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UPSRateResponseEntry {
-    static List<UPSRateResponseEntry> parseEntries(String jsonString) {
-        //xxx
-        return new ArrayList<>();
-    }
-
     @JsonProperty(value = "desc")
     @NonNull
     private String description;
