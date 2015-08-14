@@ -3,6 +3,7 @@ package com.longmendelivery.lib.client.shipment.rocketshipit.scripts;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.service.initializer.EnvironmentStage;
@@ -32,19 +33,33 @@ public class RocketShipScriptEngine {
     public RocketShipScriptEngine() throws DependentServiceException {
         engine = new InteractivePhpScriptEngineFactory().getScriptEngine();
         objectMapper = new ObjectMapper();
-        String rsiLoadResult = this.executeScriptToString("require " + getRocketShipItPath());
-    }
-
-    public RocketShipScriptEngine(ScriptEngine engine, ObjectMapper objectMapper) {
-        this.engine = engine;
-        this.objectMapper = objectMapper;
+        this.executeScriptToString("require " + getRocketShipItPath());
     }
 
     public <T> T executeScript(String script, TypeReference<T> valueTypeRef) throws DependentServiceException {
-        System.out.println(script);
         try {
             String value = (String) engine.eval(script);
             T response = objectMapper.readValue(value, valueTypeRef);
+            return response;
+        } catch (ScriptException e) {
+            e.printStackTrace();
+            throw new DependentServiceException(e);
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+            throw new DependentServiceException(e);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+            throw new DependentServiceException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new DependentServiceException(e);
+        }
+    }
+
+    public JsonNode executeScriptToTree(String script) throws DependentServiceException {
+        try {
+            String value = (String) engine.eval(script);
+            JsonNode response = objectMapper.readTree(value);
             return response;
         } catch (ScriptException e) {
             e.printStackTrace();

@@ -202,7 +202,6 @@ public class OrderResource {
             String currentTrackingDocumentType = shipmentEntity.getTrackingDocumentType();
 
             if (currentTrackingNumber != null || currentTrackingDocumentType != null) {
-                //WARN
                 System.out.println("WARNING: Already set tracking number or document type");
             }
 
