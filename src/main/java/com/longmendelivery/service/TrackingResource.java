@@ -1,9 +1,9 @@
 package com.longmendelivery.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.rocketshipit.RocketShipShipmentClient;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.TrackingRecord;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -23,8 +23,8 @@ public class TrackingResource {
     @GET
     public Response getRate(@QueryParam("trackingNumber") String trackingNumber, @QueryParam("courier") String courierCode, @QueryParam("token") String token) throws DependentServiceException {
         CourierType type = CourierType.valueOf(courierCode);
-        TrackingRecord trackingResult = client.getTracking(type, trackingNumber);
+        JsonNode trackingResult = client.getTracking(type, trackingNumber);
 
-        return Response.status(Response.Status.OK).build();
+        return Response.status(Response.Status.OK).entity(trackingResult).build();
     }
 }
