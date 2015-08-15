@@ -2,10 +2,10 @@ package com.longmendelivery.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
-import com.longmendelivery.lib.client.shipment.ShippingService;
 import com.longmendelivery.lib.client.shipment.rocketshipit.RocketShipShipmentClient;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.ShippingDimension;
+import com.longmendelivery.lib.client.shipment.rocketshipit.model.ServiceType;
+import com.longmendelivery.service.model.PackageDimensionModel;
 import com.longmendelivery.service.model.RateEntryModel;
 import com.longmendelivery.service.model.ShipmentModel;
 import com.longmendelivery.service.model.request.RateRequestModel;
@@ -44,11 +44,11 @@ public class CourierResource {
     public Response calculateRate(RateRequestModel rateRequestModel, @QueryParam("token") String token) throws DependentServiceException {
         ThrottleSecurity.getInstance().throttle(rateRequestModel.hashCode());
 
-        Map<ShippingService, BigDecimal> totalRates = new HashMap<>();
+        Map<ServiceType, BigDecimal> totalRates = new HashMap<>();
         for (ShipmentModel shipment : rateRequestModel.getShipments()) {
-            ShippingDimension dimension = new ShippingDimension(shipment.getLength(), shipment.getWidth(), shipment.getHeight(), shipment.getWeight());
-            Map<ShippingService, BigDecimal> packageRate = client.getAllRates(rateRequestModel.getFromAddress(), rateRequestModel.getToAddress(), dimension);
-            for (Map.Entry<ShippingService, BigDecimal> entry : packageRate.entrySet()) {
+            PackageDimensionModel dimension = new PackageDimensionModel(shipment.getLength(), shipment.getWidth(), shipment.getHeight(), shipment.getWeight());
+            Map<ServiceType, BigDecimal> packageRate = client.getAllRates(rateRequestModel.getFromAddress(), rateRequestModel.getToAddress(), dimension);
+            for (Map.Entry<ServiceType, BigDecimal> entry : packageRate.entrySet()) {
                 BigDecimal oldTotal = totalRates.get(entry.getKey());
                 if (oldTotal == null) {
                     totalRates.put(entry.getKey(), entry.getValue());
@@ -60,7 +60,7 @@ public class CourierResource {
         }
 
         List<RateEntryModel> rates = new ArrayList<>();
-        for (Map.Entry<ShippingService, BigDecimal> entry : totalRates.entrySet()) {
+        for (Map.Entry<ServiceType, BigDecimal> entry : totalRates.entrySet()) {
             RateEntryModel rateEntry = new RateEntryModel("", entry.getKey().name(), entry.getValue(), entry.getKey().name(), entry.getKey().name(), DateTime.now());
             rates.add(rateEntry);
         }

@@ -1,8 +1,8 @@
-package com.longmendelivery.lib.client.shipment.rocketshipit.scripts;
+package com.longmendelivery.lib.client.shipment.rocketshipit.parser;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;
-import org.codehaus.jackson.JsonNode;
 import org.joda.time.DateTime;
 
 /**

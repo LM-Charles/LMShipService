@@ -1,4 +1,4 @@
-package com.longmendelivery.lib.client.shipment.rocketshipit.scripts;
+package com.longmendelivery.lib.client.shipment.rocketshipit.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;

@@ -1,4 +1,4 @@
-package com.longmendelivery.lib.client.shipment.rocketshipit.scripts;
+package com.longmendelivery.lib.client.shipment.rocketshipit.script;
 
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
 import org.apache.commons.lang.NotImplementedException;
