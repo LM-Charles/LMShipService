@@ -6,8 +6,8 @@ import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.ShipmentClient;
 import com.longmendelivery.lib.client.shipment.rocketshipit.engine.ScriptEngine;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
+import com.longmendelivery.lib.client.shipment.rocketshipit.model.RateResponseEntry;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.ServiceType;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.UPSRateResponseEntry;
 import com.longmendelivery.lib.client.shipment.rocketshipit.script.RateScriptGenerator;
 import com.longmendelivery.lib.client.shipment.rocketshipit.script.TrackScriptGenerator;
 import com.longmendelivery.service.model.AddressModel;
@@ -40,11 +40,11 @@ public class RocketShipShipmentClient implements ShipmentClient {
             String script = generator.generate();
             JsonNode tree = engine.executeScriptToTree(script);
             System.out.println(tree.textValue());
-            List<UPSRateResponseEntry> result = engine.executeScript(script, new TypeReference<List<UPSRateResponseEntry>>() {
+            List<RateResponseEntry> result = engine.executeScript(script, new TypeReference<List<RateResponseEntry>>() {
             });
 
 
-            for (UPSRateResponseEntry entry : result) {
+            for (RateResponseEntry entry : result) {
                 rateMap.put(ServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
             }
         }
