@@ -1,0 +1,21 @@
+$rate = new \RocketShipIt\Rate('FEDEX');
+$rate->setParameter('toCountry', 'CA');
+$rate->setParameter('weight', '49');
+$rate->setParameter('lengthUnit', 'CM');
+
+$rate->setParameter('weightUnit', 'KG');
+$rate->setParameter('shipCity', 'Delta');
+$rate->setParameter('width', '110');
+$rate->setParameter('shipState', 'BC');
+$rate->setParameter('shipCountry', 'CA');
+$rate->setParameter('shipAddr1', '8355 Delsom Way');
+$rate->setParameter('toAddr1', '8355 Delsom Way');
+$rate->setParameter('height', '10');
+$rate->setParameter('toCode', 'V4C0A9');
+$rate->setParameter('toState', 'BC');
+$rate->setParameter('packagingType', 'YOUR_PACKAGING');
+$rate->setParameter('length', '33');
+$rate->setParameter('toCity', 'Delta');
+$rate->setParameter('shipCode', 'V4C0A9');
+$response = $rate->getSimpleRates();
+echo json_encode($response);

@@ -38,8 +38,11 @@ public class RocketShipShipmentClient implements ShipmentClient {
             generator.withDestinationAddress(destinationAddress);
             generator.withDimensions(dimension);
             String script = generator.generate();
+            JsonNode tree = engine.executeScriptToTree(script);
+            System.out.println(tree.textValue());
             List<UPSRateResponseEntry> result = engine.executeScript(script, new TypeReference<List<UPSRateResponseEntry>>() {
             });
+
 
             for (UPSRateResponseEntry entry : result) {
                 rateMap.put(ServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
