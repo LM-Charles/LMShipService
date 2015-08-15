@@ -2,6 +2,7 @@ package com.longmendelivery.service.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.longmendelivery.lib.conversion.Model;
+import com.longmendelivery.persistence.entity.GoodCategory;
 import com.longmendelivery.service.model.AddressModel;
 import com.longmendelivery.service.model.CourierServiceType;
 import com.longmendelivery.service.model.ShipmentModel;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.joda.time.DateTime;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 /**
@@ -43,5 +45,12 @@ public class OrderCreationRequestModel implements Model {
     @JsonProperty
     @NonNull
     private Set<ShipmentModel> shipments;
+
+    @JsonProperty
+    private GoodCategory goodCategory;
+    @JsonProperty
+    private BigDecimal declareValue;
+    @JsonProperty
+    private BigDecimal insuranceValue;
 
 }
