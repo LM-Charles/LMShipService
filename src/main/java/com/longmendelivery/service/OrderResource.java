@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.rocketshipit.RocketShipShipmentClient;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
-import com.longmendelivery.persistence.entity.*;
+import com.longmendelivery.persistence.entity.AppUserEntity;
+import com.longmendelivery.persistence.entity.OrderEntity;
+import com.longmendelivery.persistence.entity.OrderStatusHistoryEntity;
+import com.longmendelivery.persistence.entity.ShipmentEntity;
 import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.model.OrderModel;
 import com.longmendelivery.service.model.ShipmentModel;
@@ -74,9 +77,7 @@ public class OrderResource {
         Transaction tx = writeSession.beginTransaction();
         try {
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, orderCreationRequestModel.getUserId());
-            CourierServiceEntity courierService = (CourierServiceEntity) writeSession.get(CourierServiceEntity.class, orderCreationRequestModel.getCourierServiceId());
 
-            //XXX
             BigDecimal estimatedCost = BigDecimal.ONE;
             BigDecimal finalCost = null;
             String handler = null;
@@ -95,7 +96,7 @@ public class OrderResource {
                     orderCreationRequestModel.getToAddress().getProvince(),
                     orderCreationRequestModel.getToAddress().getCountry(),
                     orderCreationRequestModel.getToAddress().getPostal(),
-                    courierService, handler,
+                    orderCreationRequestModel.getCourierService(), handler,
                     null);
 
             writeSession.save(orderEntity);
@@ -174,7 +175,7 @@ public class OrderResource {
             Map<ShipmentModel, ShipmentTrackingResponseModel> shipmentTracking = new HashMap<>();
             for (ShipmentEntity shipmentEntity : order.getShipments()) {
                 ShipmentModel shipmentModel = DozerBeanMapperSingletonWrapper.getInstance().map(shipmentEntity, ShipmentModel.class);
-                CourierType courierType = CourierType.valueOf(order.getCourierServiceId().getCourierName());
+                CourierType courierType = order.getCourierServiceType().getCourier();
                 JsonNode responseJson = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
                 ShipmentTrackingResponseModel shipmentTrackingResponseModel = courierType.getTrackingResponseParser().parseResponse(responseJson);
                 shipmentTracking.put(shipmentModel, shipmentTrackingResponseModel);
