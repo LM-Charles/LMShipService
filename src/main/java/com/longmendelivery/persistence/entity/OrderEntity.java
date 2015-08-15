@@ -59,11 +59,21 @@ public class OrderEntity implements DAOEntity {
     private String toCode;
     @Column(name = "TO_COUNTRY", nullable = false)
     private String toCountry;
-    @JoinColumn(name = "COURIER_SERVICE", nullable = false)
+    @Column(name = "COURIER_SERVICE", nullable = false)
     private CourierServiceType courierCourierServiceType;
     @Column(name = "HANDLER")
     private String handler;
 
     @OneToMany(mappedBy = "orderId", fetch = FetchType.EAGER)
     private List<OrderStatusHistoryEntity> orderStatus;
+
+    @Column(name = "GOOD_CATEGORY")
+    private GoodCategory goodCategory;
+
+    @Column(name = "DECLARE_VALUE")
+    private BigDecimal declareValue;
+
+    @Column(name = "INSURANCE_VALUE")
+    private BigDecimal insuranceValue;
+
 }
