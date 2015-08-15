@@ -11,7 +11,7 @@ import java.util.EnumSet;
 @AllArgsConstructor
 @Getter
 public enum CourierType {
-    UPS("UPS", "02", new UPSTrackingResponseParser()), FEDEX("fedex", "01", new FedexTrackingResponseParser()), CANADA_POST("canada", "", null);
+    UPS("UPS", "02", new UPSTrackingResponseParser()), FEDEX("fedex", "YOUR_PACKAGING", new FedexTrackingResponseParser()), CANADA_POST("canada", "", null);
 
     public static EnumSet<CourierType> ALL = EnumSet.allOf(CourierType.class);
     public static EnumSet<CourierType> ENABLED = EnumSet.of(FEDEX);
