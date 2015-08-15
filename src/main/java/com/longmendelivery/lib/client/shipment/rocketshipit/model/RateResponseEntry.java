@@ -12,7 +12,7 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UPSRateResponseEntry {
+public class RateResponseEntry {
     @JsonProperty(value = "desc")
     @NonNull
     private String description;
