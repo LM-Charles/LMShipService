@@ -1,12 +1,17 @@
 package com.longmendelivery.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.longmendelivery.lib.client.exceptions.DependentServiceException;
+import com.longmendelivery.lib.client.shipment.rocketshipit.RocketShipShipmentClient;
+import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
 import com.longmendelivery.persistence.entity.*;
 import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.model.OrderModel;
-import com.longmendelivery.service.model.OrderStatusModel;
 import com.longmendelivery.service.model.ShipmentModel;
 import com.longmendelivery.service.model.request.OrderCreationRequestModel;
 import com.longmendelivery.service.model.request.OrderStatusRequestModel;
+import com.longmendelivery.service.model.response.OrderStatusResponseModel;
+import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;
 import com.longmendelivery.service.security.NotAuthorizedException;
 import com.longmendelivery.service.security.SecurityPower;
 import com.longmendelivery.service.security.TokenSecurity;
@@ -18,12 +23,20 @@ import org.hibernate.Transaction;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Path("/order")
 @Produces("application/json")
 public class OrderResource {
+    private RocketShipShipmentClient shipmentClient;
+
+    public OrderResource() throws DependentServiceException {
+        shipmentClient = new RocketShipShipmentClient();
+    }
+
     @GET
     public Response listOrdersForUser(@QueryParam("userId") Integer userId, @QueryParam("token") String token) {
         try {
@@ -67,7 +80,7 @@ public class OrderResource {
             BigDecimal estimatedCost = BigDecimal.ONE;
             BigDecimal finalCost = null;
             String handler = null;
-            OrderEntity orderEntity = new OrderEntity(
+            OrderEntity orderEntity = new OrderEntity(null,
                     user,
                     orderCreationRequestModel.getOrderDate(),
                     null,
@@ -142,7 +155,7 @@ public class OrderResource {
 
     @GET
     @Path("/{orderId}/status")
-    public Response getOrderStatus(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) {
+    public Response getOrderStatus(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) throws DependentServiceException {
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = writeSession.beginTransaction();
         try {
@@ -152,9 +165,22 @@ public class OrderResource {
             }
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
 
-            //XXX
-            OrderStatusModel orderStatusModel = null;
-            return Response.status(Response.Status.OK).entity(orderStatusModel).build();
+
+            OrderStatusResponseModel orderStatusResponseModel = new OrderStatusResponseModel();
+            OrderStatusHistoryEntity orderStatusHistoryEntity = order.getOrderStatus().get(0);
+            orderStatusResponseModel.setStatus(orderStatusHistoryEntity.getStatus());
+            orderStatusResponseModel.setStatusDescription(orderStatusHistoryEntity.getStatusDescription());
+
+            Map<ShipmentModel, ShipmentTrackingResponseModel> shipmentTracking = new HashMap<>();
+            for (ShipmentEntity shipmentEntity : order.getShipments()) {
+                ShipmentModel shipmentModel = DozerBeanMapperSingletonWrapper.getInstance().map(shipmentEntity, ShipmentModel.class);
+                CourierType courierType = CourierType.valueOf(order.getCourierServiceId().getCourierName());
+                JsonNode responseJson = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
+                ShipmentTrackingResponseModel shipmentTrackingResponseModel = courierType.getTrackingResponseParser().parseResponse(responseJson);
+                shipmentTracking.put(shipmentModel, shipmentTrackingResponseModel);
+            }
+
+            return Response.status(Response.Status.OK).entity(orderStatusResponseModel).build();
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e);
         } finally {

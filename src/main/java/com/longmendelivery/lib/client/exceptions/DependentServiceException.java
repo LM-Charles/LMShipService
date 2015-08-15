@@ -7,4 +7,9 @@ public class DependentServiceException extends Exception {
     public DependentServiceException(Throwable e) {
         super(e);
     }
+
+
+    public DependentServiceException() {
+
+    }
 }
