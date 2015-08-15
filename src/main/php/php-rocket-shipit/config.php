@@ -4,12 +4,7 @@
 // For Support email: support@rocketship.it
 
 // Feel free to modify the following defaults:
-
-
-
 return array(
-
-    //{{GENERIC
     /**
     * This is used to set generic defaults.  I.e. They are 
     * not carrier-specific.
@@ -19,8 +14,6 @@ return array(
     * shipment/package level.
     */
     'generic' => array(
-
-
         // 1 for Debug mode, 0 for normal operations
         // This also changes from testing to production mode
         'debugMode' => 1,
@@ -31,36 +24,27 @@ return array(
         'timezone' => 'America/Vancouver',
 
         // Your company name
-        'shipper' => 'CBE',
+        'shipper' => 'Long Men',
 
         // Key shipping contact individual at your company
-        'shipContact' => 'Desmond Zhou',
+        'shipContact' => 'Charles',
 
         'shipAddr1' => '9188 Hemlock Drive',
         'shipAddr2' => '',
         'shipCity' => 'Richmond',
-
-        // the two-letter State or Province code
-        // ex. MT => Montana, ON => Ontario
         'shipState' => 'BC',
-
-        // The Zip or Postal code
         'shipCode' => 'V4C0A9',
-
-        // The two-letter country code
         'shipCountry' => 'CA',
 
         // Phone number in this format: 1234567890
         'shipPhone' => '1231231234',
-        'toCountry' => '',
+        'toCountry' => 'CA',
 
         // General currency for things like COD
         'currency' => 'CAD',
-
     ),
     //}}
 
-    //{{FEDEX
     /**
     * This is used to set FedEx specfic defaults.
     *
@@ -70,34 +54,14 @@ return array(
     */
 
     'fedex' => array(
-
-        // Your FedEx developer key
         'key' => 'zsbcq5Rq25vlCGLd',
-
-        // Your FedEx developer password
         'password' => '8Swwmx7v0JDNX1d4nGfaPpoIH',
-
-        // Your FedEx accountNumber
         'accountNumber' => '510088000',
-
-        // Your FedEx meter number
         'meterNumber' => '118685333',
 
-        // Allowed packaging types:
-        // FEDEX_10KG_BOX
-        // FEDEX_25KG_BOX
-        // FEDEX_BOX
-        // FEDEX_ENVELOPE
-        // FEDEX_PAK
-        // FEDEX_TUBE
-        // YOUR_PACKAGING
-        'packagingType' => '',
-
-        // The two possible weight units are LB and KG
-        'weightUnit' => '',
-                
-        // The two possible length units are IN and CM
-        'lengthUnit' => '',
+        'packagingType' => 'YOUR_PACKAGING',
+        'weightUnit' => 'KG',
+        'lengthUnit' => 'CM',
 
         // EUROPE_FIRST_INTERNATIONAL_PRIORITY
         // FEDEX_1_DAY_FREIGHT
@@ -125,60 +89,20 @@ return array(
         // DROP_BOX
         // BUSINESS_SERVICE_CENTER
         // STATION
-        'dropoffType' => '',
+        'dropoffType' => 'REGULAR_PICKUP',
 
         // COLLECT
         // RECIPIENT
         // SENDER
         // THIRD_PARTY
-        'paymentType' => '',
+        'paymentType' => 'SENDER',
 
-        // COMMON2D
-        // LABEL_DATA_ONLY
         'labelFormatType' => '',
-
-        // DPL
-        // EPL2
-        // PDF
-        // PNG
-        // ZPLII
         'imageType' => '',
-                
-        // PAPER_4X6
-        // PAPER_4X8
-        // PAPER_4X9
-        // PAPER_7X4.75
-        // PAPER_8.5X11_BOTTOM_HALF_LABEL
-        // PAPER_8.5X11_TOP_HALF_LABEL
-        // STOCK_4X6
-        // STOCK_4X6.75_LEADING_DOC_TAB
-        // STOCK_4X6.75_TRAILING_DOC_TAB
-        // STOCK_4X8
-        // STOCK_4X9_LEADING_DOC_TAB
-        // STOCK_4X9_TRAILING_DOC_TAB
         'labelStockType' => '',
-
-        // BILL_OF_LADING
-        // COD_RETURN_TRACKING_NUMBER
-        // CUSTOMER_AUTHORIZATION_NUMBER
-        // CUSTOMER_REFERENCE
-        // DEPARTMENT
-        // FREE_FORM_REFERENCE
-        // GROUND_SHIPMENT_ID
-        // GROUND_MPS
-        // INVOICE
-        // PARTNER_CARRIER_NUMBER
-        // PART_NUMBER
-        // PURCHASE_ORDER
-        // RETURN_MATERIALS_AUTHORIZATION
-        // TRACKING_CONTROL_NUMBER
-        // TRACKING_NUMBER_OR_DOORTAG
-        // SHIPPER_REFERENCE
-        // STANDARD_MPS
         'trackingIdType' => 'TRACKING_NUMBER_OR_DOORTAG',
 
-        // Currency for Insurance
-        'insuredCurrency' => 'USD',
+        'insuredCurrency' => 'CAD',
         
         // COD (Collect On Delivery) - YES or NO
         'collectOnDelivery' => 'NO',
@@ -189,62 +113,31 @@ return array(
         // Saturday Delivery - YES or NO
         'saturdayDelivery' => 'NO',
         
-        // ANY
-        // CASH
-        // GUARANTEED_FUNDS
         'codCollectionType' => 'ANY',
-
     ),
     //}}
 
-    //{{UPS
     /**
     * This is used to set UPS specfic defaults.
     *
-    * These defaults will be used for UPS calls only.  They can be 
-    * overwritten on the 
+     * These defaults will be used for UPS calls only.  They can be
+     * overwritten on the
     * shipment/package level using the setParameter() function.
     */
     'ups' => array(
 
-        // Your UPS Developer license
-        // your UPS XML Access Key TODO: Insert link to get one
         'license' => '0CF224653F2240B5',
-
-        // your UPS Developer username
-        // This is tied to all shipments for tracking purposes when
-        // tracking by reference values or when viewing shipments
-        // on the UPS website.
         'username' => 'desmondzhou',
-
-        // your ups Developer password
         'password' => 'Qwerty!1',
 
         // Make sure addresses are valid before label creation
         // validate, nonvalidate
         'verifyAddress' => 'nonvalidate',
 
-        // The following variables govern the way the system functions
-        // Options
-        // ZPL - Zebra UPS Thermal Printers
-        // EPL - Eltron UPS Thermal Printers
-        // GIF - Image based, desktop inkjet printers
-        // STARPL
-        // SPL
         'labelPrintMethodCode' => '',
-
-        // Used when printing GIF images
         'httpUserAgent' => '',
-
-        // Only valid option for ZPL, EPL, STARPL, and SPL is 4
-        // When using inches use whole numbers only
         'labelHeight' => '',
-
-        // Options are 6 or 8 inches
         'labelWidth' => '',
-
-        // Options
-        // GIF - A gif image
         'labelImageFormat' => '',
 
         // The following variables are for your UPS account
@@ -261,18 +154,11 @@ return array(
         // 11 - Suggested Retail Rates
         // 19 - Letter Center
         // 20 - Air Service Center
-        'PickupType' => '',
+        'PickupType' => '03',
 
-        // LBS or KGS
         'weightUnit' => 'KGS',
-
-        // IN, or CM
         'lengthUnit' => 'CM',
-
-        // See the ups manual for a list of all currency types
         'insuredCurrency' => 'CAD',
-
-        // two-letter country code
         'toCountryCode' => 'CA',
 
         // The following variables set the defaults for individual shipments
@@ -307,12 +193,11 @@ return array(
         // 2a - Small Express Box
         // 2b - Medium Express Box
         // 2c - Large Express Box
-        'packagingType' => '',
-
+        'packagingType' => '02',
         'packageDescription' => '',
 
         // Set '0' for commercial '1' for residential
-        'residentialAddressIndicator' => '',
+        'residentialAddressIndicator' => '0',
 
         // Set '0' for retail rates '1' for negotiated
         // You must turn this on with your UPS account rep
@@ -354,142 +239,49 @@ return array(
         // 04 - Retail Rates
         // 53 - Standard List Rates
         'customerClassification' => '',
-
     ),
-    //}}
 
-    //{{USPS
-    /**
-    * This is used to set USPS specfic defaults.
-    *
-    * These defaults will be used for USPS calls only.  They can be 
-    * overwritten on the 
-    * shipment/package level using the setParameter() function.
-    */
     'usps' => array(
-
-        // USPS userID
-        // Please note: the USPS test servers only respond to pre-defined requests.
-        // For USPS rates you need to call USPS and have them move you to
-        // the production servers.
         'userid' => '',
-
-        // USPS service type
-        // FIRST CLASS
-        // PRIORITY
-        // PRIORITY COMMERCIAL
-        // EXPRESS
-        // EXPRESS COMMERCIAL
-        // EXPRESS SH
-        // EXPRESS SH COMMERCIAL
-        // EXPRESS HFP
-        // EXPRESS HFP
-        // COMMERCIAL
-        // BPM
-        // PARCEL
-        // MEDIA
-        // LIBRARY
-        // ALL
-        // ONLINE
         'service' => '',
-
-        // Values:
-        // REGULAR
-        // LARGE (Length + girth over 84in under 109in)
-        // OVERSIZE (length + girth over 108 under 131)
         'size' => '',
-
-        // FLAT
-        // LETTER
-        // PARCEL
-        // POSTCARD
         'firstClassMailType' => '',
-
         'imageType' => 'PDF',
-
     ),
 
-    //}}
-
-    //{{STAMPS
-    /**
-    * This is used to set Stamps.com specfic defaults.
-    *
-    * These defaults will be used for Stamps.com calls only.  They can be 
-    * overwritten on the 
-    * shipment/package level using the setParameter() function.
-    */
     'stamps' => array(
-
-        // USPS Stamps.com Credentials
         'username' => '',
         'password' => '',
-
-        // Label Image Type
-        //  Zpl
-        //  EncryptedPngUrl
-        //  PrintOncePdf
-        //  Jpg
-        //  Epl
-        //  Pdf
-        //  Gif
-        //  Png
-        //  Auto
         'imageType' => '',
-
         'packagingType' => 'Package',
-
     ),
-    //}}
 
-    //{{DHL
     'dhl' => array(
 
         'siteId' => '',
         'password' => '',
-        'accountNumber' => '803921577',
-
-        // The two possible length units are IN and CM
-        'lengthUnit' => 'IN',
-
-        // The two possible length units are LB and KG
-        'weightUnit' => 'LB',
-
-        // AWBNumber or LPNumber
+        'accountNumber' => '',
+        'lengthUnit' => 'CM',
+        'weightUnit' => 'KG',
         'trackingIdType' => 'AWBNumber',
-
-        // EPL2, PDF, ZPL2, LP2
         'labelPrintMethodCode' => 'PDF',
-
     ),
-    //}}
 
-    //{{CANADA
     'canada' => array(
-
         'username' => '',
         'password' => '',
         'accountNumber' => '',
         'service' => 'DOM.EP',
 
     ),
-    //}}
 
-    //{{PUROLATOR
     'purolator' => array(
 
         'username' => '',
         'password' => '',
         'accountNumber' => '9999999999',
-
-        // lb or kg
-        'weightUnit' => 'lb',
-
-        // DropOff or PreScheduled
+        'weightUnit' => 'kg',
         'pickupType' => 'PreScheduled',
-
         'service' => 'PurolatorExpress',
     ),
-    //}}
-
 );
