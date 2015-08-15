@@ -96,7 +96,7 @@ public class OrderResource {
                     orderCreationRequestModel.getToAddress().getCountry(),
                     orderCreationRequestModel.getToAddress().getPostal(),
                     orderCreationRequestModel.getCourierService(), handler,
-                    null);
+                    null, orderCreationRequestModel.getGoodCategory(), orderCreationRequestModel.getDeclareValue(), orderCreationRequestModel.getInsuranceValue());
 
             writeSession.save(orderEntity);
 
