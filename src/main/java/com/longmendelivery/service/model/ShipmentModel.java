@@ -31,5 +31,4 @@ public class ShipmentModel implements Model {
     private String trackingNumber;
     @JsonProperty
     private String trackingDocumentType;
-
 }

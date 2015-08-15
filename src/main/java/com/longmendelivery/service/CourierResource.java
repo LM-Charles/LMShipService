@@ -1,8 +1,10 @@
 package com.longmendelivery.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.ShippingService;
 import com.longmendelivery.lib.client.shipment.rocketshipit.RocketShipShipmentClient;
+import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.ShippingDimension;
 import com.longmendelivery.service.model.RateEntryModel;
 import com.longmendelivery.service.model.ShipmentModel;
@@ -11,10 +13,7 @@ import com.longmendelivery.service.model.response.RateResponseModel;
 import com.longmendelivery.service.security.ThrottleSecurity;
 import org.joda.time.DateTime;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,16 +21,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Path("/rate")
+@Path("/courier")
 @Produces("application/json")
-public class RateResource {
+public class CourierResource {
     private RocketShipShipmentClient client;
 
-    public RateResource() throws DependentServiceException {
+    public CourierResource() throws DependentServiceException {
         client = new RocketShipShipmentClient();
     }
+
+    @GET
+    @Path("/tracking")
+    public Response getTracking(@QueryParam("trackingNumber") String trackingNumber, @QueryParam("courier") String courierCode, @QueryParam("token") String token) throws DependentServiceException {
+        CourierType type = CourierType.valueOf(courierCode);
+        JsonNode trackingResult = client.getTracking(type, trackingNumber);
+
+        return Response.status(Response.Status.OK).entity(trackingResult).build();
+    }
+
     @POST
-    public Response getRate(RateRequestModel rateRequestModel, @QueryParam("token") String token) throws DependentServiceException {
+    @Path("/rate")
+    public Response calculateRate(RateRequestModel rateRequestModel, @QueryParam("token") String token) throws DependentServiceException {
         ThrottleSecurity.getInstance().throttle(rateRequestModel.hashCode());
 
         Map<ShippingService, BigDecimal> totalRates = new HashMap<>();
