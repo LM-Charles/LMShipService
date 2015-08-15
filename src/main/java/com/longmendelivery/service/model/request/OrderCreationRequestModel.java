@@ -1,9 +1,9 @@
 package com.longmendelivery.service.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.ServiceType;
 import com.longmendelivery.lib.conversion.Model;
 import com.longmendelivery.service.model.AddressModel;
+import com.longmendelivery.service.model.CourierServiceType;
 import com.longmendelivery.service.model.ShipmentModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,7 +38,7 @@ public class OrderCreationRequestModel implements Model {
 
     @JsonProperty
     @NonNull
-    private ServiceType courierService;
+    private CourierServiceType courierService;
 
     @JsonProperty
     @NonNull

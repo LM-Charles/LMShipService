@@ -6,7 +6,7 @@ import com.longmendelivery.service.initializer.EnvironmentUtil;
 /**
  * Created by  rabiddesireon 09/08/15.
  */
-public class ScriptUtil {
+public class RSIEngineUtil {
     public static String generateLineToRequireRocketShipItLibrary() {
         if (EnvironmentUtil.getStage().equals(EnvironmentStage.DESKTOP)) {
             return "require './src/main/php/php-rocket-shipit/autoload.php';";
