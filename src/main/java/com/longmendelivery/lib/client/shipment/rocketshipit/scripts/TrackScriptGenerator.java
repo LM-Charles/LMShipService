@@ -26,7 +26,7 @@ public class TrackScriptGenerator {
 
 
     public String generate() {
-        String script = "$t = new \\RocketShipIt\\Track('" + courierType + "');\n" +
+        String script = "$t = new \\RocketShipIt\\Track('" + courierType.getApiServiceId() + "');\n" +
                 "$response = $t->track('" + trackingNumber + "');\n" +
                 "echo json_encode($response);";
         return script;
