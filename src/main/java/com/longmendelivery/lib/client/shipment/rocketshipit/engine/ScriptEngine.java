@@ -1,4 +1,4 @@
-package com.longmendelivery.lib.client.shipment.rocketshipit.scripts;
+package com.longmendelivery.lib.client.shipment.rocketshipit.engine;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -10,14 +10,13 @@ import com.longmendelivery.service.initializer.EnvironmentStage;
 import com.longmendelivery.service.initializer.EnvironmentUtil;
 import php.java.script.InteractivePhpScriptEngineFactory;
 
-import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.io.IOException;
 
 /**
  * Created by desmond on 21/06/15.
  */
-public class RocketShipScriptEngine {
+public class ScriptEngine {
     public static String getRocketShipItPath() {
         if (EnvironmentUtil.getStage().equals(EnvironmentStage.DESKTOP)) {
             return "'./src/main/php/php-rocket-shipit/autoload.php'";
@@ -26,11 +25,11 @@ public class RocketShipScriptEngine {
         }
     }
 
-    private ScriptEngine engine;
+    private javax.script.ScriptEngine engine;
     private ObjectMapper objectMapper;
 
 
-    public RocketShipScriptEngine() throws DependentServiceException {
+    public ScriptEngine() throws DependentServiceException {
         engine = new InteractivePhpScriptEngineFactory().getScriptEngine();
         objectMapper = new ObjectMapper();
         this.executeScriptToString("require " + getRocketShipItPath());
