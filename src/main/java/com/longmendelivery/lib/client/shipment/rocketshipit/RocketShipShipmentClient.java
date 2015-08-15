@@ -4,14 +4,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.ShipmentClient;
-import com.longmendelivery.lib.client.shipment.ShippingService;
+import com.longmendelivery.lib.client.shipment.rocketshipit.engine.ScriptEngine;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.ShippingDimension;
+import com.longmendelivery.lib.client.shipment.rocketshipit.model.ServiceType;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.UPSRateResponseEntry;
-import com.longmendelivery.lib.client.shipment.rocketshipit.scripts.RateScriptGenerator;
-import com.longmendelivery.lib.client.shipment.rocketshipit.scripts.RocketShipScriptEngine;
-import com.longmendelivery.lib.client.shipment.rocketshipit.scripts.TrackScriptGenerator;
+import com.longmendelivery.lib.client.shipment.rocketshipit.script.RateScriptGenerator;
+import com.longmendelivery.lib.client.shipment.rocketshipit.script.TrackScriptGenerator;
 import com.longmendelivery.service.model.AddressModel;
+import com.longmendelivery.service.model.PackageDimensionModel;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,15 +22,15 @@ import java.util.TreeMap;
  * Created by desmond on 20/06/15.
  */
 public class RocketShipShipmentClient implements ShipmentClient {
-    private final RocketShipScriptEngine engine;
+    private final ScriptEngine engine;
 
     public RocketShipShipmentClient() throws DependentServiceException {
-        this.engine = new RocketShipScriptEngine();
+        this.engine = new ScriptEngine();
     }
 
     @Override
-    public Map<ShippingService, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, ShippingDimension dimension) throws DependentServiceException {
-        Map<ShippingService, BigDecimal> rateMap = new TreeMap<>();
+    public Map<ServiceType, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, PackageDimensionModel dimension) throws DependentServiceException {
+        Map<ServiceType, BigDecimal> rateMap = new TreeMap<>();
 
         for (CourierType type : CourierType.ENABLED) {
             RateScriptGenerator generator = new RateScriptGenerator(type);
@@ -42,7 +42,7 @@ public class RocketShipShipmentClient implements ShipmentClient {
             });
 
             for (UPSRateResponseEntry entry : result) {
-                rateMap.put(ShippingService.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
+                rateMap.put(ServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
             }
         }
 

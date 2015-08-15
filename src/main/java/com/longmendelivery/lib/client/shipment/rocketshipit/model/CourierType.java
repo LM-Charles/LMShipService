@@ -1,8 +1,8 @@
 package com.longmendelivery.lib.client.shipment.rocketshipit.model;
 
-import com.longmendelivery.lib.client.shipment.rocketshipit.scripts.FedexTrackingResponseParser;
-import com.longmendelivery.lib.client.shipment.rocketshipit.scripts.TrackingResponseParser;
-import com.longmendelivery.lib.client.shipment.rocketshipit.scripts.UPSTrackingResponseParser;
+import com.longmendelivery.lib.client.shipment.rocketshipit.parser.FedexTrackingResponseParser;
+import com.longmendelivery.lib.client.shipment.rocketshipit.parser.TrackingResponseParser;
+import com.longmendelivery.lib.client.shipment.rocketshipit.parser.UPSTrackingResponseParser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
