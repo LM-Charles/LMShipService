@@ -1,12 +1,12 @@
 package com.longmendelivery.lib.client.shipment.rocketshipit;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.ShipmentClient;
 import com.longmendelivery.lib.client.shipment.ShippingService;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.ShippingDimension;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.TrackingRecord;
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.UPSRateResponseEntry;
 import com.longmendelivery.lib.client.shipment.rocketshipit.scripts.RateScriptGenerator;
 import com.longmendelivery.lib.client.shipment.rocketshipit.scripts.RocketShipScriptEngine;
@@ -50,12 +50,12 @@ public class RocketShipShipmentClient implements ShipmentClient {
     }
 
     @Override
-    public TrackingRecord getTracking(CourierType type, String trackingNumber) {
+    public JsonNode getTracking(CourierType type, String trackingNumber) throws DependentServiceException {
         TrackScriptGenerator generator = new TrackScriptGenerator(type);
         generator.withTrackingNumber(trackingNumber);
         String script = generator.generate();
-        System.out.println(script);
+        JsonNode result = engine.executeScriptToTree(script);
 
-        return new TrackingRecord();
+        return result;
     }
 }
