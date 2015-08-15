@@ -2,7 +2,7 @@ package com.longmendelivery.service;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.exceptions.DependentServiceRequestException;
-import com.longmendelivery.lib.client.shipment.rocketshipit.engine.ScriptEngine;
+import com.longmendelivery.lib.client.shipment.rocketshipit.engine.RSIScriptEngine;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.util.ResourceResponseUtil;
@@ -35,7 +35,7 @@ public class DebugResource {
     @Path("testPHP")
     @Consumes("text/plain")
     public Response testPHP(String script) throws DependentServiceException, ScriptException {
-        String message = new ScriptEngine().executeScriptToString(script);
+        String message = new RSIScriptEngine().executeScriptToString(script);
         return ResourceResponseUtil.generateOKMessage(message);
     }
 

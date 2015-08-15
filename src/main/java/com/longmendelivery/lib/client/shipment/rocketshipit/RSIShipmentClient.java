@@ -4,14 +4,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.ShipmentClient;
-import com.longmendelivery.lib.client.shipment.rocketshipit.engine.ScriptEngine;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.RateResponseEntry;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.ServiceType;
+import com.longmendelivery.lib.client.shipment.rocketshipit.engine.RSIScriptEngine;
 import com.longmendelivery.lib.client.shipment.rocketshipit.script.RateScriptGenerator;
 import com.longmendelivery.lib.client.shipment.rocketshipit.script.TrackScriptGenerator;
 import com.longmendelivery.service.model.AddressModel;
+import com.longmendelivery.service.model.CourierServiceType;
+import com.longmendelivery.service.model.CourierType;
 import com.longmendelivery.service.model.PackageDimensionModel;
+import com.longmendelivery.service.model.response.CourierRateResponseModel;
+import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,16 +22,16 @@ import java.util.TreeMap;
 /**
  * Created by desmond on 20/06/15.
  */
-public class RocketShipShipmentClient implements ShipmentClient {
-    private final ScriptEngine engine;
+public class RSIShipmentClient implements ShipmentClient {
+    private final RSIScriptEngine engine;
 
-    public RocketShipShipmentClient() throws DependentServiceException {
-        this.engine = new ScriptEngine();
+    public RSIShipmentClient() throws DependentServiceException {
+        this.engine = new RSIScriptEngine();
     }
 
     @Override
-    public Map<ServiceType, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, PackageDimensionModel dimension) throws DependentServiceException {
-        Map<ServiceType, BigDecimal> rateMap = new TreeMap<>();
+    public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, PackageDimensionModel dimension) throws DependentServiceException {
+        Map<CourierServiceType, BigDecimal> rateMap = new TreeMap<>();
 
         for (CourierType type : CourierType.ENABLED) {
             RateScriptGenerator generator = new RateScriptGenerator(type);
@@ -40,12 +41,12 @@ public class RocketShipShipmentClient implements ShipmentClient {
             String script = generator.generate();
             JsonNode tree = engine.executeScriptToTree(script);
             System.out.println(tree.textValue());
-            List<RateResponseEntry> result = engine.executeScript(script, new TypeReference<List<RateResponseEntry>>() {
+            List<CourierRateResponseModel> result = engine.executeScript(script, new TypeReference<List<CourierRateResponseModel>>() {
             });
 
 
-            for (RateResponseEntry entry : result) {
-                rateMap.put(ServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
+            for (CourierRateResponseModel entry : result) {
+                rateMap.put(CourierServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
             }
         }
 
@@ -53,12 +54,12 @@ public class RocketShipShipmentClient implements ShipmentClient {
     }
 
     @Override
-    public JsonNode getTracking(CourierType type, String trackingNumber) throws DependentServiceException {
+    public ShipmentTrackingResponseModel getTracking(CourierType type, String trackingNumber) throws DependentServiceException {
         TrackScriptGenerator generator = new TrackScriptGenerator(type);
         generator.withTrackingNumber(trackingNumber);
         String script = generator.generate();
         JsonNode result = engine.executeScriptToTree(script);
 
-        return result;
+        return type.getTrackingResponseParser().parseResponse(result);
     }
 }

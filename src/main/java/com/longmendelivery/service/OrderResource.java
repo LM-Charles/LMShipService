@@ -1,14 +1,13 @@
 package com.longmendelivery.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
-import com.longmendelivery.lib.client.shipment.rocketshipit.RocketShipShipmentClient;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
+import com.longmendelivery.lib.client.shipment.rocketshipit.RSIShipmentClient;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.entity.OrderEntity;
 import com.longmendelivery.persistence.entity.OrderStatusHistoryEntity;
 import com.longmendelivery.persistence.entity.ShipmentEntity;
 import com.longmendelivery.persistence.util.HibernateUtil;
+import com.longmendelivery.service.model.CourierType;
 import com.longmendelivery.service.model.OrderModel;
 import com.longmendelivery.service.model.ShipmentModel;
 import com.longmendelivery.service.model.request.OrderCreationRequestModel;
@@ -34,10 +33,10 @@ import java.util.Set;
 @Path("/order")
 @Produces("application/json")
 public class OrderResource {
-    private RocketShipShipmentClient shipmentClient;
+    private RSIShipmentClient shipmentClient;
 
     public OrderResource() throws DependentServiceException {
-        shipmentClient = new RocketShipShipmentClient();
+        shipmentClient = new RSIShipmentClient();
     }
 
     @GET
@@ -175,9 +174,8 @@ public class OrderResource {
             Map<ShipmentModel, ShipmentTrackingResponseModel> shipmentTracking = new HashMap<>();
             for (ShipmentEntity shipmentEntity : order.getShipments()) {
                 ShipmentModel shipmentModel = DozerBeanMapperSingletonWrapper.getInstance().map(shipmentEntity, ShipmentModel.class);
-                CourierType courierType = order.getCourierServiceType().getCourier();
-                JsonNode responseJson = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
-                ShipmentTrackingResponseModel shipmentTrackingResponseModel = courierType.getTrackingResponseParser().parseResponse(responseJson);
+                CourierType courierType = order.getCourierCourierServiceType().getCourier();
+                ShipmentTrackingResponseModel shipmentTrackingResponseModel = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
                 shipmentTracking.put(shipmentModel, shipmentTrackingResponseModel);
             }
 
