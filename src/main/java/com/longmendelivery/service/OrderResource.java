@@ -102,18 +102,15 @@ public class OrderResource {
 
             Set<ShipmentEntity> shipmentEntities = new HashSet<>();
             for (ShipmentModel shipmentModel : orderCreationRequestModel.getShipments()) {
-
-
                 String trackingNumber = null;
-                String trackingDocumentType = null;
 
-                ShipmentEntity shipmentEntity = new ShipmentEntity(orderEntity,
+                ShipmentEntity shipmentEntity = new ShipmentEntity(null, orderEntity,
                         shipmentModel.getHeight(),
                         shipmentModel.getWidth(),
                         shipmentModel.getLength(),
                         shipmentModel.getWeight(),
                         trackingNumber,
-                        trackingDocumentType
+                        shipmentModel.getNickName()
                 );
 
                 writeSession.save(shipmentEntity);
@@ -224,13 +221,11 @@ public class OrderResource {
         try {
             ShipmentEntity shipmentEntity = (ShipmentEntity) writeSession.get(ShipmentEntity.class, shipmentId);
             String currentTrackingNumber = shipmentEntity.getTrackingNumber();
-            String currentTrackingDocumentType = shipmentEntity.getTrackingDocumentType();
 
-            if (currentTrackingNumber != null || currentTrackingDocumentType != null) {
+            if (currentTrackingNumber != null) {
                 System.out.println("WARNING: Already set tracking number or document type");
             }
 
-            shipmentEntity.setTrackingDocumentType(trackingDocumentType);
             shipmentEntity.setTrackingNumber(trackingNumber);
 
             writeSession.save(shipmentEntity);
