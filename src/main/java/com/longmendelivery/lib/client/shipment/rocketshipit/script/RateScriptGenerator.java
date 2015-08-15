@@ -1,7 +1,7 @@
 package com.longmendelivery.lib.client.shipment.rocketshipit.script;
 
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
 import com.longmendelivery.service.model.AddressModel;
+import com.longmendelivery.service.model.CourierType;
 import com.longmendelivery.service.model.PackageDimensionModel;
 import org.apache.commons.lang.NotImplementedException;
 

@@ -1,6 +1,8 @@
 package com.longmendelivery.persistence.entity;
 
 import com.longmendelivery.lib.conversion.DAOEntity;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 
@@ -26,6 +28,11 @@ public class OrderStatusHistoryEntity implements DAOEntity {
 
     @Column(name = "HANDLER")
     Integer handler;
+
+    @Column(name = "STATUS_DATE")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    DateTime statusDate;
+
 
     public OrderStatusHistoryEntity(OrderEntity orderId, String status, String statusDescription, Integer handler) {
         this.orderId = orderId;
@@ -102,5 +109,13 @@ public class OrderStatusHistoryEntity implements DAOEntity {
 
     public void setHandler(Integer handler) {
         this.handler = handler;
+    }
+
+    public DateTime getStatusDate() {
+        return statusDate;
+    }
+
+    public void setStatusDate(DateTime statusDate) {
+        this.statusDate = statusDate;
     }
 }

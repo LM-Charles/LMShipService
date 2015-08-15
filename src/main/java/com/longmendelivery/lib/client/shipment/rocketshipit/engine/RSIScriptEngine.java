@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * Created by  rabiddesireon 21/06/15.
  */
-public class ScriptEngine {
+public class RSIScriptEngine {
     public static String getRocketShipItPath() {
         if (EnvironmentUtil.getStage().equals(EnvironmentStage.DESKTOP)) {
             return "'./src/main/php/php-rocket-shipit/autoload.php'";
@@ -29,7 +29,7 @@ public class ScriptEngine {
     private ObjectMapper objectMapper;
 
 
-    public ScriptEngine() throws DependentServiceException {
+    public RSIScriptEngine() throws DependentServiceException {
         engine = new InteractivePhpScriptEngineFactory().getScriptEngine();
         objectMapper = new ObjectMapper();
         this.executeScriptToString("require " + getRocketShipItPath());

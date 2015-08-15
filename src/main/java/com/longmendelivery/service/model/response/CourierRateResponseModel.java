@@ -1,4 +1,4 @@
-package com.longmendelivery.lib.client.shipment.rocketshipit.model;
+package com.longmendelivery.service.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RateResponseEntry {
+public class CourierRateResponseModel {
     @JsonProperty(value = "desc")
     @NonNull
     private String description;

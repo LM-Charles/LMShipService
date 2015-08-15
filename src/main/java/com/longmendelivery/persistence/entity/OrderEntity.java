@@ -1,7 +1,7 @@
 package com.longmendelivery.persistence.entity;
 
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.ServiceType;
 import com.longmendelivery.lib.conversion.DAOEntity;
+import com.longmendelivery.service.model.CourierServiceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -60,7 +60,7 @@ public class OrderEntity implements DAOEntity {
     @Column(name = "TO_COUNTRY", nullable = false)
     private String toCountry;
     @JoinColumn(name = "COURIER_SERVICE", nullable = false)
-    private ServiceType courierServiceType;
+    private CourierServiceType courierCourierServiceType;
     @Column(name = "HANDLER")
     private String handler;
 
