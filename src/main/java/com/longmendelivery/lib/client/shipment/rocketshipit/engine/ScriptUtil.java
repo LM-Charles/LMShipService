@@ -1,4 +1,4 @@
-package com.longmendelivery.lib.client.shipment.rocketshipit.scripts;
+package com.longmendelivery.lib.client.shipment.rocketshipit.engine;
 
 import com.longmendelivery.service.initializer.EnvironmentStage;
 import com.longmendelivery.service.initializer.EnvironmentUtil;
@@ -6,7 +6,7 @@ import com.longmendelivery.service.initializer.EnvironmentUtil;
 /**
  * Created by  rabiddesireon 09/08/15.
  */
-public class RocketShipItUtil {
+public class ScriptUtil {
     public static String generateLineToRequireRocketShipItLibrary() {
         if (EnvironmentUtil.getStage().equals(EnvironmentStage.DESKTOP)) {
             return "require './src/main/php/php-rocket-shipit/autoload.php';";

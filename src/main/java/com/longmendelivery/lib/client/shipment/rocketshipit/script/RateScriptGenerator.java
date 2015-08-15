@@ -1,8 +1,8 @@
-package com.longmendelivery.lib.client.shipment.rocketshipit.scripts;
+package com.longmendelivery.lib.client.shipment.rocketshipit.script;
 
 import com.longmendelivery.lib.client.shipment.rocketshipit.model.CourierType;
-import com.longmendelivery.lib.client.shipment.rocketshipit.model.ShippingDimension;
 import com.longmendelivery.service.model.AddressModel;
+import com.longmendelivery.service.model.PackageDimensionModel;
 import org.apache.commons.lang.NotImplementedException;
 
 import java.util.EnumSet;
@@ -50,7 +50,7 @@ public class RateScriptGenerator {
         return this;
     }
 
-    public RateScriptGenerator withDimensions(ShippingDimension dimension) {
+    public RateScriptGenerator withDimensions(PackageDimensionModel dimension) {
         parameters.put("length", dimension.getLength().toString());
         parameters.put("width", dimension.getWidth().toString());
         parameters.put("height", dimension.getHeight().toString());
