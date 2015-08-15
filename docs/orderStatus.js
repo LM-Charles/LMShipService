@@ -17,13 +17,8 @@ var orderStatusResponse = {
                 "activityStatus": "## most recent status, courier provided human readable status, eg. DELIVERED ##",
                 "activityDate": "## timestamp of most recent status update",
                 "activityLocation": "## address string for the location of this activity ##"
-            },
-            {
-                "trackingNumber": "## tracking number for the individual package under this shipment",
-
-                "status": "## courier provided human readable status ##",
-                "statusDate": "## timestamp of this status update"
             }
+            // more packages here...
         ]
     }
 };

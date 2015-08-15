@@ -72,16 +72,16 @@ return array(
     'fedex' => array(
 
         // Your FedEx developer key
-        'key' => '',
+        'key' => 'zsbcq5Rq25vlCGLd',
 
         // Your FedEx developer password
-        'password' => '',
+        'password' => '8Swwmx7v0JDNX1d4nGfaPpoIH',
 
         // Your FedEx accountNumber
-        'accountNumber' => '',
+        'accountNumber' => '510088000',
 
         // Your FedEx meter number
-        'meterNumber' => '',
+        'meterNumber' => '118685333',
 
         // Allowed packaging types:
         // FEDEX_10KG_BOX

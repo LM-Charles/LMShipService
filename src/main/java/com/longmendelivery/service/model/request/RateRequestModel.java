@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by desmond on 20/06/15.
@@ -28,5 +28,5 @@ public class RateRequestModel implements Model {
 
     @JsonProperty
     @NonNull
-    private Set<ShipmentModel> shipments;
+    private List<ShipmentModel> shipments;
 }
