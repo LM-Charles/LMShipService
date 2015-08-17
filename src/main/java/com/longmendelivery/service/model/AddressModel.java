@@ -31,5 +31,4 @@ public class AddressModel {
 
     @JsonProperty
     private Boolean residential = false;
-
 }
