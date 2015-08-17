@@ -4,31 +4,12 @@
           xsi:schemaLocation="http://dozer.sourceforge.net
           http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
-    <mapping type="one-way">
-        <class-a>com.longmendelivery.persistence.entity.AppUserEntity</class-a>
-        <class-b>com.longmendelivery.service.model.AppUserModel</class-b>
-    </mapping>
-
-    <mapping type="one-way">
-        <class-a>com.longmendelivery.persistence.entity.OrderEntity</class-a>
-        <class-b>com.longmendelivery.service.model.OrderModel</class-b>
-
-        <field custom-converter="com.longmendelivery.lib.conversion.EntityToIdCustomConverter">
-            <a>client</a>
-            <b>client</b>
-        </field>
-
-        <field custom-converter="com.longmendelivery.lib.conversion.EntitySetToIdSetCustomConverter">
-            <a>shipments</a>
-            <b>shipments</b>
-        </field>
-
-        <field custom-converter="com.longmendelivery.lib.conversion.EntityToIdCustomConverter">
-            <a>courierServiceType</a>
-            <b>courierServiceType</b>
-        </field>
-
-    </mapping>
-
-
+    <configuration>
+        <custom-converters>
+            <converter type="com.longmendelivery.lib.conversion.EntityToIdCustomConverter">
+                <class-a>com.longmendelivery.lib.conversion.DAOEntity</class-a>
+                <class-b>java.lang.Integer</class-b>
+            </converter>
+        </custom-converters>
+    </configuration>
 </mappings> 
