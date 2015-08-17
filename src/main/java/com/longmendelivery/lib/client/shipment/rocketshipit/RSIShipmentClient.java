@@ -39,8 +39,6 @@ public class RSIShipmentClient implements ShipmentClient {
             generator.withDestinationAddress(destinationAddress);
             generator.withDimensions(dimension);
             String script = generator.generate();
-            JsonNode tree = engine.executeScriptToTree(script);
-            System.out.println(tree.textValue());
             List<CourierRateResponseModel> result = engine.executeScript(script, new TypeReference<List<CourierRateResponseModel>>() {
             });
 

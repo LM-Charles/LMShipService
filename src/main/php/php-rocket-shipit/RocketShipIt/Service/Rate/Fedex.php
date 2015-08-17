@@ -127,7 +127,7 @@ class Fedex extends \RocketShipIt\Service\Common implements \RocketShipIt\RateIn
                 $xml->element('ns:DropoffType', $this->dropoffType);
             }
             if (!$allAvailableRates) {
-                $xml->element('ns:CourierServiceType', $this->service);
+                $xml->element('ns:ServiceType', $this->service);
             }
             $xml->element('ns:PackagingType', $this->packagingType);
             $xml->push('ns:Shipper');
@@ -338,7 +338,7 @@ class Fedex extends \RocketShipIt\Service\Common implements \RocketShipIt\RateIn
             $rates = Array();
             if (array_values($service) === $service) {
                 foreach ($service as $s) {
-                    $serviceType = $this->core->getServiceDescriptionFromCode($s['CourierServiceType']);
+                    $serviceType = $this->core->getServiceDescriptionFromCode($s['ServiceType']);
                     if (isset($s['RatedShipmentDetails'][0])) {
                         // Find the RatedShipmentDetails with the correct currency:
                         $i = 0;
@@ -355,14 +355,14 @@ class Fedex extends \RocketShipIt\Service\Common implements \RocketShipIt\RateIn
                         $value = $s['RatedShipmentDetails']['ShipmentRateDetail']['TotalNetCharge']['Amount'];
                     }
                     //$rates["$serviceType"] = $value;
-                    $simpleRate = array('desc' => $serviceType, 'rate' => $value, 'service_code' => $s['CourierServiceType']);
+                    $simpleRate = array('desc' => $serviceType, 'rate' => $value, 'service_code' => $s['ServiceType']);
                     if (!empty($user_func)) {
                         $simpleRate = call_user_func($user_func, end(explode('\\', __CLASS__)), $s, $simpleRate);
                     }
                     $rates[] = $simpleRate;
                 }
             } else {
-                $serviceType = $this->core->getServiceDescriptionFromCode($service['CourierServiceType']);
+                $serviceType = $this->core->getServiceDescriptionFromCode($service['ServiceType']);
                 // Find the RatedShipmentDetails with the correct currency:
                 $i = 0;
                 do {
@@ -375,7 +375,7 @@ class Fedex extends \RocketShipIt\Service\Common implements \RocketShipIt\RateIn
                     return array();
                 }
                 //$rates["$serviceType"] = $value;
-                $simpleRate = array('desc' => $serviceType, 'rate' => $value, 'service_code' => $service['CourierServiceType']);
+                $simpleRate = array('desc' => $serviceType, 'rate' => $value, 'service_code' => $service['ServiceType']);
                 if (!empty($user_func)) {
                     $simpleRate = call_user_func($user_func, end(explode('\\', __CLASS__)), $service, $simpleRate);
                 }
