@@ -60,7 +60,7 @@ public class OrderEntity implements DAOEntity {
     @Column(name = "TO_COUNTRY", nullable = false)
     private String toCountry;
     @Column(name = "COURIER_SERVICE", nullable = false)
-    private CourierServiceType courierCourierServiceType;
+    private CourierServiceType courierServiceType;
     @Column(name = "HANDLER")
     private String handler;
 

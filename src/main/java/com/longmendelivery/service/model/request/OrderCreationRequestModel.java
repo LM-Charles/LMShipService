@@ -40,7 +40,7 @@ public class OrderCreationRequestModel implements Model {
 
     @JsonProperty
     @NonNull
-    private CourierServiceType courierService;
+    private CourierServiceType courierServiceType;
 
     @JsonProperty
     @NonNull
