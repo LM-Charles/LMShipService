@@ -24,8 +24,8 @@
         </field>
 
         <field custom-converter="com.longmendelivery.lib.conversion.EntityToIdCustomConverter">
-            <a>courierServiceId</a>
-            <b>courierServiceId</b>
+            <a>courierServiceType</a>
+            <b>courierServiceType</b>
         </field>
 
     </mapping>
