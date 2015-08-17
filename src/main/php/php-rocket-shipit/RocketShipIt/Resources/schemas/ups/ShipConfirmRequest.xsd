@@ -272,7 +272,7 @@
             <xsd:element name="Value" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
-    <xsd:complexType name="CourierServiceType">
+    <xsd:complexType name="ServiceType">
         <xsd:sequence>
             <xsd:element name="Code" type="xsd:string"/>
             <xsd:element name="Description" type="xsd:string" minOccurs="0"/>
