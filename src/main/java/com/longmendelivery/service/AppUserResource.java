@@ -4,8 +4,8 @@ import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.exceptions.DependentServiceRequestException;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.persistence.entity.AppUserEntity;
-import com.longmendelivery.persistence.entity.AppUserGroupEntity;
-import com.longmendelivery.persistence.entity.AppUserStatusEntity;
+import com.longmendelivery.persistence.entity.AppUserGroupType;
+import com.longmendelivery.persistence.entity.AppUserStatusType;
 import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.model.AppUserModel;
 import com.longmendelivery.service.model.VerificationCodeModel;
@@ -51,8 +51,8 @@ public class AppUserResource {
     public Response register(RegisterRequestModel registerRequestModel) {
         ThrottleSecurity.getInstance().throttle();
         String passwordMD5 = SecurityUtil.md5(registerRequestModel.getPassword());
-        AppUserGroupEntity userGroup = AppUserGroupEntity.APP_USER;
-        AppUserStatusEntity status = AppUserStatusEntity.NEW;
+        AppUserGroupType userGroup = AppUserGroupType.APP_USER;
+        AppUserStatusType status = AppUserStatusType.NEW;
         AppUserEntity newUser = new AppUserEntity(registerRequestModel.getPhone(), registerRequestModel.getEmail(), passwordMD5, userGroup, status);
 
         Session writeSession = HibernateUtil.getSessionFactory().openSession();
@@ -158,7 +158,7 @@ public class AppUserResource {
             if (phone != null && !phone.equals(user.getPhone())) {
                 user.setPhone(phone);
             }
-            user.setUserStatus(AppUserStatusEntity.PENDING_VERIFICATION_REGISTER);
+            user.setUserStatus(AppUserStatusType.PENDING_VERIFICATION_REGISTER);
             user.setVerificationString(randomVerification);
             writeSession.update(user);
             tx.commit();
@@ -192,11 +192,11 @@ public class AppUserResource {
                 return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
             }
 
-            if (!user.getUserStatus().equals(AppUserStatusEntity.PENDING_VERIFICATION_REGISTER)) {
+            if (!user.getUserStatus().equals(AppUserStatusType.PENDING_VERIFICATION_REGISTER)) {
                 return ResourceResponseUtil.generateForbiddenMessage("User is not pending verification");
             } else if (user.getVerificationString().equals(verificationCode)) {
                 user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
-                user.setUserStatus(AppUserStatusEntity.ACTIVE);
+                user.setUserStatus(AppUserStatusType.ACTIVE);
                 writeSession.update(user);
                 tx.commit();
                 return Response.status(Response.Status.OK).entity("User activated").build();
@@ -225,7 +225,7 @@ public class AppUserResource {
             if (user == null) {
                 return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
             }
-            if (user.getUserStatus().equals(AppUserStatusEntity.DISABLED)) {
+            if (user.getUserStatus().equals(AppUserStatusType.DISABLED)) {
                 return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("Cannot request password change of disabled user").build();
             } else {
                 user.setVerificationString(randomVerification);
@@ -255,7 +255,7 @@ public class AppUserResource {
                 return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
             }
 
-            if (user.getUserStatus().equals(AppUserStatusEntity.DISABLED)) {
+            if (user.getUserStatus().equals(AppUserStatusType.DISABLED)) {
                 return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("Cannot request password change of disabled user").build();
             } else if (user.getVerificationString().equals(verificationCode)) {
                 user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
@@ -287,7 +287,7 @@ public class AppUserResource {
             user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
             user.setPassword_md5(SecurityUtil.md5(SecurityUtil.generateSecureToken()));
             user.setApiToken(SecurityUtil.generateSecureToken());
-            user.setUserStatus(AppUserStatusEntity.DISABLED);
+            user.setUserStatus(AppUserStatusType.DISABLED);
             writeSession.update(user);
             tx.commit();
             return ResourceResponseUtil.generateOKMessage("Password changed, token refreshed");

@@ -31,6 +31,7 @@
         <mapping class="com.longmendelivery.persistence.entity.AppUserActionHistoryEntity"/>
         <mapping class="com.longmendelivery.persistence.entity.OrderStatusHistoryEntity"/>
         <mapping class="com.longmendelivery.persistence.entity.ShipmentEntity"/>
+        <mapping class="com.longmendelivery.persistence.entity.AddressEntity"/>
 
 
     </session-factory>

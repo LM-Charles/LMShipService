@@ -2,10 +2,7 @@ package com.longmendelivery.service;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.rocketshipit.RSIShipmentClient;
-import com.longmendelivery.persistence.entity.AppUserEntity;
-import com.longmendelivery.persistence.entity.OrderEntity;
-import com.longmendelivery.persistence.entity.OrderStatusHistoryEntity;
-import com.longmendelivery.persistence.entity.ShipmentEntity;
+import com.longmendelivery.persistence.entity.*;
 import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.model.CourierType;
 import com.longmendelivery.service.model.OrderModel;
@@ -18,9 +15,11 @@ import com.longmendelivery.service.security.NotAuthorizedException;
 import com.longmendelivery.service.security.SecurityPower;
 import com.longmendelivery.service.security.TokenSecurity;
 import com.longmendelivery.service.util.ResourceResponseUtil;
+import org.dozer.DozerBeanMapper;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -76,29 +75,31 @@ public class OrderResource {
         Transaction tx = writeSession.beginTransaction();
         try {
             AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, orderCreationRequestModel.getUserId());
-
+            if (user == null) {
+                ResourceResponseUtil.generateBadRequestMessage("Order client user not found");
+            }
             BigDecimal estimatedCost = BigDecimal.ONE;
             BigDecimal finalCost = null;
             String handler = null;
+            AddressEntity from = new DozerBeanMapper().map(orderCreationRequestModel.getFromAddress(), AddressEntity.class);
+            writeSession.save(from);
+            AddressEntity to = new DozerBeanMapper().map(orderCreationRequestModel.getToAddress(), AddressEntity.class);
+            writeSession.save(to);
+
             OrderEntity orderEntity = new OrderEntity(null,
                     user,
                     orderCreationRequestModel.getOrderDate(),
                     null,
-                    estimatedCost, finalCost,
-                    orderCreationRequestModel.getFromAddress().getAddress(),
-                    orderCreationRequestModel.getFromAddress().getCity(),
-                    orderCreationRequestModel.getFromAddress().getProvince(),
-                    orderCreationRequestModel.getFromAddress().getCountry(),
-                    orderCreationRequestModel.getFromAddress().getPostal(),
-                    orderCreationRequestModel.getToAddress().getAddress(),
-                    orderCreationRequestModel.getToAddress().getCity(),
-                    orderCreationRequestModel.getToAddress().getProvince(),
-                    orderCreationRequestModel.getToAddress().getCountry(),
-                    orderCreationRequestModel.getToAddress().getPostal(),
-                    orderCreationRequestModel.getCourierServiceType(), handler,
-                    null, orderCreationRequestModel.getGoodCategory(), orderCreationRequestModel.getDeclareValue(), orderCreationRequestModel.getInsuranceValue());
-
-            writeSession.save(orderEntity);
+                    estimatedCost,
+                    finalCost,
+                    from,
+                    to,
+                    orderCreationRequestModel.getCourierServiceType(),
+                    handler,
+                    null,
+                    orderCreationRequestModel.getGoodCategory(),
+                    orderCreationRequestModel.getDeclareValue(),
+                    orderCreationRequestModel.getInsuranceValue());
 
             Set<ShipmentEntity> shipmentEntities = new HashSet<>();
             for (ShipmentModel shipmentModel : orderCreationRequestModel.getShipments()) {
@@ -201,7 +202,7 @@ public class OrderResource {
             if (order == null) {
                 return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
             }
-            OrderStatusHistoryEntity orderStatusHistoryEntity = new OrderStatusHistoryEntity(order, status.getStatus(), status.getStatusDescription(), backendUser);
+            OrderStatusHistoryEntity orderStatusHistoryEntity = new OrderStatusHistoryEntity(null, status.getStatus(), order, status.getStatusDescription(), backendUser, DateTime.now());
             writeSession.save(orderStatusHistoryEntity);
             tx.commit();
 

@@ -2,8 +2,8 @@ package com.longmendelivery.service.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.longmendelivery.lib.conversion.Model;
-import com.longmendelivery.persistence.entity.AppUserGroupEntity;
-import com.longmendelivery.persistence.entity.AppUserStatusEntity;
+import com.longmendelivery.persistence.entity.AppUserGroupType;
+import com.longmendelivery.persistence.entity.AppUserStatusType;
 import com.longmendelivery.persistence.entity.OrderEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,10 +34,10 @@ public class AppUserModel implements Model {
     private String password_md5;
     @JsonProperty
     @NonNull
-    private AppUserGroupEntity userGroup;
+    private AppUserGroupType userGroup;
     @JsonProperty
     @NonNull
-    private AppUserStatusEntity userStatus;
+    private AppUserStatusType userStatus;
     @JsonProperty
     @NonNull
     private String apiToken;

@@ -4,6 +4,7 @@ import com.longmendelivery.lib.conversion.DAOEntity;
 import com.longmendelivery.service.model.CourierServiceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -19,6 +20,7 @@ import java.util.Set;
 @Entity
 @Table(name = "ORDER_")
 @Data
+@EqualsAndHashCode(exclude = {"shipments", "orderStatus"})
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderEntity implements DAOEntity {
@@ -33,40 +35,24 @@ public class OrderEntity implements DAOEntity {
     @Column(name = "ORDER_DATE", nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime orderDate;
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order")
     private Set<ShipmentEntity> shipments;
     @Column(name = "ESTIMATE_COST")
     private BigDecimal estimateCost;
     @Column(name = "FINAL_COST")
     private BigDecimal finalCost;
-    @Column(name = "FROM_ADDRESS", nullable = false)
-    private String fromAddress;
-    @Column(name = "FROM_CITY", nullable = false)
-    private String fromCity;
-    @Column(name = "FROM_PROVINCE", nullable = false)
-    private String fromProvince;
-    @Column(name = "FROM_CODE", nullable = false)
-    private String fromCode;
-    @Column(name = "FROM_COUNTRY", nullable = false)
-    private String fromCountry;
-    @Column(name = "TO_ADDRESS", nullable = false)
-    private String toAddress;
-    @Column(name = "TO_CITY", nullable = false)
-    private String toCity;
-    @Column(name = "TO_PROVINCE", nullable = false)
-    private String toProvince;
-    @Column(name = "TO_CODE", nullable = false)
-    private String toCode;
-    @Column(name = "TO_COUNTRY", nullable = false)
-    private String toCountry;
+    @ManyToOne
+    @JoinColumn(name = "FROM_ADDRESS_ID")
+    private AddressEntity fromAddress;
+    @ManyToOne
+    @JoinColumn(name = "TO_ADDRESS_ID")
+    private AddressEntity toAddress;
     @Column(name = "COURIER_SERVICE", nullable = false)
     private CourierServiceType courierServiceType;
     @Column(name = "HANDLER")
     private String handler;
-
-    @OneToMany(mappedBy = "orderId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY)
     private List<OrderStatusHistoryEntity> orderStatus;
-
     @Column(name = "GOOD_CATEGORY")
     private GoodCategory goodCategory;
 
