@@ -95,7 +95,7 @@ public class OrderResource {
                     orderCreationRequestModel.getToAddress().getProvince(),
                     orderCreationRequestModel.getToAddress().getCountry(),
                     orderCreationRequestModel.getToAddress().getPostal(),
-                    orderCreationRequestModel.getCourierService(), handler,
+                    orderCreationRequestModel.getCourierServiceType(), handler,
                     null, orderCreationRequestModel.getGoodCategory(), orderCreationRequestModel.getDeclareValue(), orderCreationRequestModel.getInsuranceValue());
 
             writeSession.save(orderEntity);
@@ -171,7 +171,7 @@ public class OrderResource {
             Map<ShipmentModel, ShipmentTrackingResponseModel> shipmentTracking = new HashMap<>();
             for (ShipmentEntity shipmentEntity : order.getShipments()) {
                 ShipmentModel shipmentModel = DozerBeanMapperSingletonWrapper.getInstance().map(shipmentEntity, ShipmentModel.class);
-                CourierType courierType = order.getCourierCourierServiceType().getCourier();
+                CourierType courierType = order.getCourierServiceType().getCourier();
                 ShipmentTrackingResponseModel shipmentTrackingResponseModel = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
                 shipmentTracking.put(shipmentModel, shipmentTrackingResponseModel);
             }

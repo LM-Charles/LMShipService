@@ -30,7 +30,7 @@ public class OrderModel implements Model {
     private DateTime orderDate;
     @JsonProperty
     @NonNull
-    private Integer courierServiceId;
+    private CourierServiceType courierServiceType;
     @JsonProperty
     @NonNull
     private Set<Integer> shipments;
