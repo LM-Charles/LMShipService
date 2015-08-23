@@ -14,6 +14,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserProfileModel implements DTOModel {
+    private String id;
     @NonNull
     private String phone;
     @NonNull
