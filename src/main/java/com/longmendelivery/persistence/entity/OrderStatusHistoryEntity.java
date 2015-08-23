@@ -24,7 +24,7 @@ public class OrderStatusHistoryEntity implements DAOEntity {
     String status;
 
     @ManyToOne
-    ShipOrderEntity orderId;
+    ShipOrderEntity order;
 
     String statusDescription;
 

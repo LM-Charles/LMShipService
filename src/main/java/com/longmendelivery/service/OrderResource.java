@@ -5,9 +5,6 @@ import com.longmendelivery.lib.client.shipment.rocketshipit.RSIShipmentClient;
 import com.longmendelivery.persistence.OrderStorage;
 import com.longmendelivery.persistence.ShipmentStorage;
 import com.longmendelivery.persistence.UserStorage;
-import com.longmendelivery.persistence.engine.DatabaseOrderStorage;
-import com.longmendelivery.persistence.engine.DatabaseShipmentStorage;
-import com.longmendelivery.persistence.engine.DatabaseUserStorage;
 import com.longmendelivery.persistence.entity.*;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.courier.CourierType;
@@ -24,6 +21,8 @@ import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -35,13 +34,17 @@ import java.util.Set;
 
 @Path("/order")
 @Produces("application/json")
+@Component
 public class OrderResource {
-    private OrderStorage orderStorage = DatabaseOrderStorage.getInstance();
-    private UserStorage userStorage = DatabaseUserStorage.getInstance();
+    @Autowired
+    private OrderStorage orderStorage;
+    @Autowired
+    private UserStorage userStorage;
+    @Autowired
+    private ShipmentStorage shipmentStorage;
     private RSIShipmentClient shipmentClient;
-    private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 
-    private ShipmentStorage shipmentStorage = DatabaseShipmentStorage.getInstance();
+    private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 
     public OrderResource() throws DependentServiceException {
         shipmentClient = new RSIShipmentClient();

@@ -24,15 +24,6 @@ import java.util.List;
         isolation = Isolation.DEFAULT,
         readOnly = true)
 public class DatabaseUserStorage implements UserStorage {
-    static UserStorage instance;
-
-    public static UserStorage getInstance() {
-        if (instance == null) {
-            instance = new DatabaseUserStorage();
-        }
-        return instance;
-    }
-
     @Autowired
     private SessionFactory sessionFactory;
 

@@ -3,7 +3,6 @@ package com.longmendelivery.lib.client.shipment.longmendelivery;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.ShipmentClient;
 import com.longmendelivery.persistence.ShipmentStorage;
-import com.longmendelivery.persistence.engine.DatabaseShipmentStorage;
 import com.longmendelivery.persistence.entity.ShipmentEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.courier.CourierServiceType;
@@ -23,8 +22,11 @@ import java.util.Map;
  */
 public class LongmenShipmentClient implements ShipmentClient {
 
-    private ShipmentStorage shipmentStorage = DatabaseShipmentStorage.getInstance();
+    private ShipmentStorage shipmentStorage;
 
+    LongmenShipmentClient(ShipmentStorage shipmentStorage) {
+        this.shipmentStorage = shipmentStorage;
+    }
     @Override
     public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel source, AddressModel destination, PackageDimensionModel dimension) throws DependentServiceException {
         BigDecimal total = BigDecimal.ZERO;
