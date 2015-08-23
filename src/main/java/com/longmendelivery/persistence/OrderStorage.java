@@ -1,7 +1,7 @@
 package com.longmendelivery.persistence;
 
-import com.longmendelivery.persistence.entity.OrderEntity;
 import com.longmendelivery.persistence.entity.OrderStatusHistoryEntity;
+import com.longmendelivery.persistence.entity.ShipOrderEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 
 import java.util.List;
@@ -10,13 +10,13 @@ import java.util.List;
  * Created by desmond on 23/08/15.
  */
 public interface OrderStorage {
-    List<OrderEntity> listAll(int pageSize, int offset);
+    List<ShipOrderEntity> listAll(int pageSize, int offset);
 
-    OrderEntity get(Integer userId) throws ResourceNotFoundException;
+    ShipOrderEntity get(Integer userId) throws ResourceNotFoundException;
 
-    String create(OrderEntity entity);
+    String create(ShipOrderEntity entity);
 
-    void update(OrderEntity entity);
+    void update(ShipOrderEntity entity);
 
     void createHistory(OrderStatusHistoryEntity orderStatusHistoryEntity);
 }

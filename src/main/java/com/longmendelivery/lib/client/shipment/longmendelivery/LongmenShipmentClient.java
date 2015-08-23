@@ -2,15 +2,15 @@ package com.longmendelivery.lib.client.shipment.longmendelivery;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.ShipmentClient;
+import com.longmendelivery.persistence.ShipmentStorage;
+import com.longmendelivery.persistence.engine.DatabaseShipmentStorage;
 import com.longmendelivery.persistence.entity.ShipmentEntity;
-import com.longmendelivery.persistence.util.HibernateUtil;
+import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.courier.CourierServiceType;
 import com.longmendelivery.service.model.courier.CourierType;
 import com.longmendelivery.service.model.order.AddressModel;
 import com.longmendelivery.service.model.order.PackageDimensionModel;
 import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
@@ -22,6 +22,8 @@ import java.util.Map;
  * Created by desmond on 15/08/15.
  */
 public class LongmenShipmentClient implements ShipmentClient {
+
+    private ShipmentStorage shipmentStorage = DatabaseShipmentStorage.getInstance();
 
     @Override
     public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel source, AddressModel destination, PackageDimensionModel dimension) throws DependentServiceException {
@@ -47,19 +49,12 @@ public class LongmenShipmentClient implements ShipmentClient {
     }
 
     @Override
-    public ShipmentTrackingResponseModel getTracking(CourierType type, String shipmentId) throws DependentServiceException {
-        Session writeSession = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = writeSession.beginTransaction();
-        try {
-            ShipmentEntity shipment = (ShipmentEntity) writeSession.get(ShipmentEntity.class, shipmentId);
-            DateTime pickUpDate = shipment.getOrder().getOrderDate();
-            DateTime trackDate = shipment.getOrder().getOrderStatus().get(0).getStatusDate();
-            String trackingLocation = "N/A";
-            String trackingStatus = shipment.getOrder().getOrderStatus().get(0).getStatusDescription();
-            return new ShipmentTrackingResponseModel(pickUpDate, trackDate, trackingLocation, trackingStatus);
-        } finally {
-            tx.rollback();
-            writeSession.close();
-        }
+    public ShipmentTrackingResponseModel getTracking(CourierType type, String shipmentId) throws DependentServiceException, ResourceNotFoundException {
+        ShipmentEntity shipment = shipmentStorage.get(Integer.valueOf(shipmentId));
+        DateTime pickUpDate = shipment.getOrder().getOrderDate();
+        DateTime trackDate = shipment.getOrder().getOrderStatus().get(0).getStatusDate();
+        String trackingLocation = "N/A";
+        String trackingStatus = shipment.getOrder().getOrderStatus().get(0).getStatusDescription();
+        return new ShipmentTrackingResponseModel(pickUpDate, trackDate, trackingLocation, trackingStatus);
     }
 }

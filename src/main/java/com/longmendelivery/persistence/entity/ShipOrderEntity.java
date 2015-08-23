@@ -18,12 +18,12 @@ import java.util.Set;
 /**
  * Created by desmond on 04/06/15.
  */
-@Entity(name = "Order")
+@Entity(name = "ShipOrder")
 @Data
 @EqualsAndHashCode(exclude = {"shipments", "orderStatus"})
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderEntity implements DAOEntity {
+public class ShipOrderEntity implements DAOEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
