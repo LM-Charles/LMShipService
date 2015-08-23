@@ -1,5 +1,6 @@
 package com.longmendelivery.service.model.shipment;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RateResponse {
+public class RSIRateEntry {
+    @JsonProperty(value = "desc")
     private String description;
+    @JsonProperty(value = "rate")
     private String rate;
+    @JsonProperty(value = "service_code")
     private String serviceCode;
 }

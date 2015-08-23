@@ -229,7 +229,12 @@ public class AppUserResource {
             userStorage.update(user);
 
             String smsBody = buildRegistrationVerificationMessage(user.getEmail(), randomVerification);
-            new TwilioSMSClient().sendSMS(user.getPhone(), smsBody);
+
+            try {
+                new TwilioSMSClient().sendSMS(user.getPhone(), smsBody);
+            } catch (DependentServiceRequestException e) {
+                return ResourceResponseUtil.generateBadRequestMessage("Unable to reset due to invalid phone number: " + user.getPhone());
+            }
             return ResourceResponseUtil.generateOKMessage("Password verification sent for " + user.getEmail() + " to " + user.getPhone());
         }
     }
