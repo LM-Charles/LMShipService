@@ -1,4 +1,4 @@
-package com.longmendelivery.persistence;
+package com.longmendelivery.persistence.exception;
 
 /**
  * Created by  rabiddesireon 23/08/15.

@@ -2,8 +2,14 @@ package com.longmendelivery.service;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.rocketshipit.RSIShipmentClient;
+import com.longmendelivery.persistence.OrderStorage;
+import com.longmendelivery.persistence.ShipmentStorage;
+import com.longmendelivery.persistence.UserStorage;
+import com.longmendelivery.persistence.engine.DatabaseOrderStorage;
+import com.longmendelivery.persistence.engine.DatabaseShipmentStorage;
+import com.longmendelivery.persistence.engine.DatabaseUserStorage;
 import com.longmendelivery.persistence.entity.*;
-import com.longmendelivery.persistence.util.HibernateUtil;
+import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.courier.CourierType;
 import com.longmendelivery.service.model.order.OrderModel;
 import com.longmendelivery.service.model.order.ShipmentModel;
@@ -15,10 +21,8 @@ import com.longmendelivery.service.security.NotAuthorizedException;
 import com.longmendelivery.service.security.SecurityPower;
 import com.longmendelivery.service.security.TokenSecurity;
 import com.longmendelivery.service.util.ResourceResponseUtil;
-import org.dozer.DozerBeanMapper;
 import org.dozer.DozerBeanMapperSingletonWrapper;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.dozer.Mapper;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
@@ -32,7 +36,12 @@ import java.util.Set;
 @Path("/order")
 @Produces("application/json")
 public class OrderResource {
+    private OrderStorage orderStorage = DatabaseOrderStorage.getInstance();
+    private UserStorage userStorage = DatabaseUserStorage.getInstance();
     private RSIShipmentClient shipmentClient;
+    private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+
+    private ShipmentStorage shipmentStorage = DatabaseShipmentStorage.getInstance();
 
     public OrderResource() throws DependentServiceException {
         shipmentClient = new RSIShipmentClient();
@@ -46,124 +55,109 @@ public class OrderResource {
             ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
-        Session writeSession = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = writeSession.beginTransaction();
         try {
-            AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, userId);
+            AppUserEntity user = userStorage.get(userId);
             Set<OrderEntity> ordersEntity = user.getOrders();
-            Set<OrderModel> ordersModel = new HashSet<>();
-            for (OrderEntity orderEntity : ordersEntity) {
-                ordersModel.add(DozerBeanMapperSingletonWrapper.getInstance().map(orderEntity, OrderModel.class));
-            }
-
+            Set<OrderModel> ordersModel = mapSetEntityToModel(ordersEntity);
             return Response.status(Response.Status.OK).entity(ordersModel).build();
-        } finally {
-            tx.rollback();
-            writeSession.close();
+        } catch (ResourceNotFoundException e) {
+            return ResourceResponseUtil.generateNotFoundMessage("user is not found");
         }
+    }
+
+    private Set<OrderModel> mapSetEntityToModel(Set<OrderEntity> ordersEntity) {
+        Set<OrderModel> ordersModel = new HashSet<>();
+        for (OrderEntity orderEntity : ordersEntity) {
+            ordersModel.add(mapper.map(orderEntity, OrderModel.class));
+        }
+        return ordersModel;
     }
 
     @POST
     public Response createOrder(OrderCreationRequestModel orderCreationRequestModel, @QueryParam("token") String token) {
+        Integer userId = orderCreationRequestModel.getUserId();
         try {
-            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, orderCreationRequestModel.getUserId());
+            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
-        Session writeSession = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = writeSession.beginTransaction();
         try {
-            AppUserEntity user = (AppUserEntity) writeSession.get(AppUserEntity.class, orderCreationRequestModel.getUserId());
-            if (user == null) {
-                ResourceResponseUtil.generateBadRequestMessage("Order client user not found");
-            }
-            BigDecimal estimatedCost = BigDecimal.ONE;
-            BigDecimal finalCost = null;
-            String handler = null;
-            AddressEntity from = new DozerBeanMapper().map(orderCreationRequestModel.getFromAddress(), AddressEntity.class);
-            writeSession.save(from);
-            AddressEntity to = new DozerBeanMapper().map(orderCreationRequestModel.getToAddress(), AddressEntity.class);
-            writeSession.save(to);
-
-            OrderEntity orderEntity = new OrderEntity(null,
-                    user,
-                    orderCreationRequestModel.getOrderDate(),
-                    null,
-                    estimatedCost,
-                    finalCost,
-                    from,
-                    to,
-                    orderCreationRequestModel.getCourierServiceType(),
-                    handler,
-                    null,
-                    orderCreationRequestModel.getGoodCategoryType(),
-                    orderCreationRequestModel.getDeclareValue(),
-                    orderCreationRequestModel.getInsuranceValue());
-
-            Set<ShipmentEntity> shipmentEntities = new HashSet<>();
-            for (ShipmentModel shipmentModel : orderCreationRequestModel.getShipments()) {
-                String trackingNumber = null;
-
-                ShipmentEntity shipmentEntity = new ShipmentEntity(null, orderEntity,
-                        shipmentModel.getHeight(),
-                        shipmentModel.getWidth(),
-                        shipmentModel.getLength(),
-                        shipmentModel.getWeight(),
-                        trackingNumber,
-                        shipmentModel.getNickName()
-                );
-
-                writeSession.save(shipmentEntity);
-                shipmentEntities.add(shipmentEntity);
-            }
-
+            AppUserEntity user = userStorage.get(userId);
+            OrderEntity orderEntity = buildOrderEntity(orderCreationRequestModel, user);
+            Set<ShipmentEntity> shipmentEntities = buildShipmentEntities(orderCreationRequestModel, orderEntity);
             orderEntity.setShipments(shipmentEntities);
-            writeSession.save(orderEntity);
-
-            OrderModel orderModel = DozerBeanMapperSingletonWrapper.getInstance().map(orderEntity, OrderModel.class);
-            tx.commit();
+            orderStorage.create(orderEntity);
+            OrderModel orderModel = mapper.map(orderEntity, OrderModel.class);
             return Response.status(Response.Status.OK).entity(orderModel).build();
-        } finally {
-            writeSession.close();
+        } catch (ResourceNotFoundException e) {
+            return ResourceResponseUtil.generateBadRequestMessage("Order client user not found");
         }
+    }
+
+    private OrderEntity buildOrderEntity(OrderCreationRequestModel orderCreationRequestModel, AppUserEntity user) {
+        BigDecimal estimatedCost = BigDecimal.ONE;
+        //XXX wire up with estimation
+        BigDecimal finalCost = null;
+        String handler = null;
+        AddressEntity from = mapper.map(orderCreationRequestModel.getFromAddress(), AddressEntity.class);
+        AddressEntity to = mapper.map(orderCreationRequestModel.getToAddress(), AddressEntity.class);
+
+        return new OrderEntity(null, user, orderCreationRequestModel.getOrderDate(),
+                null, estimatedCost, finalCost, from, to, orderCreationRequestModel.getCourierServiceType(),
+                handler, null, orderCreationRequestModel.getGoodCategoryType(),
+                orderCreationRequestModel.getDeclareValue(), orderCreationRequestModel.getInsuranceValue());
+    }
+
+    private Set<ShipmentEntity> buildShipmentEntities(OrderCreationRequestModel orderCreationRequestModel, OrderEntity orderEntity) {
+        Set<ShipmentEntity> shipmentEntities = new HashSet<>();
+        for (ShipmentModel shipmentModel : orderCreationRequestModel.getShipments()) {
+            String trackingNumber = null;
+
+            ShipmentEntity shipmentEntity = new ShipmentEntity(null, orderEntity,
+                    shipmentModel.getHeight(),
+                    shipmentModel.getWidth(),
+                    shipmentModel.getLength(),
+                    shipmentModel.getWeight(),
+                    trackingNumber,
+                    shipmentModel.getNickName()
+            );
+
+            shipmentEntities.add(shipmentEntity);
+        }
+        return shipmentEntities;
     }
 
 
     @GET
     @Path("/{orderId}")
     public Response getOrderDetails(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) {
-        Session writeSession = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = writeSession.beginTransaction();
+
+
         try {
-            OrderEntity order = (OrderEntity) writeSession.get(OrderEntity.class, orderId);
-            if (order == null) {
-                return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
-            }
+            OrderEntity order = orderStorage.get(orderId);
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
-            OrderModel orderModel = DozerBeanMapperSingletonWrapper.getInstance().map(order, OrderModel.class);
+            OrderModel orderModel = mapper.map(order, OrderModel.class);
             return Response.status(Response.Status.OK).entity(orderModel).build();
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e);
+        } catch (ResourceNotFoundException e) {
+            return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
         } finally {
-            tx.rollback();
-            writeSession.close();
+
+
         }
     }
 
     @GET
     @Path("/{orderId}/status")
     public Response getOrderStatus(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) throws DependentServiceException {
-        Session writeSession = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = writeSession.beginTransaction();
+
+
         try {
-            OrderEntity order = (OrderEntity) writeSession.get(OrderEntity.class, orderId);
-            if (order == null) {
-                return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
-            }
+            OrderEntity order = orderStorage.get(orderId); 
+
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
-
-
             OrderStatusResponseModel orderStatusResponseModel = new OrderStatusResponseModel();
             OrderStatusHistoryEntity orderStatusHistoryEntity = order.getOrderStatus().get(0);
             orderStatusResponseModel.setStatus(orderStatusHistoryEntity.getStatus());
@@ -171,18 +165,16 @@ public class OrderResource {
 
             Map<ShipmentModel, ShipmentTrackingResponseModel> shipmentTracking = new HashMap<>();
             for (ShipmentEntity shipmentEntity : order.getShipments()) {
-                ShipmentModel shipmentModel = DozerBeanMapperSingletonWrapper.getInstance().map(shipmentEntity, ShipmentModel.class);
+                ShipmentModel shipmentModel = mapper.map(shipmentEntity, ShipmentModel.class);
                 CourierType courierType = order.getCourierServiceType().getCourier();
                 ShipmentTrackingResponseModel shipmentTrackingResponseModel = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
                 shipmentTracking.put(shipmentModel, shipmentTrackingResponseModel);
             }
-
             return Response.status(Response.Status.OK).entity(orderStatusResponseModel).build();
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e);
-        } finally {
-            tx.rollback();
-            writeSession.close();
+        } catch (ResourceNotFoundException e) {
+            return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
         }
     }
 
@@ -195,20 +187,16 @@ public class OrderResource {
             ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
-        Session writeSession = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = writeSession.beginTransaction();
         try {
-            OrderEntity order = (OrderEntity) writeSession.get(OrderEntity.class, orderId);
-            if (order == null) {
-                return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
-            }
+            OrderEntity order = orderStorage.get(orderId);
             OrderStatusHistoryEntity orderStatusHistoryEntity = new OrderStatusHistoryEntity(null, status.getStatus(), order, status.getStatusDescription(), backendUser, DateTime.now());
-            writeSession.save(orderStatusHistoryEntity);
-            tx.commit();
-
+            orderStorage.createHistory(orderStatusHistoryEntity);
+            orderStorage.update(order);
             return ResourceResponseUtil.generateOKMessage("order updated");
+        } catch (ResourceNotFoundException e) {
+            return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
         } finally {
-            writeSession.close();
+
         }
     }
 
@@ -217,26 +205,24 @@ public class OrderResource {
     public Response addTrackingNumber(@PathParam("orderId") Integer orderId, @PathParam("shipmentId") Integer shipmentId, @FormParam(("trackingNumber")) String trackingNumber, @FormParam("trackingDocument") String trackingDocumentType, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE);
 
-        Session writeSession = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = writeSession.beginTransaction();
+
         try {
-            ShipmentEntity shipmentEntity = (ShipmentEntity) writeSession.get(ShipmentEntity.class, shipmentId);
+            ShipmentEntity shipmentEntity = shipmentStorage.get(shipmentId);
             String currentTrackingNumber = shipmentEntity.getTrackingNumber();
 
             if (currentTrackingNumber != null) {
-                System.out.println("WARNING: Already set tracking number or document type");
+                System.out.println("pWARN] already set tracking number or document type " + orderId + " - " + shipmentId);
             }
 
             shipmentEntity.setTrackingNumber(trackingNumber);
 
-            writeSession.save(shipmentEntity);
-
-            ShipmentModel shipmentModel = new ShipmentModel();
-            DozerBeanMapperSingletonWrapper.getInstance().map(shipmentEntity, shipmentModel);
+            shipmentStorage.update(shipmentEntity);
+            ShipmentModel shipmentModel = mapper.map(shipmentEntity, ShipmentModel.class);
             return Response.status(Response.Status.OK).entity(shipmentModel).build();
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
         } finally {
-            tx.rollback();
-            writeSession.close();
+            return ResourceResponseUtil.generateNotFoundMessage("shipment " + shipmentId + " does not exist");
         }
     }
 }
