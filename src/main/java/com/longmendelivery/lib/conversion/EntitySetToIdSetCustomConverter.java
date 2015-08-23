@@ -1,5 +1,6 @@
 package com.longmendelivery.lib.conversion;
 
+import com.longmendelivery.persistence.DAOEntity;
 import org.dozer.CustomConverter;
 
 import java.util.HashSet;

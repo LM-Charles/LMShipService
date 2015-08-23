@@ -1,7 +1,7 @@
 package com.longmendelivery.service.model.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.longmendelivery.service.model.RateEntryModel;
+import com.longmendelivery.service.model.order.RateEntryModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.longmendelivery.service.model;
+package com.longmendelivery.service.model.order;
 
 /**
  * Created by  rabiddesireon 04/06/15.

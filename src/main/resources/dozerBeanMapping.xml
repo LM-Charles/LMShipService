@@ -7,7 +7,7 @@
     <configuration>
         <custom-converters>
             <converter type="com.longmendelivery.lib.conversion.EntityToIdCustomConverter">
-                <class-a>com.longmendelivery.lib.conversion.DAOEntity</class-a>
+                <class-a>com.longmendelivery.persistence.DAOEntity</class-a>
                 <class-b>java.lang.Integer</class-b>
             </converter>
         </custom-converters>

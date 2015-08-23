@@ -1,8 +1,8 @@
-package com.longmendelivery.persistence.entity;
+package com.longmendelivery.service.model.order;
 
 /**
  * Created by  rabiddesireon 15/08/15.
  */
-public enum GoodCategory {
+public enum GoodCategoryType {
     REGULAR, LUXURY, COSMETICS
 }

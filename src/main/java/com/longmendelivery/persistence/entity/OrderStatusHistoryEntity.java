@@ -1,6 +1,6 @@
 package com.longmendelivery.persistence.entity;
 
-import com.longmendelivery.lib.conversion.DAOEntity;
+import com.longmendelivery.persistence.DAOEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,7 @@ import javax.persistence.*;
 /**
  * Created by  rabiddesireon 04/06/15.
  */
-@Entity
-@Table(name = "ORDER_STATUS_HISTORY")
+@Entity(name = "ORDER_STATUS_HISTORY")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,20 +21,16 @@ public class OrderStatusHistoryEntity implements DAOEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @Column(name = "STATUS", nullable = false)
     String status;
 
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
     OrderEntity orderId;
 
-    @Column(name = "STATUS_DESCRIPTION", nullable = false)
     String statusDescription;
 
-    @Column(name = "HANDLER")
     Integer handler;
 
-    @Column(name = "STATUS_DATE")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime statusDate;
 }
