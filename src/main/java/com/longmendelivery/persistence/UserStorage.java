@@ -1,7 +1,7 @@
 package com.longmendelivery.persistence;
 
 import com.longmendelivery.persistence.entity.AppUserEntity;
-import org.springframework.transaction.annotation.Transactional;
+import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -13,9 +13,10 @@ public interface UserStorage {
 
     AppUserEntity get(Integer userId) throws ResourceNotFoundException;
 
-    @Transactional(readOnly = false)
     String create(AppUserEntity entity);
 
-    @Transactional(readOnly = false)
     void update(AppUserEntity entity);
+
+
+    AppUserEntity getByEmail(String email) throws ResourceNotFoundException;
 }

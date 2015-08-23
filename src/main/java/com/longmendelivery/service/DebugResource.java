@@ -4,12 +4,14 @@ import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.exceptions.DependentServiceRequestException;
 import com.longmendelivery.lib.client.shipment.rocketshipit.engine.RSIScriptEngine;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
-import com.longmendelivery.persistence.util.HibernateUtil;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.hibernate.SessionFactory;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.script.ScriptException;
 import javax.ws.rs.*;
@@ -18,7 +20,11 @@ import java.util.Map;
 
 @Path("/debug")
 @Produces("application/json")
+@Component
 public class DebugResource {
+    @Autowired
+    private SessionFactory sessionFactory;
+
     @PUT
     @Path("testSMS")
     public Response testSMS(@QueryParam("to") String to, @QueryParam("body") String body) throws DependentServiceException {
@@ -49,13 +55,14 @@ public class DebugResource {
 
     @GET
     @Path("testDB")
+    @Transactional(readOnly = true)
+    @Produces("text/plain")
     public Response testDB() throws DependentServiceException {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Map<String, ClassMetadata> map = sessionFactory.getAllClassMetadata();
         StringBuilder builder = new StringBuilder();
         builder.append("Testing DB Hibernate entity mapping...");
         builder.append("\n");
-
+        sessionFactory.getCurrentSession();
         for (String entityName : map.keySet()) {
             SessionFactoryImpl sfImpl = (SessionFactoryImpl) sessionFactory;
             String tableName = ((AbstractEntityPersister) sfImpl.getEntityPersister(entityName)).getTableName();
