@@ -42,7 +42,7 @@ public class AppUserModel implements DTOModel {
     private String apiToken;
     @JsonProperty
     @NonNull
-    private VerificationCodeModel verificationCode;
+    private String verificationCode;
 
     @JsonProperty
     private String firstName;
