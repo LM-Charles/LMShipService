@@ -21,6 +21,8 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
@@ -31,6 +33,10 @@ import java.util.List;
 @Path("/user")
 @Produces("application/json")
 @Component
+@Transactional(
+        propagation = Propagation.REQUIRED,
+        isolation = Isolation.DEFAULT,
+        readOnly = true)
 public class AppUserResource {
     @Autowired
     private UserStorage userStorage;
@@ -50,6 +56,7 @@ public class AppUserResource {
 
     @PUT
     @Consumes("application/json")
+    @Transactional(readOnly = false)
     public Response register(RegisterRequestModel registerRequestModel) {
         ThrottleSecurity.getInstance().throttle();
         String passwordMD5 = SecurityUtil.md5(registerRequestModel.getPassword());
@@ -96,7 +103,6 @@ public class AppUserResource {
 
     @GET
     @Path("/{userId}/admin")
-    @Transactional(readOnly = true)
     public Response getUserAdmin(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN, userId);
@@ -116,6 +122,7 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}")
+    @Transactional(readOnly = false)
     public Response changeUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token, ChangeUserDetailRequestModel request) {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
@@ -129,6 +136,7 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}/activation")
+    @Transactional(readOnly = false)
     public Response sendActivationVerification(@PathParam("userId") Integer userId, @QueryParam("phone") String phone, @QueryParam("token") String token) throws DependentServiceException {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
@@ -162,6 +170,7 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}/activation/{verificationCode}")
+    @Transactional(readOnly = false)
     public Response activate(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, @QueryParam("token") String token) {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
@@ -195,6 +204,7 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}/resetPassword")
+    @Transactional(readOnly = false)
     public Response sendChangePasswordVerification(@PathParam("userId") Integer userId) throws DependentServiceException, DependentServiceRequestException {
         ThrottleSecurity.getInstance().throttle(userId);
 
@@ -223,6 +233,7 @@ public class AppUserResource {
 
     @POST
     @Path("/{userId}/resetPassword/{verificationCode}")
+    @Transactional(readOnly = false)
     public Response changePassword(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, @QueryParam("newPassword") String password) {
         ThrottleSecurity.getInstance().throttle(userId);
 
@@ -248,6 +259,7 @@ public class AppUserResource {
 
     @DELETE
     @Path("/{userId}")
+    @Transactional(readOnly = false)
     public Response disableUser(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN);
 

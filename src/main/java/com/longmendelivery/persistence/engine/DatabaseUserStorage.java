@@ -49,6 +49,9 @@ public class DatabaseUserStorage implements UserStorage {
     public AppUserEntity get(Integer userId) throws ResourceNotFoundException {
         Session session = getSession();
         AppUserEntity result = (AppUserEntity) session.get(AppUserEntity.class, userId);
+        if (result == null) {
+            throw new ResourceNotFoundException();
+        }
         return result;
     }
 
@@ -71,6 +74,10 @@ public class DatabaseUserStorage implements UserStorage {
     @Override
     public AppUserEntity getByEmail(String email) throws ResourceNotFoundException {
         Criteria criteria = getCriteria();
-        return (AppUserEntity) criteria.add(Restrictions.eq("email", email)).uniqueResult();
+        AppUserEntity result = (AppUserEntity) criteria.add(Restrictions.eq("email", email)).uniqueResult();
+        if (result == null) {
+            throw new ResourceNotFoundException();
+        }
+        return result;
     }
 }
