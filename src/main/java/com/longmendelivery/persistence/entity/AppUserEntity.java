@@ -41,7 +41,7 @@ public class AppUserEntity implements DAOEntity {
     private String country;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
-    private Set<OrderEntity> orders;
+    private Set<ShipOrderEntity> orders;
 
     public AppUserEntity(String phone, String email, String password_md5, AppUserGroupType userGroup, AppUserStatusType userStatus) {
         this.phone = phone;

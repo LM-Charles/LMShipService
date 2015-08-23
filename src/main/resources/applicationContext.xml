@@ -8,12 +8,13 @@
 
     <context:component-scan base-package="com.longmendelivery.service.*"/>
     <context:component-scan base-package="com.longmendelivery.persistence.engine"/>
+    <context:component-scan base-package="com.longmendelivery.lib.conversion"/>
 
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://aa1cn3gfajee4lg.cc1rijt3nzv9.us-west-1.rds.amazonaws.com:3306/ebdb"/>
-        <property name="username" value="lmdevolmdevo"/>
+        <property name="username" value="lmdevo"/>
         <property name="password" value="4SCWRLKJ3968UL8Y"/>
     </bean>
 

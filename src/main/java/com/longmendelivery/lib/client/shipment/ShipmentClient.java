@@ -1,6 +1,7 @@
 package com.longmendelivery.lib.client.shipment;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
+import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.courier.CourierServiceType;
 import com.longmendelivery.service.model.courier.CourierType;
 import com.longmendelivery.service.model.order.AddressModel;
@@ -16,5 +17,5 @@ import java.util.Map;
 public interface ShipmentClient {
     Map<CourierServiceType, BigDecimal> getAllRates(AddressModel source, AddressModel destination, PackageDimensionModel dimension) throws DependentServiceException;
 
-    ShipmentTrackingResponseModel getTracking(CourierType type, String trackingNumber) throws DependentServiceException;
+    ShipmentTrackingResponseModel getTracking(CourierType type, String trackingNumber) throws DependentServiceException, ResourceNotFoundException;
 }

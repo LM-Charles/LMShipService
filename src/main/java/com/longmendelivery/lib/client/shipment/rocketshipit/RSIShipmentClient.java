@@ -7,6 +7,7 @@ import com.longmendelivery.lib.client.shipment.ShipmentClient;
 import com.longmendelivery.lib.client.shipment.rocketshipit.engine.RSIScriptEngine;
 import com.longmendelivery.lib.client.shipment.rocketshipit.script.RateScriptGenerator;
 import com.longmendelivery.lib.client.shipment.rocketshipit.script.TrackScriptGenerator;
+import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.courier.CourierServiceType;
 import com.longmendelivery.service.model.courier.CourierType;
 import com.longmendelivery.service.model.order.AddressModel;
@@ -52,7 +53,7 @@ public class RSIShipmentClient implements ShipmentClient {
     }
 
     @Override
-    public ShipmentTrackingResponseModel getTracking(CourierType type, String trackingNumber) throws DependentServiceException {
+    public ShipmentTrackingResponseModel getTracking(CourierType type, String trackingNumber) throws DependentServiceException, ResourceNotFoundException {
         TrackScriptGenerator generator = new TrackScriptGenerator(type);
         generator.withTrackingNumber(trackingNumber);
         String script = generator.generate();

@@ -20,7 +20,7 @@ public class ShipmentEntity implements DAOEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
-    private OrderEntity order;
+    private ShipOrderEntity order;
     private Integer height;
     private Integer width;
     private Integer length;
