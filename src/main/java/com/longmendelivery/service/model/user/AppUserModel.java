@@ -1,15 +1,12 @@
 package com.longmendelivery.service.model.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.longmendelivery.persistence.entity.ShipOrderEntity;
 import com.longmendelivery.service.model.DTOModel;
 import com.longmendelivery.service.model.order.AddressModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-
-import java.util.Set;
 
 /**
  * Created by  rabiddesireon 04/06/15.
@@ -50,7 +47,4 @@ public class AppUserModel implements DTOModel {
     private String lastName;
     @JsonProperty
     private AddressModel address;
-
-    @JsonProperty
-    private Set<ShipOrderEntity> orders;
 }
