@@ -59,7 +59,7 @@ public class LongmenShipmentClient implements ShipmentClient {
         DateTime trackDate = getFirstOrderStatusHistoryEntity(shipment.getOrder().getOrderStatuses()).getStatusDate();
         String trackingLocation = "N/A";
         String trackingStatus = getFirstOrderStatusHistoryEntity(shipment.getOrder().getOrderStatuses()).getStatusDescription();
-        return new ShipmentTrackingResponse(pickUpDate, trackDate, trackingLocation, trackingStatus);
+        return new ShipmentTrackingResponse(pickUpDate, trackDate, trackingLocation, trackingLocation, trackingStatus);
     }
 
     private OrderStatusHistoryEntity getFirstOrderStatusHistoryEntity(Set<OrderStatusHistoryEntity> status) {
