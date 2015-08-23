@@ -1,8 +1,8 @@
 package com.longmendelivery.persistence.engine;
 
 import com.longmendelivery.persistence.OrderStorage;
-import com.longmendelivery.persistence.entity.OrderEntity;
 import com.longmendelivery.persistence.entity.OrderStatusHistoryEntity;
+import com.longmendelivery.persistence.entity.ShipOrderEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -37,17 +37,17 @@ public class DatabaseOrderStorage implements OrderStorage {
     private SessionFactory sessionFactory;
 
     @Override
-    public List<OrderEntity> listAll(int pageSize, int offset) {
+    public List<ShipOrderEntity> listAll(int pageSize, int offset) {
         Criteria criteria = getCriteria();
         criteria.setMaxResults(pageSize);
         criteria.setFirstResult(offset);
-        List<OrderEntity> result = criteria.list();
+        List<ShipOrderEntity> result = criteria.list();
         return result;
     }
 
     private Criteria getCriteria() {
         Session session = getSession();
-        return session.createCriteria(OrderEntity.class);
+        return session.createCriteria(ShipOrderEntity.class);
     }
 
     private Session getSession() {
@@ -55,16 +55,16 @@ public class DatabaseOrderStorage implements OrderStorage {
     }
 
     @Override
-    public OrderEntity get(Integer userId) throws ResourceNotFoundException {
+    public ShipOrderEntity get(Integer userId) throws ResourceNotFoundException {
         Session session = getSession();
-        OrderEntity result = (OrderEntity) session.get(OrderEntity.class, userId);
+        ShipOrderEntity result = (ShipOrderEntity) session.get(ShipOrderEntity.class, userId);
         return result;
     }
 
 
     @Override
     @Transactional(readOnly = false)
-    public String create(OrderEntity entity) {
+    public String create(ShipOrderEntity entity) {
         Session session = getSession();
         Integer result = (Integer) session.save(entity);
         return result.toString();
@@ -72,7 +72,7 @@ public class DatabaseOrderStorage implements OrderStorage {
 
     @Override
     @Transactional(readOnly = false)
-    public void update(OrderEntity entity) {
+    public void update(ShipOrderEntity entity) {
         Session session = getSession();
         session.update(entity);
     }
