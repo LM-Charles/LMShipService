@@ -6,6 +6,7 @@ import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.persistence.UserStorage;
 import com.longmendelivery.persistence.entity.AddressEntity;
 import com.longmendelivery.persistence.entity.AppUserEntity;
+import com.longmendelivery.persistence.entity.ShipOrderEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.user.*;
 import com.longmendelivery.service.security.NotAuthorizedException;
@@ -23,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Path("/user")
 @Produces("application/json")
@@ -57,7 +60,15 @@ public class AppUserResource {
         byte[] passwordMD5 = SecurityUtil.md5(userCreationRequest.getPassword());
         AppUserGroupType userGroup = AppUserGroupType.APP_USER;
         AppUserStatusType status = AppUserStatusType.NEW;
-        AppUserEntity newUser = new AppUserEntity(userCreationRequest.getPhone(), userCreationRequest.getEmail(), passwordMD5, userGroup, status);
+        Set<ShipOrderEntity> orders = new HashSet<>();
+
+        AddressEntity address = null;
+        if (userCreationRequest.getAddress() != null) {
+            address = mapper.map(userCreationRequest.getAddress(), AddressEntity.class);
+            userStorage.saveAddress(address);
+        }
+
+        AppUserEntity newUser = new AppUserEntity(null, userCreationRequest.getPhone(), userCreationRequest.getEmail(), passwordMD5, userGroup, status, null, null, userCreationRequest.getFirstName(), userCreationRequest.getLastName(), address, orders);
 
         try {
             userStorage.create(newUser);
@@ -123,11 +134,15 @@ public class AppUserResource {
 
         try {
             AppUserEntity user = userStorage.get(userId);
-            user.setEmail(request.getEmail());
-            user.setAddress(mapper.map(request.getAddress(), AddressEntity.class));
+
+            AddressEntity address = null;
+            if (request.getAddress() != null) {
+                address = mapper.map(request.getAddress(), AddressEntity.class);
+                userStorage.saveAddress(address);
+            }
+
             user.setFirstName(request.getFirstName());
             user.setLastName(request.getLastName());
-            user.setPhone(request.getPhone());
 
             userStorage.update(user);
             AppUserModel userModel = mapper.map(user, AppUserModel.class);
