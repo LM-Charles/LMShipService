@@ -23,11 +23,11 @@ public class SecurityUtil {
         return String.valueOf(secureRandom.nextInt(99999));
     }
 
-    public static String md5(String password) {
+    public static byte[] md5(String password) {
         try {
             byte[] bytes = password.getBytes(UTF_8);
             byte[] digest = MessageDigest.getInstance(MD_5).digest(bytes);
-            return new String(digest, UTF_8);
+            return digest;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

@@ -27,7 +27,7 @@ public class AppUserModel implements DTOModel {
     private String email;
     @JsonProperty
     @NonNull
-    private String password_md5;
+    private byte[] password_md5;
     @JsonProperty
     @NonNull
     private AppUserGroupType userGroup;
