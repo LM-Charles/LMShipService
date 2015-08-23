@@ -57,7 +57,7 @@ public class AppUserResource {
     @Transactional(readOnly = false)
     public Response register(RegisterRequestModel registerRequestModel) {
         ThrottleSecurity.getInstance().throttle();
-        String passwordMD5 = SecurityUtil.md5(registerRequestModel.getPassword());
+        byte[] passwordMD5 = SecurityUtil.md5(registerRequestModel.getPassword());
         AppUserGroupType userGroup = AppUserGroupType.APP_USER;
         AppUserStatusType status = AppUserStatusType.NEW;
         AppUserEntity newUser = new AppUserEntity(registerRequestModel.getPhone(), registerRequestModel.getEmail(), passwordMD5, userGroup, status);
@@ -74,7 +74,7 @@ public class AppUserResource {
 
     private void sanitizeUserModel(AppUserModel newUserModel) {
         newUserModel.setApiToken("hidden");
-        newUserModel.setPassword_md5("hidden");
+        newUserModel.setPassword_md5(new byte[0]);
         newUserModel.setVerificationCode("hidden");
     }
 
@@ -217,7 +217,7 @@ public class AppUserResource {
         }
 
         if (user.getUserStatus().equals(AppUserStatusType.DISABLED)) {
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("Cannot request password change of disabled user").build();
+            return ResourceResponseUtil.generateBadRequestMessage("Cannot request password change of disabled user");
         } else {
             user.setVerificationCode(randomVerification);
             userStorage.update(user);

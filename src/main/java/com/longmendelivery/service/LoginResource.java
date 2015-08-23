@@ -11,13 +11,21 @@ import com.longmendelivery.service.security.TokenSecurity;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.Arrays;
 
 @Path("/login")
 @Produces("application/json")
 @Component
+@Transactional(
+        propagation = Propagation.REQUIRED,
+        isolation = Isolation.DEFAULT,
+        readOnly = true)
 public class LoginResource {
     @Autowired
     private UserStorage userStorage;
@@ -33,7 +41,7 @@ public class LoginResource {
             return ResourceResponseUtil.generateForbiddenMessage("Incorrect combination of email and password");
         }
 
-        if (user.getPassword_md5().equals(SecurityUtil.md5(password))) {
+        if (Arrays.equals(user.getPassword_md5(), SecurityUtil.md5(password))) {
             if (user.getApiToken() == null) {
                 String token = SecurityUtil.generateSecureToken();
                 user.setApiToken(token);
