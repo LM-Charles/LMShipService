@@ -23,7 +23,6 @@ public class AppUserEntity implements DAOEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String phone;
     private String email;
     private String password_md5;
@@ -35,14 +34,10 @@ public class AppUserEntity implements DAOEntity {
     private String verificationString;
     private String firstName;
     private String lastName;
-    private String address;
-    private String city;
-    private String province;
-    private String country;
-
+    @OneToOne
+    private AddressEntity address;
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private Set<ShipOrderEntity> orders;
-
     public AppUserEntity(String phone, String email, String password_md5, AppUserGroupType userGroup, AppUserStatusType userStatus) {
         this.phone = phone;
         this.email = email;
