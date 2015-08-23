@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+               http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.longmendelivery.service.*"/>
+    <context:component-scan base-package="com.longmendelivery.persistence.engine"/>
+
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://aa1cn3gfajee4lg.cc1rijt3nzv9.us-west-1.rds.amazonaws.com:3306/ebdb"/>
+        <property name="username" value="lmdevolmdevo"/>
+        <property name="password" value="4SCWRLKJ3968UL8Y"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+                <prop key="hibernate.connection.autocommit">false</prop>
+            </props>
+        </property>
+
+        <property name="packagesToScan" value="com.longmendelivery.persistence.entity"/>
+    </bean>
+
+    <!-- Annotation based transaction provider -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <!-- Activate annotation-driven transactions -->
+    <tx:annotation-driven/>
+
+    <!-- Rest Endpoints -->
+    <bean class="com.longmendelivery.service.AppUserResource"/>
+    <bean class="com.longmendelivery.service.CourierResource"/>
+    <bean class="com.longmendelivery.service.DebugResource"/>
+    <bean class="com.longmendelivery.service.EchoResource"/>
+    <bean class="com.longmendelivery.service.LoginResource"/>
+    <bean class="com.longmendelivery.service.OrderResource"/>
+
+</beans>

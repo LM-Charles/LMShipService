@@ -1,8 +1,8 @@
 package com.longmendelivery.service.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.longmendelivery.lib.conversion.Model;
-import com.longmendelivery.service.model.AddressModel;
+import com.longmendelivery.service.model.DTOModel;
+import com.longmendelivery.service.model.order.AddressModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChangeUserDetailRequestModel implements Model {
+public class ChangeUserDetailRequestModel implements DTOModel {
 
     @JsonProperty
     @NonNull

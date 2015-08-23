@@ -1,6 +1,6 @@
 package com.longmendelivery.service.model.response;
 
-import com.longmendelivery.service.model.ShipmentModel;
+import com.longmendelivery.service.model.order.ShipmentModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

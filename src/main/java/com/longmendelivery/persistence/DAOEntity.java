@@ -1,4 +1,4 @@
-package com.longmendelivery.lib.conversion;
+package com.longmendelivery.persistence;
 
 /**
  * Created by desmond on 21/06/15.

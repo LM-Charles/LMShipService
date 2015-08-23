@@ -1,5 +1,6 @@
 package com.longmendelivery.lib.conversion;
 
+import com.longmendelivery.persistence.DAOEntity;
 import com.longmendelivery.persistence.util.HibernateUtil;
 import org.dozer.CustomConverter;
 import org.dozer.MappingException;

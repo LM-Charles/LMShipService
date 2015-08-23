@@ -1,12 +1,12 @@
 package com.longmendelivery.service.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.longmendelivery.lib.conversion.Model;
+import com.longmendelivery.service.model.DTOModel;
 
 /**
  * Created by desmond on 21/06/15.
  */
-public class OrderStatusRequestModel implements Model {
+public class OrderStatusRequestModel implements DTOModel {
     @JsonProperty
 
     String status;

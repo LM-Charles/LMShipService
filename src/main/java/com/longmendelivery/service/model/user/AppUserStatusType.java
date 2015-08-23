@@ -1,4 +1,4 @@
-package com.longmendelivery.persistence.entity;
+package com.longmendelivery.service.model.user;
 
 /**
  * Created by desmond on 17/06/15.
