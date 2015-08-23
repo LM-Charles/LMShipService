@@ -18,7 +18,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderModel implements DTOModel {
+public class ShipOrderModel implements DTOModel {
     @JsonProperty
     @NonNull
     private Integer id;

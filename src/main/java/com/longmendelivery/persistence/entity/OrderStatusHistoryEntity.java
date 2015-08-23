@@ -25,7 +25,7 @@ public class OrderStatusHistoryEntity implements DAOEntity {
 
     @ManyToOne
     @JoinColumn(name = "ORDER_ID")
-    OrderEntity orderId;
+    ShipOrderEntity orderId;
 
     String statusDescription;
 

@@ -2,6 +2,7 @@ package com.longmendelivery.service;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.rocketshipit.RSIShipmentClient;
+import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.courier.CourierServiceType;
 import com.longmendelivery.service.model.courier.CourierType;
 import com.longmendelivery.service.model.order.PackageDimensionModel;
@@ -11,6 +12,7 @@ import com.longmendelivery.service.model.request.RateRequestModel;
 import com.longmendelivery.service.model.response.RateResponseModel;
 import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;
 import com.longmendelivery.service.security.ThrottleSecurity;
+import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
@@ -33,10 +35,15 @@ public class CourierResource {
     @GET
     @Path("/tracking")
     public Response getTracking(@QueryParam("trackingNumber") String trackingNumber, @QueryParam("courier") String courierCode, @QueryParam("token") String token) throws DependentServiceException {
-        CourierType type = CourierType.valueOf(courierCode);
-        ShipmentTrackingResponseModel trackingResult = client.getTracking(type, trackingNumber);
 
-        return Response.status(Response.Status.OK).entity(trackingResult).build();
+        try {
+            CourierType type = CourierType.valueOf(courierCode);
+            ShipmentTrackingResponseModel trackingResult = client.getTracking(type, trackingNumber);
+            return Response.status(Response.Status.OK).entity(trackingResult).build();
+
+        } catch (ResourceNotFoundException e) {
+            return ResourceResponseUtil.generateNotFoundMessage(e.getLocalizedMessage());
+        }
     }
 
     @POST

@@ -11,7 +11,7 @@ import com.longmendelivery.persistence.engine.DatabaseUserStorage;
 import com.longmendelivery.persistence.entity.*;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.courier.CourierType;
-import com.longmendelivery.service.model.order.OrderModel;
+import com.longmendelivery.service.model.order.ShipOrderModel;
 import com.longmendelivery.service.model.order.ShipmentModel;
 import com.longmendelivery.service.model.request.OrderCreationRequestModel;
 import com.longmendelivery.service.model.request.OrderStatusRequestModel;
@@ -57,18 +57,18 @@ public class OrderResource {
 
         try {
             AppUserEntity user = userStorage.get(userId);
-            Set<OrderEntity> ordersEntity = user.getOrders();
-            Set<OrderModel> ordersModel = mapSetEntityToModel(ordersEntity);
+            Set<ShipOrderEntity> ordersEntity = user.getOrders();
+            Set<ShipOrderModel> ordersModel = mapSetEntityToModel(ordersEntity);
             return Response.status(Response.Status.OK).entity(ordersModel).build();
         } catch (ResourceNotFoundException e) {
             return ResourceResponseUtil.generateNotFoundMessage("user is not found");
         }
     }
 
-    private Set<OrderModel> mapSetEntityToModel(Set<OrderEntity> ordersEntity) {
-        Set<OrderModel> ordersModel = new HashSet<>();
-        for (OrderEntity orderEntity : ordersEntity) {
-            ordersModel.add(mapper.map(orderEntity, OrderModel.class));
+    private Set<ShipOrderModel> mapSetEntityToModel(Set<ShipOrderEntity> ordersEntity) {
+        Set<ShipOrderModel> ordersModel = new HashSet<>();
+        for (ShipOrderEntity shipOrderEntity : ordersEntity) {
+            ordersModel.add(mapper.map(shipOrderEntity, ShipOrderModel.class));
         }
         return ordersModel;
     }
@@ -84,18 +84,18 @@ public class OrderResource {
 
         try {
             AppUserEntity user = userStorage.get(userId);
-            OrderEntity orderEntity = buildOrderEntity(orderCreationRequestModel, user);
-            Set<ShipmentEntity> shipmentEntities = buildShipmentEntities(orderCreationRequestModel, orderEntity);
-            orderEntity.setShipments(shipmentEntities);
-            orderStorage.create(orderEntity);
-            OrderModel orderModel = mapper.map(orderEntity, OrderModel.class);
-            return Response.status(Response.Status.OK).entity(orderModel).build();
+            ShipOrderEntity shipOrderEntity = buildOrderEntity(orderCreationRequestModel, user);
+            Set<ShipmentEntity> shipmentEntities = buildShipmentEntities(orderCreationRequestModel, shipOrderEntity);
+            shipOrderEntity.setShipments(shipmentEntities);
+            orderStorage.create(shipOrderEntity);
+            ShipOrderModel shipOrderModel = mapper.map(shipOrderEntity, ShipOrderModel.class);
+            return Response.status(Response.Status.OK).entity(shipOrderModel).build();
         } catch (ResourceNotFoundException e) {
             return ResourceResponseUtil.generateBadRequestMessage("Order client user not found");
         }
     }
 
-    private OrderEntity buildOrderEntity(OrderCreationRequestModel orderCreationRequestModel, AppUserEntity user) {
+    private ShipOrderEntity buildOrderEntity(OrderCreationRequestModel orderCreationRequestModel, AppUserEntity user) {
         BigDecimal estimatedCost = BigDecimal.ONE;
         //XXX wire up with estimation
         BigDecimal finalCost = null;
@@ -103,18 +103,18 @@ public class OrderResource {
         AddressEntity from = mapper.map(orderCreationRequestModel.getFromAddress(), AddressEntity.class);
         AddressEntity to = mapper.map(orderCreationRequestModel.getToAddress(), AddressEntity.class);
 
-        return new OrderEntity(null, user, orderCreationRequestModel.getOrderDate(),
+        return new ShipOrderEntity(null, user, orderCreationRequestModel.getOrderDate(),
                 null, estimatedCost, finalCost, from, to, orderCreationRequestModel.getCourierServiceType(),
                 handler, null, orderCreationRequestModel.getGoodCategoryType(),
                 orderCreationRequestModel.getDeclareValue(), orderCreationRequestModel.getInsuranceValue());
     }
 
-    private Set<ShipmentEntity> buildShipmentEntities(OrderCreationRequestModel orderCreationRequestModel, OrderEntity orderEntity) {
+    private Set<ShipmentEntity> buildShipmentEntities(OrderCreationRequestModel orderCreationRequestModel, ShipOrderEntity shipOrderEntity) {
         Set<ShipmentEntity> shipmentEntities = new HashSet<>();
         for (ShipmentModel shipmentModel : orderCreationRequestModel.getShipments()) {
             String trackingNumber = null;
 
-            ShipmentEntity shipmentEntity = new ShipmentEntity(null, orderEntity,
+            ShipmentEntity shipmentEntity = new ShipmentEntity(null, shipOrderEntity,
                     shipmentModel.getHeight(),
                     shipmentModel.getWidth(),
                     shipmentModel.getLength(),
@@ -135,10 +135,10 @@ public class OrderResource {
 
 
         try {
-            OrderEntity order = orderStorage.get(orderId);
+            ShipOrderEntity order = orderStorage.get(orderId);
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
-            OrderModel orderModel = mapper.map(order, OrderModel.class);
-            return Response.status(Response.Status.OK).entity(orderModel).build();
+            ShipOrderModel shipOrderModel = mapper.map(order, ShipOrderModel.class);
+            return Response.status(Response.Status.OK).entity(shipOrderModel).build();
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e);
         } catch (ResourceNotFoundException e) {
@@ -155,7 +155,7 @@ public class OrderResource {
 
 
         try {
-            OrderEntity order = orderStorage.get(orderId); 
+            ShipOrderEntity order = orderStorage.get(orderId);
 
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
             OrderStatusResponseModel orderStatusResponseModel = new OrderStatusResponseModel();
@@ -188,7 +188,7 @@ public class OrderResource {
         }
 
         try {
-            OrderEntity order = orderStorage.get(orderId);
+            ShipOrderEntity order = orderStorage.get(orderId);
             OrderStatusHistoryEntity orderStatusHistoryEntity = new OrderStatusHistoryEntity(null, status.getStatus(), order, status.getStatusDescription(), backendUser, DateTime.now());
             orderStorage.createHistory(orderStatusHistoryEntity);
             orderStorage.update(order);
