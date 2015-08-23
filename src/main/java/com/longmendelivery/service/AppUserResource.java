@@ -190,7 +190,7 @@ public class AppUserResource {
             user.setVerificationCode(SecurityUtil.generateSecureVerificationCode());
             user.setUserStatus(AppUserStatusType.ACTIVE);
             userStorage.update(user);
-            return Response.status(Response.Status.OK).entity("User activated").build();
+            return ResourceResponseUtil.generateOKMessage("User activated");
         } else {
             return ResourceResponseUtil.generateForbiddenMessage("Verification code not accepted");
         }
