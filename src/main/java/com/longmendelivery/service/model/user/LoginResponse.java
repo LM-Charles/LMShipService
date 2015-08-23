@@ -1,6 +1,5 @@
-package com.longmendelivery.service.model.response;
+package com.longmendelivery.service.model.user;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.longmendelivery.service.model.DTOModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,13 +12,9 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponseModel implements DTOModel {
-    @JsonProperty
+public class LoginResponse implements DTOModel {
     @NonNull
     private Integer id;
-
-    @JsonProperty
     @NonNull
     private String apiToken;
-
 }

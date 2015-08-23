@@ -8,12 +8,12 @@ import com.longmendelivery.lib.client.shipment.rocketshipit.engine.RSIScriptEngi
 import com.longmendelivery.lib.client.shipment.rocketshipit.script.RateScriptGenerator;
 import com.longmendelivery.lib.client.shipment.rocketshipit.script.TrackScriptGenerator;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
-import com.longmendelivery.service.model.courier.CourierServiceType;
-import com.longmendelivery.service.model.courier.CourierType;
 import com.longmendelivery.service.model.order.AddressModel;
-import com.longmendelivery.service.model.order.PackageDimensionModel;
-import com.longmendelivery.service.model.response.CourierRateResponseModel;
-import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;
+import com.longmendelivery.service.model.order.DimensionModel;
+import com.longmendelivery.service.model.shipment.CourierServiceType;
+import com.longmendelivery.service.model.shipment.CourierType;
+import com.longmendelivery.service.model.shipment.RateResponse;
+import com.longmendelivery.service.model.shipment.ShipmentTrackingResponse;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,7 +31,7 @@ public class RSIShipmentClient implements ShipmentClient {
     }
 
     @Override
-    public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, PackageDimensionModel dimension) throws DependentServiceException {
+    public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, DimensionModel dimension) throws DependentServiceException {
         Map<CourierServiceType, BigDecimal> rateMap = new TreeMap<>();
 
         for (CourierType type : CourierType.ENABLED) {
@@ -40,11 +40,11 @@ public class RSIShipmentClient implements ShipmentClient {
             generator.withDestinationAddress(destinationAddress);
             generator.withDimensions(dimension);
             String script = generator.generate();
-            List<CourierRateResponseModel> result = engine.executeScript(script, new TypeReference<List<CourierRateResponseModel>>() {
+            List<RateResponse> result = engine.executeScript(script, new TypeReference<List<RateResponse>>() {
             });
 
 
-            for (CourierRateResponseModel entry : result) {
+            for (RateResponse entry : result) {
                 rateMap.put(CourierServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
             }
         }
@@ -53,7 +53,7 @@ public class RSIShipmentClient implements ShipmentClient {
     }
 
     @Override
-    public ShipmentTrackingResponseModel getTracking(CourierType type, String trackingNumber) throws DependentServiceException, ResourceNotFoundException {
+    public ShipmentTrackingResponse getTracking(CourierType type, String trackingNumber) throws DependentServiceException, ResourceNotFoundException {
         TrackScriptGenerator generator = new TrackScriptGenerator(type);
         generator.withTrackingNumber(trackingNumber);
         String script = generator.generate();

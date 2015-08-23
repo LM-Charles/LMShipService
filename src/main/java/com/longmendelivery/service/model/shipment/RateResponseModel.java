@@ -1,13 +1,14 @@
-package com.longmendelivery.service.model.response;
+package com.longmendelivery.service.model.shipment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.longmendelivery.service.model.order.RateEntryModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.joda.time.DateTime;
 
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Created by desmond on 05/07/15.
@@ -15,20 +16,14 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShipmentTrackingResponseModel {
+public class RateResponseModel {
     @JsonProperty
     @NonNull
-    DateTime pickUpDate;
+    DateTime rateDate;
 
-    @JsonProperty
     @NonNull
-    DateTime trackingDate;
+    List<RateEntryModel> courierRates;
 
-    @JsonProperty
-    @NotNull
-    String trackingLocation;
-
-    @JsonProperty
-    @NotNull
-    String trackingStatus;
+    @NonNull
+    RateEntryModel handlingRate;
 }

@@ -3,7 +3,7 @@ package com.longmendelivery.service.model.order;
 /**
  * Created by desmond on 04/06/15.
  */
-public class PackageDimensionModel {
+public class DimensionModel {
     private final Integer length;
     private final Integer width;
     private final Integer height;
@@ -11,7 +11,7 @@ public class PackageDimensionModel {
     private final Integer weight;
 
 
-    public PackageDimensionModel(Integer length, Integer width, Integer height, Integer weight) {
+    public DimensionModel(Integer length, Integer width, Integer height, Integer weight) {
         this.length = length;
         this.width = width;
         this.height = height;
@@ -32,9 +32,5 @@ public class PackageDimensionModel {
 
     public Integer getWeight() {
         return weight;
-    }
-
-    public PackageDimensionModel normalized() {
-        return this;
     }
 }
