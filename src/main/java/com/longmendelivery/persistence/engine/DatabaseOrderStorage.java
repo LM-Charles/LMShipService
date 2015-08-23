@@ -50,6 +50,9 @@ public class DatabaseOrderStorage implements OrderStorage {
     public ShipOrderEntity get(Integer userId) throws ResourceNotFoundException {
         Session session = getSession();
         ShipOrderEntity result = (ShipOrderEntity) session.get(ShipOrderEntity.class, userId);
+        if (result == null) {
+            throw new ResourceNotFoundException();
+        }
         return result;
     }
 
