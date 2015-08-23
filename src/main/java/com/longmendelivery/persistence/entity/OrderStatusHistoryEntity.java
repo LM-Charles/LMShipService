@@ -12,7 +12,7 @@ import javax.persistence.*;
 /**
  * Created by  rabiddesireon 04/06/15.
  */
-@Entity(name = "ORDER_STATUS_HISTORY")
+@Entity(name = "OrderStatusHistoryEntity")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,7 +24,6 @@ public class OrderStatusHistoryEntity implements DAOEntity {
     String status;
 
     @ManyToOne
-    @JoinColumn(name = "ORDER_ID")
     ShipOrderEntity orderId;
 
     String statusDescription;
