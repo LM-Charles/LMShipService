@@ -24,14 +24,6 @@ import java.util.List;
         isolation = Isolation.DEFAULT,
         readOnly = true)
 public class DatabaseOrderStorage implements OrderStorage {
-    static OrderStorage instance;
-
-    public static OrderStorage getInstance() {
-        if (instance == null) {
-            instance = new DatabaseOrderStorage();
-        }
-        return instance;
-    }
 
     @Autowired
     private SessionFactory sessionFactory;

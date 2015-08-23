@@ -14,6 +14,7 @@ import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;
 import com.longmendelivery.service.security.ThrottleSecurity;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -25,6 +26,7 @@ import java.util.Map;
 
 @Path("/courier")
 @Produces("application/json")
+@Component
 public class CourierResource {
     private RSIShipmentClient client;
 
