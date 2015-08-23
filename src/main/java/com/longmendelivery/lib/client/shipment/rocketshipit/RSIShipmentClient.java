@@ -12,7 +12,7 @@ import com.longmendelivery.service.model.order.AddressModel;
 import com.longmendelivery.service.model.order.DimensionModel;
 import com.longmendelivery.service.model.shipment.CourierServiceType;
 import com.longmendelivery.service.model.shipment.CourierType;
-import com.longmendelivery.service.model.shipment.RateResponse;
+import com.longmendelivery.service.model.shipment.RSIRateEntry;
 import com.longmendelivery.service.model.shipment.ShipmentTrackingResponse;
 
 import java.math.BigDecimal;
@@ -40,11 +40,11 @@ public class RSIShipmentClient implements ShipmentClient {
             generator.withDestinationAddress(destinationAddress);
             generator.withDimensions(dimension);
             String script = generator.generate();
-            List<RateResponse> result = engine.executeScript(script, new TypeReference<List<RateResponse>>() {
+            List<RSIRateEntry> result = engine.executeScript(script, new TypeReference<List<RSIRateEntry>>() {
             });
 
 
-            for (RateResponse entry : result) {
+            for (RSIRateEntry entry : result) {
                 rateMap.put(CourierServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
             }
         }
