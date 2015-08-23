@@ -1,7 +1,6 @@
-package com.longmendelivery.service.model.response;
+package com.longmendelivery.service.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.longmendelivery.service.model.DTOModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,7 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageResponseModel implements DTOModel {
+public class GeneralMessageResponseModel implements DTOModel {
     @JsonProperty
     @NonNull
     private String message;

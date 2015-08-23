@@ -7,13 +7,10 @@ import com.longmendelivery.persistence.ShipmentStorage;
 import com.longmendelivery.persistence.UserStorage;
 import com.longmendelivery.persistence.entity.*;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
-import com.longmendelivery.service.model.courier.CourierType;
-import com.longmendelivery.service.model.order.ShipOrderModel;
-import com.longmendelivery.service.model.order.ShipmentModel;
-import com.longmendelivery.service.model.request.OrderCreationRequestModel;
-import com.longmendelivery.service.model.request.OrderStatusRequestModel;
-import com.longmendelivery.service.model.response.OrderStatusResponseModel;
-import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;
+import com.longmendelivery.service.model.order.*;
+import com.longmendelivery.service.model.shipment.CourierServiceType;
+import com.longmendelivery.service.model.shipment.CourierType;
+import com.longmendelivery.service.model.shipment.ShipmentTrackingResponse;
 import com.longmendelivery.service.security.NotAuthorizedException;
 import com.longmendelivery.service.security.SecurityPower;
 import com.longmendelivery.service.security.TokenSecurity;
@@ -80,8 +77,8 @@ public class OrderResource {
 
     @POST
     @Transactional(readOnly = false)
-    public Response createOrder(OrderCreationRequestModel orderCreationRequestModel, @QueryParam("token") String token) {
-        Integer userId = orderCreationRequestModel.getUserId();
+    public Response createOrder(OrderCreationRequest orderCreationRequest, @QueryParam("token") String token) {
+        Integer userId = orderCreationRequest.getClient();
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
         } catch (NotAuthorizedException e) {
@@ -89,51 +86,41 @@ public class OrderResource {
         }
 
         try {
-            AppUserEntity user = userStorage.get(userId);
-            ShipOrderEntity shipOrderEntity = buildOrderEntity(orderCreationRequestModel, user);
-            Set<ShipmentEntity> shipmentEntities = buildShipmentEntities(orderCreationRequestModel, shipOrderEntity);
+            AppUserEntity client = userStorage.get(userId);
+            DateTime orderDate = orderCreationRequest.getOrderDate();
+            CourierServiceType courierServiceType = orderCreationRequest.getCourierServiceType();
+            AddressEntity fromAddress = mapper.map(orderCreationRequest.getFromAddress(), AddressEntity.class);
+            AddressEntity toAddress = mapper.map(orderCreationRequest.getToAddress(), AddressEntity.class);
+
+            String handler = orderCreationRequest.getHandler();
+            GoodCategoryType goodCategoryType = orderCreationRequest.getGoodCategoryType();
+            Set<OrderStatusHistoryEntity> orderStatus = new HashSet<>();
+            Set<ShipmentEntity> shipments = new HashSet<>();
+            BigDecimal estimatedCost = BigDecimal.ZERO;
+            BigDecimal finalCost = BigDecimal.ZERO;
+            BigDecimal declaredValue = orderCreationRequest.getDeclareValue();
+            BigDecimal insuranceValue = orderCreationRequest.getInsuranceValue();
+            ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, shipments, estimatedCost, finalCost, fromAddress, toAddress, handler, goodCategoryType, orderStatus, declaredValue, insuranceValue);
+
+            Set<ShipmentEntity> shipmentEntities = new HashSet<>();
+            for (ShipmentModel shipmentModel : orderCreationRequest.getShipments()) {
+                String trackingNumber = null;
+                ShipmentEntity shipmentEntity = new ShipmentEntity(null, shipOrderEntity, shipmentModel.getHeight(), shipmentModel.getWidth(), shipmentModel.getLength(), shipmentModel.getWeight(), trackingNumber, shipmentModel.getNickName());
+                shipmentEntities.add(shipmentEntity);
+            }
             shipOrderEntity.setShipments(shipmentEntities);
+
+            OrderStatusHistoryEntity initialOrderStatus = new OrderStatusHistoryEntity(null, OrderStatusType.ORDER_PLACED, shipOrderEntity, "order placed by system", handler, DateTime.now());
+            shipOrderEntity.getOrderStatus().add(initialOrderStatus);
+
             orderStorage.recursiveCreate(shipOrderEntity);
+
             ShipOrderModel shipOrderModel = mapper.map(shipOrderEntity, ShipOrderModel.class);
             return Response.status(Response.Status.OK).entity(shipOrderModel).build();
         } catch (ResourceNotFoundException e) {
-            return ResourceResponseUtil.generateBadRequestMessage("Order client user not found");
+            return ResourceResponseUtil.generateBadRequestMessage("order client user not found");
         }
     }
-
-    private ShipOrderEntity buildOrderEntity(OrderCreationRequestModel orderCreationRequestModel, AppUserEntity user) {
-        BigDecimal estimatedCost = BigDecimal.ONE;
-        //XXX wire up with estimation
-        BigDecimal finalCost = null;
-        String handler = null;
-        AddressEntity from = mapper.map(orderCreationRequestModel.getFromAddress(), AddressEntity.class);
-        AddressEntity to = mapper.map(orderCreationRequestModel.getToAddress(), AddressEntity.class);
-
-        return new ShipOrderEntity(null, user, orderCreationRequestModel.getOrderDate(),
-                null, estimatedCost, finalCost, from, to, orderCreationRequestModel.getCourierServiceType(),
-                handler, null, orderCreationRequestModel.getGoodCategoryType(),
-                orderCreationRequestModel.getDeclareValue(), orderCreationRequestModel.getInsuranceValue());
-    }
-
-    private Set<ShipmentEntity> buildShipmentEntities(OrderCreationRequestModel orderCreationRequestModel, ShipOrderEntity shipOrderEntity) {
-        Set<ShipmentEntity> shipmentEntities = new HashSet<>();
-        for (ShipmentModel shipmentModel : orderCreationRequestModel.getShipments()) {
-            String trackingNumber = null;
-
-            ShipmentEntity shipmentEntity = new ShipmentEntity(null, shipOrderEntity,
-                    shipmentModel.getHeight(),
-                    shipmentModel.getWidth(),
-                    shipmentModel.getLength(),
-                    shipmentModel.getWeight(),
-                    trackingNumber,
-                    shipmentModel.getNickName()
-            );
-
-            shipmentEntities.add(shipmentEntity);
-        }
-        return shipmentEntities;
-    }
-
 
     @GET
     @Path("/{orderId}")
@@ -159,19 +146,19 @@ public class OrderResource {
             ShipOrderEntity order = orderStorage.get(orderId);
 
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
-            OrderStatusResponseModel orderStatusResponseModel = new OrderStatusResponseModel();
-            OrderStatusHistoryEntity orderStatusHistoryEntity = order.getOrderStatus().get(0);
-            orderStatusResponseModel.setStatus(orderStatusHistoryEntity.getStatus());
-            orderStatusResponseModel.setStatusDescription(orderStatusHistoryEntity.getStatusDescription());
+            OrderStatusResponse orderStatusResponse = new OrderStatusResponse();
+            OrderStatusHistoryEntity orderStatusHistoryEntity = order.getOrderStatus().toArray(new OrderStatusHistoryEntity[order.getOrderStatus().size()])[0];
+            orderStatusResponse.setStatus(orderStatusHistoryEntity.getStatus());
+            orderStatusResponse.setStatusDescription(orderStatusHistoryEntity.getStatusDescription());
 
-            Map<ShipmentModel, ShipmentTrackingResponseModel> shipmentTracking = new HashMap<>();
+            Map<ShipmentModel, ShipmentTrackingResponse> shipmentTracking = new HashMap<>();
             for (ShipmentEntity shipmentEntity : order.getShipments()) {
                 ShipmentModel shipmentModel = mapper.map(shipmentEntity, ShipmentModel.class);
                 CourierType courierType = order.getCourierServiceType().getCourier();
-                ShipmentTrackingResponseModel shipmentTrackingResponseModel = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
-                shipmentTracking.put(shipmentModel, shipmentTrackingResponseModel);
+                ShipmentTrackingResponse shipmentTrackingResponse = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
+                shipmentTracking.put(shipmentModel, shipmentTrackingResponse);
             }
-            return Response.status(Response.Status.OK).entity(orderStatusResponseModel).build();
+            return Response.status(Response.Status.OK).entity(orderStatusResponse).build();
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e);
         } catch (ResourceNotFoundException e) {
@@ -182,16 +169,17 @@ public class OrderResource {
     @POST
     @Path("/{orderId}/status")
     @Transactional(readOnly = false)
-    public Response updateOrderStatus(@PathParam("orderId") Integer orderId, OrderStatusRequestModel status, @QueryParam("backendUser") Integer backendUser, @QueryParam("token") String token) {
+    public Response updateOrderStatus(@PathParam("orderId") Integer orderId, OrderStatusUpdateRequest status, @QueryParam("backendUserId") Integer backendUserId, @QueryParam("token") String token) {
         try {
-            TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE, backendUser);
+            TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE, backendUserId);
         } catch (NotAuthorizedException e) {
             ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
         try {
+            AppUserEntity backendUser = userStorage.get(backendUserId);
             ShipOrderEntity order = orderStorage.get(orderId);
-            OrderStatusHistoryEntity orderStatusHistoryEntity = new OrderStatusHistoryEntity(null, status.getStatus(), order, status.getStatusDescription(), backendUser, DateTime.now());
+            OrderStatusHistoryEntity orderStatusHistoryEntity = new OrderStatusHistoryEntity(null, status.getStatus(), order, status.getStatusDescription(), backendUser.getEmail(), DateTime.now());
             orderStorage.createHistory(orderStatusHistoryEntity);
             orderStorage.update(order);
             return ResourceResponseUtil.generateOKMessage("order updated");

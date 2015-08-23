@@ -34,4 +34,6 @@ public class ShipmentModel implements DTOModel {
 
     @JsonProperty
     private String nickName;
+
+    private ShipmentPackageType shipmentPackageType;
 }
