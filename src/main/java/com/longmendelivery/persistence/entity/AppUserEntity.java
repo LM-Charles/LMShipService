@@ -31,7 +31,7 @@ public class AppUserEntity implements DAOEntity {
     @Enumerated(EnumType.STRING)
     private AppUserStatusType userStatus;
     private String apiToken;
-    private String verificationString;
+    private String verificationCode;
     private String firstName;
     private String lastName;
     @OneToOne

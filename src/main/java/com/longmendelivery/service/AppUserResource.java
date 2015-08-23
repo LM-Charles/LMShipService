@@ -11,14 +11,12 @@ import com.longmendelivery.service.model.request.RegisterRequestModel;
 import com.longmendelivery.service.model.user.AppUserGroupType;
 import com.longmendelivery.service.model.user.AppUserModel;
 import com.longmendelivery.service.model.user.AppUserStatusType;
-import com.longmendelivery.service.model.user.VerificationCodeModel;
 import com.longmendelivery.service.security.NotAuthorizedException;
 import com.longmendelivery.service.security.*;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 import org.hibernate.exception.ConstraintViolationException;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
@@ -77,7 +75,7 @@ public class AppUserResource {
     private void sanitizeUserModel(AppUserModel newUserModel) {
         newUserModel.setApiToken("hidden");
         newUserModel.setPassword_md5("hidden");
-        newUserModel.setVerificationCode(new VerificationCodeModel("hidden", DateTime.now()));
+        newUserModel.setVerificationCode("hidden");
     }
 
     @GET
@@ -154,7 +152,7 @@ public class AppUserResource {
                 user.setPhone(phone);
             }
             user.setUserStatus(AppUserStatusType.PENDING_VERIFICATION_REGISTER);
-            user.setVerificationString(randomVerification);
+            user.setVerificationCode(randomVerification);
             userStorage.update(user);
             String smsBody = buildRegistrationVerificationMessage(user.getEmail(), randomVerification);
             try {
@@ -188,8 +186,8 @@ public class AppUserResource {
 
         if (!user.getUserStatus().equals(AppUserStatusType.PENDING_VERIFICATION_REGISTER)) {
             return ResourceResponseUtil.generateForbiddenMessage("User is not pending verification");
-        } else if (user.getVerificationString().equals(verificationCode)) {
-            user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
+        } else if (user.getVerificationCode().equals(verificationCode)) {
+            user.setVerificationCode(SecurityUtil.generateSecureVerificationCode());
             user.setUserStatus(AppUserStatusType.ACTIVE);
             userStorage.update(user);
             return Response.status(Response.Status.OK).entity("User activated").build();
@@ -221,7 +219,7 @@ public class AppUserResource {
         if (user.getUserStatus().equals(AppUserStatusType.DISABLED)) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("Cannot request password change of disabled user").build();
         } else {
-            user.setVerificationString(randomVerification);
+            user.setVerificationCode(randomVerification);
             userStorage.update(user);
 
             String smsBody = buildRegistrationVerificationMessage(user.getEmail(), randomVerification);
@@ -246,8 +244,8 @@ public class AppUserResource {
         }
         if (user.getUserStatus().equals(AppUserStatusType.DISABLED)) {
             return ResourceResponseUtil.generateBadRequestMessage("Cannot request password change of disabled user");
-        } else if (user.getVerificationString().equals(verificationCode)) {
-            user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
+        } else if (user.getVerificationCode().equals(verificationCode)) {
+            user.setVerificationCode(SecurityUtil.generateSecureVerificationCode());
             user.setPassword_md5(SecurityUtil.md5(password));
             user.setApiToken(SecurityUtil.generateSecureToken());
             userStorage.update(user);
@@ -271,7 +269,7 @@ public class AppUserResource {
             return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
         }
 
-        user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
+        user.setVerificationCode(SecurityUtil.generateSecureVerificationCode());
         user.setPassword_md5(SecurityUtil.md5(SecurityUtil.generateSecureToken()));
         user.setApiToken(SecurityUtil.generateSecureToken());
         user.setUserStatus(AppUserStatusType.DISABLED);
