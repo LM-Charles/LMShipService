@@ -19,4 +19,6 @@ public interface OrderStorage {
     void update(ShipOrderEntity entity);
 
     void createHistory(OrderStatusHistoryEntity orderStatusHistoryEntity);
+
+    Integer recursiveCreate(ShipOrderEntity shipOrderEntity);
 }

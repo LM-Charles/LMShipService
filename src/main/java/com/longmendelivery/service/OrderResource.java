@@ -93,7 +93,7 @@ public class OrderResource {
             ShipOrderEntity shipOrderEntity = buildOrderEntity(orderCreationRequestModel, user);
             Set<ShipmentEntity> shipmentEntities = buildShipmentEntities(orderCreationRequestModel, shipOrderEntity);
             shipOrderEntity.setShipments(shipmentEntities);
-            orderStorage.create(shipOrderEntity);
+            orderStorage.recursiveCreate(shipOrderEntity);
             ShipOrderModel shipOrderModel = mapper.map(shipOrderEntity, ShipOrderModel.class);
             return Response.status(Response.Status.OK).entity(shipOrderModel).build();
         } catch (ResourceNotFoundException e) {

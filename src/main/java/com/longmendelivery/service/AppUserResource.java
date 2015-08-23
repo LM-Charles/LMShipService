@@ -245,7 +245,7 @@ public class AppUserResource {
             return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
         }
         if (user.getUserStatus().equals(AppUserStatusType.DISABLED)) {
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("Cannot request password change of disabled user").build();
+            return ResourceResponseUtil.generateBadRequestMessage("Cannot request password change of disabled user");
         } else if (user.getVerificationString().equals(verificationCode)) {
             user.setVerificationString(SecurityUtil.generateSecureVerificationCode());
             user.setPassword_md5(SecurityUtil.md5(password));
