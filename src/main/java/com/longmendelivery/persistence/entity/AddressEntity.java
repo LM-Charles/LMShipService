@@ -1,35 +1,31 @@
 package com.longmendelivery.persistence.entity;
 
-import com.longmendelivery.lib.conversion.DAOEntity;
+import com.longmendelivery.persistence.DAOEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Created by  rabiddesireon 04/06/15.
  */
-@Entity
-@Table(name = "ADDRESS")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "Address")
 public class AddressEntity implements DAOEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "ADDRESS", nullable = false)
     private String address;
-    @Column(name = "CITY", nullable = false)
     private String city;
-    @Column(name = "PROVINCE", nullable = false)
     private String province;
-    @Column(name = "CODE", nullable = false)
     private String postal;
-    @Column(name = "COUNTRY", nullable = false)
     private String country;
-    @Column(name = "RESIDENTIAL", nullable = false)
     private Boolean residential;
 }

@@ -1,10 +1,10 @@
 package com.longmendelivery.lib.client.shipment;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
-import com.longmendelivery.service.model.AddressModel;
-import com.longmendelivery.service.model.CourierServiceType;
-import com.longmendelivery.service.model.CourierType;
-import com.longmendelivery.service.model.PackageDimensionModel;
+import com.longmendelivery.service.model.courier.CourierServiceType;
+import com.longmendelivery.service.model.courier.CourierType;
+import com.longmendelivery.service.model.order.AddressModel;
+import com.longmendelivery.service.model.order.PackageDimensionModel;
 import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;
 
 import java.math.BigDecimal;

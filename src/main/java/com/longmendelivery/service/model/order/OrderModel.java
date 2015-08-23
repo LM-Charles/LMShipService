@@ -1,8 +1,8 @@
-package com.longmendelivery.service.model;
+package com.longmendelivery.service.model.order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.longmendelivery.lib.conversion.Model;
-import com.longmendelivery.persistence.entity.GoodCategory;
+import com.longmendelivery.service.model.DTOModel;
+import com.longmendelivery.service.model.courier.CourierServiceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderModel implements Model {
+public class OrderModel implements DTOModel {
     @JsonProperty
     @NonNull
     private Integer id;
@@ -49,7 +49,7 @@ public class OrderModel implements Model {
     @JsonProperty
     private String handler;
     @JsonProperty
-    private GoodCategory goodCategory;
+    private GoodCategoryType goodCategoryType;
     @JsonProperty
     private BigDecimal declareValue;
     @JsonProperty

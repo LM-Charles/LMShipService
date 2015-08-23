@@ -1,8 +1,8 @@
 package com.longmendelivery.lib.client.shipment.rocketshipit.script;
 
-import com.longmendelivery.service.model.AddressModel;
-import com.longmendelivery.service.model.CourierType;
-import com.longmendelivery.service.model.PackageDimensionModel;
+import com.longmendelivery.service.model.courier.CourierType;
+import com.longmendelivery.service.model.order.AddressModel;
+import com.longmendelivery.service.model.order.PackageDimensionModel;
 import org.apache.commons.lang.NotImplementedException;
 
 import java.util.EnumSet;

@@ -4,9 +4,9 @@ import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.rocketshipit.RSIShipmentClient;
 import com.longmendelivery.persistence.entity.*;
 import com.longmendelivery.persistence.util.HibernateUtil;
-import com.longmendelivery.service.model.CourierType;
-import com.longmendelivery.service.model.OrderModel;
-import com.longmendelivery.service.model.ShipmentModel;
+import com.longmendelivery.service.model.courier.CourierType;
+import com.longmendelivery.service.model.order.OrderModel;
+import com.longmendelivery.service.model.order.ShipmentModel;
 import com.longmendelivery.service.model.request.OrderCreationRequestModel;
 import com.longmendelivery.service.model.request.OrderStatusRequestModel;
 import com.longmendelivery.service.model.response.OrderStatusResponseModel;
@@ -97,7 +97,7 @@ public class OrderResource {
                     orderCreationRequestModel.getCourierServiceType(),
                     handler,
                     null,
-                    orderCreationRequestModel.getGoodCategory(),
+                    orderCreationRequestModel.getGoodCategoryType(),
                     orderCreationRequestModel.getDeclareValue(),
                     orderCreationRequestModel.getInsuranceValue());
 

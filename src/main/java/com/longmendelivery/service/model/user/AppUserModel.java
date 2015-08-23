@@ -1,10 +1,9 @@
-package com.longmendelivery.service.model;
+package com.longmendelivery.service.model.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.longmendelivery.lib.conversion.Model;
-import com.longmendelivery.persistence.entity.AppUserGroupType;
-import com.longmendelivery.persistence.entity.AppUserStatusType;
 import com.longmendelivery.persistence.entity.OrderEntity;
+import com.longmendelivery.service.model.DTOModel;
+import com.longmendelivery.service.model.order.AddressModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppUserModel implements Model {
+public class AppUserModel implements DTOModel {
 
     @JsonProperty
     @NonNull
