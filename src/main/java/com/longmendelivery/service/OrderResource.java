@@ -23,6 +23,7 @@ import org.dozer.Mapper;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -35,6 +36,7 @@ import java.util.Set;
 @Path("/order")
 @Produces("application/json")
 @Component
+@Transactional(readOnly = true)
 public class OrderResource {
     @Autowired
     private OrderStorage orderStorage;
@@ -77,6 +79,7 @@ public class OrderResource {
     }
 
     @POST
+    @Transactional(readOnly = false)
     public Response createOrder(OrderCreationRequestModel orderCreationRequestModel, @QueryParam("token") String token) {
         Integer userId = orderCreationRequestModel.getUserId();
         try {
@@ -135,8 +138,6 @@ public class OrderResource {
     @GET
     @Path("/{orderId}")
     public Response getOrderDetails(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) {
-
-
         try {
             ShipOrderEntity order = orderStorage.get(orderId);
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
@@ -146,9 +147,6 @@ public class OrderResource {
             return ResourceResponseUtil.generateForbiddenMessage(e);
         } catch (ResourceNotFoundException e) {
             return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
-        } finally {
-
-
         }
     }
 
@@ -183,6 +181,7 @@ public class OrderResource {
 
     @POST
     @Path("/{orderId}/status")
+    @Transactional(readOnly = false)
     public Response updateOrderStatus(@PathParam("orderId") Integer orderId, OrderStatusRequestModel status, @QueryParam("backendUser") Integer backendUser, @QueryParam("token") String token) {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE, backendUser);
@@ -205,6 +204,7 @@ public class OrderResource {
 
     @POST
     @Path("/{orderId}/tracking/{shipmentId}")
+    @Transactional(readOnly = false)
     public Response addTrackingNumber(@PathParam("orderId") Integer orderId, @PathParam("shipmentId") Integer shipmentId, @FormParam(("trackingNumber")) String trackingNumber, @FormParam("trackingDocument") String trackingDocumentType, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE);
 
