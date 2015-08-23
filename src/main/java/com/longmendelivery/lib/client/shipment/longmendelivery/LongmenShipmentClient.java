@@ -56,9 +56,9 @@ public class LongmenShipmentClient implements ShipmentClient {
     public ShipmentTrackingResponse getTracking(CourierType type, String shipmentId) throws DependentServiceException, ResourceNotFoundException {
         ShipmentEntity shipment = shipmentStorage.get(Integer.valueOf(shipmentId));
         DateTime pickUpDate = shipment.getOrder().getOrderDate();
-        DateTime trackDate = getFirstOrderStatusHistoryEntity(shipment.getOrder().getOrderStatus()).getStatusDate();
+        DateTime trackDate = getFirstOrderStatusHistoryEntity(shipment.getOrder().getOrderStatuses()).getStatusDate();
         String trackingLocation = "N/A";
-        String trackingStatus = getFirstOrderStatusHistoryEntity(shipment.getOrder().getOrderStatus()).getStatusDescription();
+        String trackingStatus = getFirstOrderStatusHistoryEntity(shipment.getOrder().getOrderStatuses()).getStatusDescription();
         return new ShipmentTrackingResponse(pickUpDate, trackDate, trackingLocation, trackingStatus);
     }
 

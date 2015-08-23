@@ -10,6 +10,7 @@ import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.order.*;
 import com.longmendelivery.service.model.shipment.CourierServiceType;
 import com.longmendelivery.service.model.shipment.CourierType;
+import com.longmendelivery.service.model.shipment.ShipmentAddTrackingRequest;
 import com.longmendelivery.service.model.shipment.ShipmentTrackingResponse;
 import com.longmendelivery.service.security.NotAuthorizedException;
 import com.longmendelivery.service.security.SecurityPower;
@@ -94,11 +95,13 @@ public class OrderResource {
 
             String handler = orderCreationRequest.getHandler();
             GoodCategoryType goodCategoryType = orderCreationRequest.getGoodCategoryType();
+            Set<OrderStatusHistoryEntity> orderStatus = new HashSet<>();
+            Set<ShipmentEntity> shipments = new HashSet<>();
             BigDecimal estimatedCost = BigDecimal.ZERO;
             BigDecimal finalCost = BigDecimal.ZERO;
             BigDecimal declaredValue = orderCreationRequest.getDeclareValue();
             BigDecimal insuranceValue = orderCreationRequest.getInsuranceValue();
-            ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, null, estimatedCost, finalCost, fromAddress, toAddress, handler, goodCategoryType, null, declaredValue, insuranceValue);
+            ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, shipments, estimatedCost, finalCost, fromAddress, toAddress, handler, goodCategoryType, orderStatus, declaredValue, insuranceValue);
 
             Set<ShipmentEntity> shipmentEntities = new HashSet<>();
             for (ShipmentModel shipmentModel : orderCreationRequest.getShipments()) {
@@ -111,6 +114,7 @@ public class OrderResource {
             OrderStatusHistoryEntity initialOrderStatus = new OrderStatusHistoryEntity(null, OrderStatusType.ORDER_PLACED, shipOrderEntity, "order placed by system", handler, DateTime.now());
             Set<OrderStatusHistoryEntity> initialOrderSet = new HashSet<>();
             initialOrderSet.add(initialOrderStatus);
+            shipOrderEntity.setOrderStatuses(initialOrderSet);
 
             orderStorage.recursiveCreate(shipOrderEntity);
 
@@ -139,14 +143,12 @@ public class OrderResource {
     @GET
     @Path("/{orderId}/status")
     public Response getOrderStatus(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) throws DependentServiceException {
-
-
         try {
             ShipOrderEntity order = orderStorage.get(orderId);
 
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
             OrderStatusResponse orderStatusResponse = new OrderStatusResponse();
-            OrderStatusHistoryEntity orderStatusHistoryEntity = order.getOrderStatus().toArray(new OrderStatusHistoryEntity[order.getOrderStatus().size()])[0];
+            OrderStatusHistoryEntity orderStatusHistoryEntity = order.getOrderStatuses().toArray(new OrderStatusHistoryEntity[order.getOrderStatuses().size()])[0];
             orderStatusResponse.setStatus(orderStatusHistoryEntity.getStatus());
             orderStatusResponse.setStatusDescription(orderStatusHistoryEntity.getStatusDescription());
 
@@ -192,26 +194,16 @@ public class OrderResource {
     @POST
     @Path("/{orderId}/tracking/{shipmentId}")
     @Transactional(readOnly = false)
-    public Response addTrackingNumber(@PathParam("orderId") Integer orderId, @PathParam("shipmentId") Integer shipmentId, @FormParam(("trackingNumber")) String trackingNumber, @FormParam("trackingDocument") String trackingDocumentType, @QueryParam("token") String token) {
+    public Response addTrackingNumber(@PathParam("orderId") Integer orderId, @PathParam("shipmentId") Integer shipmentId, ShipmentAddTrackingRequest request, @QueryParam("token") String token) {
         TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE);
-
 
         try {
             ShipmentEntity shipmentEntity = shipmentStorage.get(shipmentId);
-            String currentTrackingNumber = shipmentEntity.getTrackingNumber();
-
-            if (currentTrackingNumber != null) {
-                System.out.println("pWARN] already set tracking number or document type " + orderId + " - " + shipmentId);
-            }
-
-            shipmentEntity.setTrackingNumber(trackingNumber);
-
+            shipmentEntity.setTrackingNumber(request.getTrackingNumber());
             shipmentStorage.update(shipmentEntity);
             ShipmentModel shipmentModel = mapper.map(shipmentEntity, ShipmentModel.class);
             return Response.status(Response.Status.OK).entity(shipmentModel).build();
         } catch (ResourceNotFoundException e) {
-            e.printStackTrace();
-        } finally {
             return ResourceResponseUtil.generateNotFoundMessage("shipment " + shipmentId + " does not exist");
         }
     }

@@ -45,9 +45,9 @@ public class DatabaseShipmentStorage implements ShipmentStorage {
     }
 
     @Override
-    public ShipmentEntity get(Integer userId) throws ResourceNotFoundException {
+    public ShipmentEntity get(Integer id) throws ResourceNotFoundException {
         Session session = getSession();
-        ShipmentEntity result = (ShipmentEntity) session.get(ShipmentEntity.class, userId);
+        ShipmentEntity result = (ShipmentEntity) session.get(ShipmentEntity.class, id);
         if (result == null) {
             throw new ResourceNotFoundException();
         }
