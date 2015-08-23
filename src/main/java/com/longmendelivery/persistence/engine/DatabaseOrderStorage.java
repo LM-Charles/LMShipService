@@ -3,6 +3,7 @@ package com.longmendelivery.persistence.engine;
 import com.longmendelivery.persistence.OrderStorage;
 import com.longmendelivery.persistence.entity.OrderStatusHistoryEntity;
 import com.longmendelivery.persistence.entity.ShipOrderEntity;
+import com.longmendelivery.persistence.entity.ShipmentEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -76,6 +77,18 @@ public class DatabaseOrderStorage implements OrderStorage {
     public void createHistory(OrderStatusHistoryEntity orderStatusHistoryEntity) {
         Session session = getSession();
         session.save(orderStatusHistoryEntity);
+    }
+
+    @Override
+    public Integer recursiveCreate(ShipOrderEntity shipOrderEntity) {
+        Session session = getSession();
+        for (ShipmentEntity shipment : shipOrderEntity.getShipments()) {
+            session.save(shipment);
+        }
+        session.save(shipOrderEntity.getFromAddress());
+        session.save(shipOrderEntity.getToAddress());
+        Integer result = (Integer) session.save(shipOrderEntity);
+        return result;
     }
 
 
