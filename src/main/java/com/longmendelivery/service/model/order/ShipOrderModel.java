@@ -27,7 +27,7 @@ public class ShipOrderModel implements DTOModel {
     @NonNull
     private CourierServiceType courierServiceType;
     @NonNull
-    private Set<Integer> shipments;
+    private Set<ShipmentModel> shipments;
     private BigDecimal estimateCost;
     private BigDecimal finalCost;
     @NonNull
