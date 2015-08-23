@@ -1,6 +1,7 @@
 package com.longmendelivery.persistence.entity;
 
 import com.longmendelivery.persistence.DAOEntity;
+import com.longmendelivery.service.model.order.OrderStatusType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,14 +22,15 @@ public class OrderStatusHistoryEntity implements DAOEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    String status;
+    @Enumerated(value = EnumType.STRING)
+    OrderStatusType status;
 
     @ManyToOne
     ShipOrderEntity order;
 
     String statusDescription;
 
-    Integer handler;
+    String handler;
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     DateTime statusDate;

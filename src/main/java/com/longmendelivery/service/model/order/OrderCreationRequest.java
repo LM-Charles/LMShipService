@@ -17,9 +17,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShipOrderModel implements DTOModel {
-    @NonNull
-    private Integer id;
+public class OrderCreationRequest implements DTOModel {
     @NonNull
     private Integer client;
     @NonNull
@@ -27,9 +25,7 @@ public class ShipOrderModel implements DTOModel {
     @NonNull
     private CourierServiceType courierServiceType;
     @NonNull
-    private Set<Integer> shipments;
-    private BigDecimal estimateCost;
-    private BigDecimal finalCost;
+    private Set<ShipmentModel> shipments;
     @NonNull
     private AddressModel fromAddress;
     @NonNull

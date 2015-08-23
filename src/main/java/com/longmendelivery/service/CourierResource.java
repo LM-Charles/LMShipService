@@ -3,14 +3,10 @@ package com.longmendelivery.service;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.rocketshipit.RSIShipmentClient;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
-import com.longmendelivery.service.model.courier.CourierServiceType;
-import com.longmendelivery.service.model.courier.CourierType;
-import com.longmendelivery.service.model.order.PackageDimensionModel;
+import com.longmendelivery.service.model.order.DimensionModel;
 import com.longmendelivery.service.model.order.RateEntryModel;
 import com.longmendelivery.service.model.order.ShipmentModel;
-import com.longmendelivery.service.model.request.RateRequestModel;
-import com.longmendelivery.service.model.response.RateResponseModel;
-import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;
+import com.longmendelivery.service.model.shipment.*;
 import com.longmendelivery.service.security.ThrottleSecurity;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.joda.time.DateTime;
@@ -40,7 +36,7 @@ public class CourierResource {
 
         try {
             CourierType type = CourierType.valueOf(courierCode);
-            ShipmentTrackingResponseModel trackingResult = client.getTracking(type, trackingNumber);
+            ShipmentTrackingResponse trackingResult = client.getTracking(type, trackingNumber);
             return Response.status(Response.Status.OK).entity(trackingResult).build();
 
         } catch (ResourceNotFoundException e) {
@@ -50,13 +46,13 @@ public class CourierResource {
 
     @POST
     @Path("/rate")
-    public Response calculateRate(RateRequestModel rateRequestModel, @QueryParam("token") String token) throws DependentServiceException {
-        ThrottleSecurity.getInstance().throttle(rateRequestModel.hashCode());
+    public Response calculateRate(RateRequest rateRequest, @QueryParam("token") String token) throws DependentServiceException {
+        ThrottleSecurity.getInstance().throttle(rateRequest.hashCode());
 
         Map<CourierServiceType, BigDecimal> totalRates = new HashMap<>();
-        for (ShipmentModel shipment : rateRequestModel.getShipments()) {
-            PackageDimensionModel dimension = new PackageDimensionModel(shipment.getLength(), shipment.getWidth(), shipment.getHeight(), shipment.getWeight());
-            Map<CourierServiceType, BigDecimal> packageRate = client.getAllRates(rateRequestModel.getFromAddress(), rateRequestModel.getToAddress(), dimension);
+        for (ShipmentModel shipment : rateRequest.getShipments()) {
+            DimensionModel dimension = new DimensionModel(shipment.getLength(), shipment.getWidth(), shipment.getHeight(), shipment.getWeight());
+            Map<CourierServiceType, BigDecimal> packageRate = client.getAllRates(rateRequest.getFromAddress(), rateRequest.getToAddress(), dimension);
             for (Map.Entry<CourierServiceType, BigDecimal> entry : packageRate.entrySet()) {
                 BigDecimal oldTotal = totalRates.get(entry.getKey());
                 if (oldTotal == null) {

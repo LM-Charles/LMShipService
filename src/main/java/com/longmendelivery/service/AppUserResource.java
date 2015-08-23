@@ -6,11 +6,7 @@ import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.persistence.UserStorage;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
-import com.longmendelivery.service.model.request.ChangeUserDetailRequestModel;
-import com.longmendelivery.service.model.request.RegisterRequestModel;
-import com.longmendelivery.service.model.user.AppUserGroupType;
-import com.longmendelivery.service.model.user.AppUserModel;
-import com.longmendelivery.service.model.user.AppUserStatusType;
+import com.longmendelivery.service.model.user.*;
 import com.longmendelivery.service.security.NotAuthorizedException;
 import com.longmendelivery.service.security.*;
 import com.longmendelivery.service.util.ResourceResponseUtil;
@@ -55,12 +51,12 @@ public class AppUserResource {
     @PUT
     @Consumes("application/json")
     @Transactional(readOnly = false)
-    public Response register(RegisterRequestModel registerRequestModel) {
+    public Response register(UserCreationRequest userCreationRequest) {
         ThrottleSecurity.getInstance().throttle();
-        byte[] passwordMD5 = SecurityUtil.md5(registerRequestModel.getPassword());
+        byte[] passwordMD5 = SecurityUtil.md5(userCreationRequest.getPassword());
         AppUserGroupType userGroup = AppUserGroupType.APP_USER;
         AppUserStatusType status = AppUserStatusType.NEW;
-        AppUserEntity newUser = new AppUserEntity(registerRequestModel.getPhone(), registerRequestModel.getEmail(), passwordMD5, userGroup, status);
+        AppUserEntity newUser = new AppUserEntity(userCreationRequest.getPhone(), userCreationRequest.getEmail(), passwordMD5, userGroup, status);
 
         try {
             userStorage.create(newUser);
@@ -121,7 +117,7 @@ public class AppUserResource {
     @POST
     @Path("/{userId}")
     @Transactional(readOnly = false)
-    public Response changeUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token, ChangeUserDetailRequestModel request) {
+    public Response changeUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token, UserProfileModel request) {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
         } catch (NotAuthorizedException e) {

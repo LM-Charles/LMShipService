@@ -1,7 +1,7 @@
-package com.longmendelivery.service.model.request;
+package com.longmendelivery.service.model.user;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.longmendelivery.service.model.DTOModel;
+import com.longmendelivery.service.model.order.AddressModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,15 +13,16 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequestModel implements DTOModel {
-
-    @JsonProperty
+public class UserCreationRequest implements DTOModel {
     @NonNull
     private String phone;
-    @JsonProperty
     @NonNull
     private String email;
-    @JsonProperty
+
+    private String firstName;
+    private String lastName;
+    private AddressModel address;
+
     @NonNull
     private String password;
 

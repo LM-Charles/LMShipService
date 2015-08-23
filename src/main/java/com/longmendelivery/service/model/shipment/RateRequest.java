@@ -1,4 +1,4 @@
-package com.longmendelivery.service.model.request;
+package com.longmendelivery.service.model.shipment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.longmendelivery.service.model.DTOModel;
@@ -7,7 +7,6 @@ import com.longmendelivery.service.model.order.ShipmentModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import java.util.List;
 
@@ -17,16 +16,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RateRequestModel implements DTOModel {
+public class RateRequest implements DTOModel {
     @JsonProperty
-    @NonNull
     private AddressModel toAddress;
-
     @JsonProperty
-    @NonNull
     private AddressModel fromAddress;
-
     @JsonProperty
-    @NonNull
     private List<ShipmentModel> shipments;
 }

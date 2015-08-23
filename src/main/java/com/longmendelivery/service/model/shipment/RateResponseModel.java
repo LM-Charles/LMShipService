@@ -1,4 +1,4 @@
-package com.longmendelivery.service.model.response;
+package com.longmendelivery.service.model.shipment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.longmendelivery.service.model.order.RateEntryModel;

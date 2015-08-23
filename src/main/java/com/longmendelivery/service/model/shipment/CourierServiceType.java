@@ -1,4 +1,4 @@
-package com.longmendelivery.service.model.courier;
+package com.longmendelivery.service.model.shipment;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
