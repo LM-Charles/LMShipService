@@ -1,7 +1,6 @@
 package com.longmendelivery.service;
 
 import com.longmendelivery.persistence.UserStorage;
-import com.longmendelivery.persistence.engine.DatabaseUserStorage;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.response.LoginResponseModel;
@@ -10,15 +9,18 @@ import com.longmendelivery.service.security.SecurityUtil;
 import com.longmendelivery.service.security.ThrottleSecurity;
 import com.longmendelivery.service.security.TokenSecurity;
 import com.longmendelivery.service.util.ResourceResponseUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/login")
 @Produces("application/json")
+@Component
 public class LoginResource {
-    UserStorage userStorage = DatabaseUserStorage.getInstance();
-
+    @Autowired
+    private UserStorage userStorage;
     @POST
     public Response login(@QueryParam("email") String email, @QueryParam("password") String password) {
         ThrottleSecurity.getInstance().throttle(email);

@@ -4,7 +4,6 @@ import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.exceptions.DependentServiceRequestException;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.persistence.UserStorage;
-import com.longmendelivery.persistence.engine.DatabaseUserStorage;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.request.ChangeUserDetailRequestModel;
@@ -20,7 +19,9 @@ import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 import org.hibernate.exception.ConstraintViolationException;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -31,7 +32,8 @@ import java.util.List;
 @Produces("application/json")
 @Component
 public class AppUserResource {
-    private UserStorage userStorage = DatabaseUserStorage.getInstance();
+    @Autowired
+    private UserStorage userStorage;
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 
     @SuppressWarnings("unchecked")
@@ -94,6 +96,7 @@ public class AppUserResource {
 
     @GET
     @Path("/{userId}/admin")
+    @Transactional(readOnly = true)
     public Response getUserAdmin(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN, userId);

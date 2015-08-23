@@ -23,15 +23,6 @@ import java.util.List;
         isolation = Isolation.DEFAULT,
         readOnly = true)
 public class DatabaseShipmentStorage implements ShipmentStorage {
-    static ShipmentStorage instance;
-
-    public static ShipmentStorage getInstance() {
-        if (instance == null) {
-            instance = new DatabaseShipmentStorage();
-        }
-        return instance;
-    }
-
     @Autowired
     private SessionFactory sessionFactory;
 

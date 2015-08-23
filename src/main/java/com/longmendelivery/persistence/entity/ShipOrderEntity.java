@@ -43,7 +43,7 @@ public class ShipOrderEntity implements DAOEntity {
     private AddressEntity toAddress;
     private CourierServiceType courierServiceType;
     private String handler;
-    @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderStatusHistoryEntity> orderStatus;
     private GoodCategoryType goodCategoryType;
 
