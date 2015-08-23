@@ -1,4 +1,4 @@
-package com.longmendelivery.service.model.courier;
+package com.longmendelivery.service.model.shipment;
 
 import com.longmendelivery.lib.client.shipment.ShipmentClient;
 import com.longmendelivery.lib.client.shipment.longmendelivery.LongmenShipmentClient;

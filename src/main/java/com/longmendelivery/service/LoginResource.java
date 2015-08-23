@@ -3,7 +3,7 @@ package com.longmendelivery.service;
 import com.longmendelivery.persistence.UserStorage;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
-import com.longmendelivery.service.model.response.LoginResponseModel;
+import com.longmendelivery.service.model.user.LoginResponse;
 import com.longmendelivery.service.security.SecurityPower;
 import com.longmendelivery.service.security.SecurityUtil;
 import com.longmendelivery.service.security.ThrottleSecurity;
@@ -47,7 +47,7 @@ public class LoginResource {
                 user.setApiToken(token);
                 userStorage.update(user);
             }
-            return Response.status(Response.Status.OK).entity(new LoginResponseModel(user.getId(), user.getApiToken())).build();
+            return Response.status(Response.Status.OK).entity(new LoginResponse(user.getId(), user.getApiToken())).build();
         } else {
             return ResourceResponseUtil.generateForbiddenMessage("Incorrect combination of email and password");
         }

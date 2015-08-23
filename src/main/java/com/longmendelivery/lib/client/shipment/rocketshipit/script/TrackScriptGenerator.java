@@ -1,6 +1,6 @@
 package com.longmendelivery.lib.client.shipment.rocketshipit.script;
 
-import com.longmendelivery.service.model.courier.CourierType;
+import com.longmendelivery.service.model.shipment.CourierType;
 import org.apache.commons.lang.NotImplementedException;
 
 import java.util.EnumSet;
