@@ -7,10 +7,10 @@ import com.longmendelivery.lib.client.shipment.ShipmentClient;
 import com.longmendelivery.lib.client.shipment.rocketshipit.engine.RSIScriptEngine;
 import com.longmendelivery.lib.client.shipment.rocketshipit.script.RateScriptGenerator;
 import com.longmendelivery.lib.client.shipment.rocketshipit.script.TrackScriptGenerator;
-import com.longmendelivery.service.model.AddressModel;
-import com.longmendelivery.service.model.CourierServiceType;
-import com.longmendelivery.service.model.CourierType;
-import com.longmendelivery.service.model.PackageDimensionModel;
+import com.longmendelivery.service.model.courier.CourierServiceType;
+import com.longmendelivery.service.model.courier.CourierType;
+import com.longmendelivery.service.model.order.AddressModel;
+import com.longmendelivery.service.model.order.PackageDimensionModel;
 import com.longmendelivery.service.model.response.CourierRateResponseModel;
 import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;
 

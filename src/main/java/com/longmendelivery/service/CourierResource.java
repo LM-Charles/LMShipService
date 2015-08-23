@@ -2,7 +2,11 @@ package com.longmendelivery.service;
 
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.shipment.rocketshipit.RSIShipmentClient;
-import com.longmendelivery.service.model.*;
+import com.longmendelivery.service.model.courier.CourierServiceType;
+import com.longmendelivery.service.model.courier.CourierType;
+import com.longmendelivery.service.model.order.PackageDimensionModel;
+import com.longmendelivery.service.model.order.RateEntryModel;
+import com.longmendelivery.service.model.order.ShipmentModel;
 import com.longmendelivery.service.model.request.RateRequestModel;
 import com.longmendelivery.service.model.response.RateResponseModel;
 import com.longmendelivery.service.model.response.ShipmentTrackingResponseModel;

@@ -1,13 +1,10 @@
-package com.longmendelivery.service.model;
+package com.longmendelivery.service.model.order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.joda.time.DateTime;
-
-import java.math.BigDecimal;
 
 /**
  * Created by desmond on 05/07/15.
@@ -15,23 +12,23 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RateEntryModel {
+public class AddressModel {
     @JsonProperty
     @NonNull
-    private String service_icon_url;
+    private String address = "";
     @JsonProperty
     @NonNull
-    private String category;
+    private String city = "";
     @JsonProperty
     @NonNull
-    private BigDecimal estimate;
+    private String province = "";
     @JsonProperty
     @NonNull
-    private String courierName;
+    private String country = "";
     @JsonProperty
     @NonNull
-    private String serviceName;
+    private String postal = "";
 
     @JsonProperty
-    private DateTime estimatedDelivery;
+    private Boolean residential = false;
 }

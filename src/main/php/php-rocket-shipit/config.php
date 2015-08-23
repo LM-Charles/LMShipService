@@ -213,7 +213,7 @@ return array(
         // 3Q Food and Drug Administration (FDA) Product Code
         // IK Invoice Number
         // MK Manifest Key Number
-        // MJ Model Number
+        // MJ DTOModel Number
         // PM Part Number
         // PC Production Code
         // PO Purchase Order Number

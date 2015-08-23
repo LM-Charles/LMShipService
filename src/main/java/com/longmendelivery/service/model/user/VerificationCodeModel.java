@@ -1,4 +1,4 @@
-package com.longmendelivery.service.model;
+package com.longmendelivery.service.model.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

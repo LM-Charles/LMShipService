@@ -1,7 +1,7 @@
-package com.longmendelivery.service.model;
+package com.longmendelivery.service.model.order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.longmendelivery.lib.conversion.Model;
+import com.longmendelivery.service.model.DTOModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShipmentModel implements Model {
+public class ShipmentModel implements DTOModel {
     @JsonProperty
     @NonNull
     private Integer height;
