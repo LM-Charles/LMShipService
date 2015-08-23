@@ -19,7 +19,7 @@ import java.util.Set;
  */
 @Entity(name = "ShipOrder")
 @Data
-@EqualsAndHashCode(exclude = {"shipments", "orderStatus"})
+@EqualsAndHashCode(exclude = {"shipments", "orderStatuses"})
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShipOrderEntity implements DAOEntity {
@@ -42,7 +42,7 @@ public class ShipOrderEntity implements DAOEntity {
     private String handler;
     private GoodCategoryType goodCategoryType;
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    private Set<OrderStatusHistoryEntity> orderStatus;
+    private Set<OrderStatusHistoryEntity> orderStatuses;
     private BigDecimal declareValue;
     private BigDecimal insuranceValue;
 }
