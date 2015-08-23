@@ -21,7 +21,8 @@ public class FedexTrackingResponseParser implements TrackingResponseParser {
     @Override
     public ShipmentTrackingResponseModel parseResponse(JsonNode jsonNode) throws DependentServiceException {
         String status = jsonNode.path("$.TrackReply.Notifications.Severity").asText();
-        if (!status.equals("SUCCESS")) throw new DependentServiceException();
+        if (!status.equals("SUCCESS"))
+            throw new DependentServiceException("Tracking request did not return success for Fedex");
         DateTime pickUpDate = DateTime.parse(jsonNode.path("$.TrackReply.TrackDetails.ShipTimestamp").asText());
         DateTime trackingDate = DateTime.parse(jsonNode.path("$.TrackReply.TrackDetails.Events[0].Timestamp").asText());
         String trackingLocation = jsonNode.path("$.TrackReply.TrackDetails.Events[0].Address").asText();

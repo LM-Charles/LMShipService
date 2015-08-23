@@ -25,7 +25,7 @@ public class AppUserEntity implements DAOEntity {
     private Integer id;
     private String phone;
     private String email;
-    private String password_md5;
+    private byte[] password_md5;
     @Enumerated(EnumType.STRING)
     private AppUserGroupType userGroup;
     @Enumerated(EnumType.STRING)
@@ -38,7 +38,8 @@ public class AppUserEntity implements DAOEntity {
     private AddressEntity address;
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private Set<ShipOrderEntity> orders;
-    public AppUserEntity(String phone, String email, String password_md5, AppUserGroupType userGroup, AppUserStatusType userStatus) {
+
+    public AppUserEntity(String phone, String email, byte[] password_md5, AppUserGroupType userGroup, AppUserStatusType userStatus) {
         this.phone = phone;
         this.email = email;
         this.password_md5 = password_md5;

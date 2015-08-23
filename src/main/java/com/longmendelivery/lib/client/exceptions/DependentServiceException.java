@@ -12,4 +12,9 @@ public class DependentServiceException extends Exception {
     public DependentServiceException() {
 
     }
+
+
+    public DependentServiceException(String message) {
+        super(message);
+    }
 }
