@@ -14,6 +14,7 @@ import org.joda.time.DateTime;
 public class ShipmentTrackingResponse {
     DateTime pickUpDate;
     DateTime trackingDate;
-    String trackingLocation;
+    String trackingCity;
+    String trackingCountry;
     String trackingStatus;
 }

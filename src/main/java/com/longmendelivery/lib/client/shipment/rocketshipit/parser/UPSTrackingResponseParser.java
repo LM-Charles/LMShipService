@@ -28,11 +28,13 @@ public class UPSTrackingResponseParser implements TrackingResponseParser {
         DateTimeFormatter upsDateTimeFormat = DateTimeFormat.forPattern("yyyyMMDD");
         String pickupDateString = jsonNode.at("/TrackResponse/Shipment/PickupDate").asText();
         DateTime pickUpDate = pickupDateString.isEmpty() ? null : DateTime.parse(pickupDateString, upsDateTimeFormat);
-        String trackingDateString = jsonNode.at("/TrackReply/TrackDetails/Events/0/Timestamp").asText();
+        String trackingDateString = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/Date").asText();
         DateTime trackingDate = trackingDateString.isEmpty() ? null : DateTime.parse(trackingDateString, upsDateTimeFormat);
-        String trackingLocation = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/ActivityLocation/Address").asText();
+        String trackingCity = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/ActivityLocation/Address/City").asText();
+        String trackingCountry = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/ActivityLocation/Address/CountryCode").asText();
+
         String trackingStatus = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/Status/StatusType/Description").asText();
-        ShipmentTrackingResponse model = new ShipmentTrackingResponse(pickUpDate, trackingDate, trackingLocation, trackingStatus);
+        ShipmentTrackingResponse model = new ShipmentTrackingResponse(pickUpDate, trackingDate, trackingCity, trackingCountry, trackingStatus);
         return model;
     }
 }
