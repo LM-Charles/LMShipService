@@ -94,13 +94,11 @@ public class OrderResource {
 
             String handler = orderCreationRequest.getHandler();
             GoodCategoryType goodCategoryType = orderCreationRequest.getGoodCategoryType();
-            Set<OrderStatusHistoryEntity> orderStatus = new HashSet<>();
-            Set<ShipmentEntity> shipments = new HashSet<>();
             BigDecimal estimatedCost = BigDecimal.ZERO;
             BigDecimal finalCost = BigDecimal.ZERO;
             BigDecimal declaredValue = orderCreationRequest.getDeclareValue();
             BigDecimal insuranceValue = orderCreationRequest.getInsuranceValue();
-            ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, shipments, estimatedCost, finalCost, fromAddress, toAddress, handler, goodCategoryType, orderStatus, declaredValue, insuranceValue);
+            ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, null, estimatedCost, finalCost, fromAddress, toAddress, handler, goodCategoryType, null, declaredValue, insuranceValue);
 
             Set<ShipmentEntity> shipmentEntities = new HashSet<>();
             for (ShipmentModel shipmentModel : orderCreationRequest.getShipments()) {
@@ -111,7 +109,8 @@ public class OrderResource {
             shipOrderEntity.setShipments(shipmentEntities);
 
             OrderStatusHistoryEntity initialOrderStatus = new OrderStatusHistoryEntity(null, OrderStatusType.ORDER_PLACED, shipOrderEntity, "order placed by system", handler, DateTime.now());
-            shipOrderEntity.getOrderStatus().add(initialOrderStatus);
+            Set<OrderStatusHistoryEntity> initialOrderSet = new HashSet<>();
+            initialOrderSet.add(initialOrderStatus);
 
             orderStorage.recursiveCreate(shipOrderEntity);
 
