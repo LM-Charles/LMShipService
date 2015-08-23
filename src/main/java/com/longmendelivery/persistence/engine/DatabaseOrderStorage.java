@@ -87,7 +87,9 @@ public class DatabaseOrderStorage implements OrderStorage {
         }
         session.save(shipOrderEntity.getFromAddress());
         session.save(shipOrderEntity.getToAddress());
-        session.save(shipOrderEntity.getOrderStatus());
+        for (OrderStatusHistoryEntity history : shipOrderEntity.getOrderStatus()) {
+            session.save(history);
+        }
         Integer result = (Integer) session.save(shipOrderEntity);
         return result;
     }

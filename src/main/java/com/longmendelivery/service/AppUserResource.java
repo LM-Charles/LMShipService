@@ -4,6 +4,7 @@ import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.exceptions.DependentServiceRequestException;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
 import com.longmendelivery.persistence.UserStorage;
+import com.longmendelivery.persistence.entity.AddressEntity;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.user.*;
@@ -61,17 +62,14 @@ public class AppUserResource {
         try {
             userStorage.create(newUser);
             AppUserModel newUserModel = mapper.map(newUser, AppUserModel.class);
-            sanitizeUserModel(newUserModel);
-            return Response.status(Response.Status.OK).entity(newUserModel).build();
+            return Response.status(Response.Status.OK).entity(sanitizeUserModel(newUserModel)).build();
         } catch (ConstraintViolationException e) {
             return ResourceResponseUtil.generateConflictMessage("user already registered");
         }
     }
 
-    private void sanitizeUserModel(AppUserModel newUserModel) {
-        newUserModel.setApiToken("hidden");
-        newUserModel.setPassword_md5(new byte[0]);
-        newUserModel.setVerificationCode("hidden");
+    private UserProfileModel sanitizeUserModel(AppUserModel userModel) {
+        return mapper.map(userModel, UserProfileModel.class);
     }
 
     @GET
@@ -86,8 +84,7 @@ public class AppUserResource {
         try {
             AppUserEntity user = userStorage.get(userId);
             AppUserModel userModel = mapper.map(user, AppUserModel.class);
-            sanitizeUserModel(userModel);
-            return Response.status(Response.Status.OK).entity(userModel).build();
+            return Response.status(Response.Status.OK).entity(sanitizeUserModel(userModel)).build();
         } catch (ResourceNotFoundException e) {
             return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
 
@@ -124,8 +121,21 @@ public class AppUserResource {
             ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
+        try {
+            AppUserEntity user = userStorage.get(userId);
+            user.setEmail(request.getEmail());
+            user.setAddress(mapper.map(request.getAddress(), AddressEntity.class));
+            user.setFirstName(request.getFirstName());
+            user.setLastName(request.getLastName());
+            user.setPhone(request.getPhone());
 
-        return Response.status(Response.Status.OK).build();
+            userStorage.update(user);
+            AppUserModel userModel = mapper.map(user, AppUserModel.class);
+            return Response.status(Response.Status.OK).entity(sanitizeUserModel(userModel)).build();
+        } catch (ResourceNotFoundException e) {
+            return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+
+        }
     }
 
     @POST
