@@ -1,6 +1,7 @@
 package com.longmendelivery.persistence.engine;
 
 import com.longmendelivery.persistence.UserStorage;
+import com.longmendelivery.persistence.entity.AddressEntity;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import org.hibernate.Criteria;
@@ -79,5 +80,10 @@ public class DatabaseUserStorage implements UserStorage {
             throw new ResourceNotFoundException();
         }
         return result;
+    }
+
+    @Override
+    public String saveAddress(AddressEntity address) {
+        return (String) getSession().save(address);
     }
 }

@@ -1,5 +1,6 @@
 package com.longmendelivery.persistence;
 
+import com.longmendelivery.persistence.entity.AddressEntity;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 
@@ -19,4 +20,6 @@ public interface UserStorage {
 
 
     AppUserEntity getByEmail(String email) throws ResourceNotFoundException;
+
+    String saveAddress(AddressEntity address);
 }
