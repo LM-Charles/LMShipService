@@ -17,6 +17,7 @@ import javax.script.ScriptException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Map;
+import java.util.Properties;
 
 @Path("/debug")
 @Produces("application/json")
@@ -45,12 +46,12 @@ public class DebugResource {
         return ResourceResponseUtil.generateOKMessage(message);
     }
 
-    @POST
+    @GET
     @Path("testEnvironment")
     @Consumes("text/plain")
     public Response testEnvironment(String variable) throws DependentServiceException, ScriptException {
-        String value = System.getProperty(variable);
-        return ResourceResponseUtil.generateOKMessage(value);
+        Properties properties = System.getProperties();
+        return Response.status(Response.Status.OK).entity(properties).build();
     }
 
     @GET
