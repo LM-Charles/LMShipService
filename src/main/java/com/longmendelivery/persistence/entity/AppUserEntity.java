@@ -38,12 +38,4 @@ public class AppUserEntity implements DAOEntity {
     private AddressEntity address;
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private Set<ShipOrderEntity> orders;
-
-    public AppUserEntity(String phone, String email, byte[] password_md5, AppUserGroupType userGroup, AppUserStatusType userStatus) {
-        this.phone = phone;
-        this.email = email;
-        this.password_md5 = password_md5;
-        this.userGroup = userGroup;
-        this.userStatus = userStatus;
-    }
 }
