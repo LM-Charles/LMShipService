@@ -377,7 +377,7 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1440375420364,
-			"name": "users get 1 admin $verify delete",
+			"name": "users get 1 admin - verify delete",
 			"description": "also verify status disabled",
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"responses": []
@@ -694,11 +694,11 @@
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Body matches string\"] = responseBody.has(\"optionalchange\");",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1440375152088,
+			"time": 1440376222913,
 			"name": "user update",
 			"description": "",
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
-			"rawModeData": "{\n    \"firstName\" : \"optional\",\n    \"lastName\" : \"optional2\",\n    \"address\" : {\n        \"address\" : \"optional2\",\n        \"city\" : \"optional\",\n        \"province\" : \"optional\",\n        \"country\" : \"optional\",\n        \"postal\" : \"optionalchange\",\n        \"residential\" : \"true\"\n    }\n}"
+			"rawModeData": "{\n    \"firstName\" : \"optional\",\n    \"lastName\" : \"optional2\",\n    \"address\" : {\n        \"address\" : \"optional2\",\n        \n        \"address2\" : \"optional\",\n        \"city\" : \"optional\",\n        \"province\" : \"optional\",\n        \"country\" : \"optional\",\n        \"postal\" : \"optionalchange\",\n        \"residential\" : \"true\"\n    }\n}"
 		},
 		{
 			"id": "cfa41acb-3e5a-6e0b-5be1-1ef41e1f73d6",
@@ -830,12 +830,12 @@
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\n\ntests[\"Body matches string\"] = responseBody.has(\"optionalkk\");\n\n\ntry {\n  var data = JSON.parse(responseBody);\n  postman.setGlobalVariable(\"current_user\", data.id);\n} catch (e) {\n    tests[\"Able to populate user id\"] = false;\n}",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1440375599102,
+			"time": 1440376268936,
 			"name": "users register $ current_user",
 			"description": "",
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"responses": [],
-			"rawModeData": "{\n    \"phone\" : \"6047821542\",\n    \"email\" : \"right@gmail.com\",\n    \"password\" : \"qwerty\",\n    \"firstName\" : \"optional\",\n    \"lastName\" : \"optional\",\n    \"address\" : {\n        \"address\" : \"optional\",\n        \"city\" : \"optionalkk\",\n        \"country\" : \"optional\",\n        \"province\" : \"optional\",\n        \"postal\" : \"optional\",\n        \"residential\" : true\n    }\n}"
+			"rawModeData": "{\n    \"phone\" : \"6047821542\",\n    \"email\" : \"right@gmail.com\",\n    \"password\" : \"qwerty\",\n    \"firstName\" : \"optional\",\n    \"lastName\" : \"optional\",\n    \"address\" : {\n        \"address\" : \"optional\",\n        \"address2\" : \"optional\",\n        \"city\" : \"optionalkk\",\n        \"country\" : \"optional\",\n        \"province\" : \"optional\",\n        \"postal\" : \"optional\",\n        \"residential\" : true\n    }\n}"
 		},
 		{
 			"id": "f6afe20e-39e1-a2df-05be-9873f4fee314",

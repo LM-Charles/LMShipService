@@ -140,12 +140,7 @@ public class AppUserResource {
 
             user.setFirstName(request.getFirstName());
             user.setLastName(request.getLastName());
-            user.getAddress().setAddress(request.getAddress().getAddress());
-            user.getAddress().setCity(request.getAddress().getCity());
-            user.getAddress().setCountry(request.getAddress().getCountry());
-            user.getAddress().setProvince(request.getAddress().getProvince());
-            user.getAddress().setPostal(request.getAddress().getPostal());
-            user.getAddress().setResidential(request.getAddress().getResidential());
+            user.getAddress().updateWithAddress(mapper.map(request.getAddress(), AddressEntity.class));
 
             userStorage.update(user);
             AppUserModel userModel = mapper.map(user, AppUserModel.class);
