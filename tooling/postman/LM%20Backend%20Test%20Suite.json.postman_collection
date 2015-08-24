@@ -11,6 +11,7 @@
 		"dff9551e-0482-9347-b3bf-9e9659e7f6e3",
 		"ef4613be-b178-16fe-85f7-20751521231c",
 		"3f228a63-99e8-b7c2-2bb3-eb7809951cce",
+		"c06eca98-d240-0f3c-2da0-5ef1be1b2bb8",
 		"b8c3fac9-eb32-007a-d121-e24f117a1caf",
 		"6efa450f-e4fa-d26b-eaf8-0073e40f1891",
 		"cfa41acb-3e5a-6e0b-5be1-1ef41e1f73d6",
@@ -699,6 +700,25 @@
 			"description": "",
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"rawModeData": "{\n    \"firstName\" : \"optional\",\n    \"lastName\" : \"optional2\",\n    \"address\" : {\n        \"address\" : \"optional2\",\n        \n        \"address2\" : \"optional\",\n        \"city\" : \"optional\",\n        \"province\" : \"optional\",\n        \"country\" : \"optional\",\n        \"postal\" : \"optionalchange\",\n        \"residential\" : \"true\"\n    }\n}"
+		},
+		{
+			"id": "c06eca98-d240-0f3c-2da0-5ef1be1b2bb8",
+			"headers": "",
+			"url": "{{path}}/rest/user/10000",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "tests[\"Status code is 404\"] = responseCode.code === 404;\n\n\n\ntests[\"Body matches string\"] = responseBody.has(\"User not found\");",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1440376457532,
+			"name": "user get non-exist",
+			"description": "",
+			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
+			"responses": []
 		},
 		{
 			"id": "cfa41acb-3e5a-6e0b-5be1-1ef41e1f73d6",
