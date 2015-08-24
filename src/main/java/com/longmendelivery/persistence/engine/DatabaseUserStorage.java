@@ -84,6 +84,6 @@ public class DatabaseUserStorage implements UserStorage {
 
     @Override
     public String saveAddress(AddressEntity address) {
-        return (String) getSession().save(address);
+        return getSession().save(address).toString();
     }
 }
