@@ -41,7 +41,8 @@
 		"007d6ef7-3844-e3bf-258c-a8d073b41dc9",
 		"4ddb7302-0c47-d026-d7b4-209b9ff2eef4",
 		"e67beea9-0206-c43d-00c4-223530fcfdb1",
-		"60392d87-947b-7b60-6c19-6aafceef620b"
+		"60392d87-947b-7b60-6c19-6aafceef620b",
+		"0f7a0e6e-4b86-1b8c-32ef-44468817d6aa"
 	],
 	"folders": [],
 	"timestamp": 1434838203281,
@@ -111,6 +112,26 @@
 			"description": "",
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"responses": []
+		},
+		{
+			"id": "0f7a0e6e-4b86-1b8c-32ef-44468817d6aa",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{path}}/rest/user?token=admin",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "PUT",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1440374179330,
+			"name": "users register minimal",
+			"description": "",
+			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
+			"responses": [],
+			"rawModeData": "{\n    \"phone\" : \"6047821542\",\n    \"email\" : \"right2@gmail.com\",\n    \"password\" : \"qwerty\"\n}"
 		},
 		{
 			"id": "14c1b777-64d7-50db-bbd8-dd0e03b138df",
@@ -698,30 +719,23 @@
 			"rawModeData": ""
 		},
 		{
-			"folder": null,
 			"id": "b8c3fac9-eb32-007a-d121-e24f117a1caf",
-			"name": "user update",
-			"dataMode": "params",
-			"data": [
-				{
-					"key": "asset",
-					"value": "229th-anniversary-of-the-first-ascent-of-mont-blanc-5711572991213568.2-res.png",
-					"type": "text",
-					"enabled": true
-				}
-			],
-			"rawModeData": null,
-			"descriptionFormat": null,
-			"description": "",
-			"headers": "",
-			"method": "GET",
-			"pathVariables": {},
-			"url": "{{path}}/rest/user/1",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{path}}/rest/user/1?token=userToken",
 			"preRequestScript": "",
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Body matches string\"] = responseBody.has(\"optionalchange\");",
 			"currentHelper": "normal",
-			"helperAttributes": "{}",
-			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19"
+			"helperAttributes": {},
+			"time": 1440374489199,
+			"name": "user update",
+			"description": "",
+			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
+			"rawModeData": "{\n    \"firstName\" : \"optional\",\n    \"lastName\" : \"optional2\",\n    \"address\" : {\n        \"address\" : \"optional2\",\n        \"city\" : \"optional\",\n        \"province\" : \"optional\",\n        \"country\" : \"optional\",\n        \"postal\" : \"optionalchange\",\n        \"residential\" : \"true\"\n    }\n}"
 		},
 		{
 			"id": "cfa41acb-3e5a-6e0b-5be1-1ef41e1f73d6",
@@ -850,15 +864,15 @@
 			"data": [],
 			"dataMode": "raw",
 			"version": 2,
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\n\ntests[\"Body matches string\"] = responseBody.has(\"optionalkk\");",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1440362438580,
-			"name": "users put",
+			"time": 1440374461167,
+			"name": "users register",
 			"description": "",
 			"collectionId": "db9bff25-fc50-9091-09b8-a4d65aa0de19",
 			"responses": [],
-			"rawModeData": "{\n    \"phone\" : \"6047821542\",\n    \"email\" : \"right@gmail.com\",\n    \"password\" : \"qwerty\"\n}"
+			"rawModeData": "{\n    \"phone\" : \"6047821542\",\n    \"email\" : \"right@gmail.com\",\n    \"password\" : \"qwerty\",\n    \"firstName\" : \"optional\",\n    \"lastName\" : \"optional\",\n    \"address\" : {\n        \"address\" : \"optional\",\n        \"city\" : \"optionalkk\",\n        \"country\" : \"optional\",\n        \"province\" : \"optional\",\n        \"postal\" : \"optional\",\n        \"residential\" : true\n    }\n}"
 		},
 		{
 			"id": "f6afe20e-39e1-a2df-05be-9873f4fee314",
