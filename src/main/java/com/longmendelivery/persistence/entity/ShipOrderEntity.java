@@ -45,4 +45,7 @@ public class ShipOrderEntity implements DAOEntity {
     private Set<OrderStatusHistoryEntity> orderStatuses;
     private BigDecimal declareValue;
     private BigDecimal insuranceValue;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime appointmentDate;
+    private AppointmentSlotType appointmentSlotType;
 }
