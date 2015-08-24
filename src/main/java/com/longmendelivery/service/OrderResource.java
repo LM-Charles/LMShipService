@@ -101,7 +101,9 @@ public class OrderResource {
             BigDecimal finalCost = BigDecimal.ZERO;
             BigDecimal declaredValue = orderCreationRequest.getDeclareValue();
             BigDecimal insuranceValue = orderCreationRequest.getInsuranceValue();
-            ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, shipments, estimatedCost, finalCost, fromAddress, toAddress, handler, goodCategoryType, orderStatus, declaredValue, insuranceValue);
+            DateTime appointmentDate = orderCreationRequest.getAppointmentDate();
+            AppointmentSlotType appointmentSlotType = orderCreationRequest.getAppointmentSlotType();
+            ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, shipments, estimatedCost, finalCost, fromAddress, toAddress, handler, goodCategoryType, orderStatus, declaredValue, insuranceValue, appointmentDate, appointmentSlotType);
 
             Set<ShipmentEntity> shipmentEntities = new HashSet<>();
             for (ShipmentModel shipmentModel : orderCreationRequest.getShipments()) {

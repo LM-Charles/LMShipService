@@ -1,5 +1,6 @@
 package com.longmendelivery.service.model.order;
 
+import com.longmendelivery.persistence.entity.AppointmentSlotType;
 import com.longmendelivery.service.model.DTOModel;
 import com.longmendelivery.service.model.shipment.CourierServiceType;
 import lombok.AllArgsConstructor;
@@ -38,4 +39,6 @@ public class ShipOrderModel implements DTOModel {
     private GoodCategoryType goodCategoryType;
     private BigDecimal declareValue;
     private BigDecimal insuranceValue;
+    private DateTime appointmentDate;
+    private AppointmentSlotType appointmentSlotType;
 }
