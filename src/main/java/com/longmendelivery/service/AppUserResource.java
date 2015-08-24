@@ -66,6 +66,9 @@ public class AppUserResource {
         if (userCreationRequest.getAddress() != null) {
             address = mapper.map(userCreationRequest.getAddress(), AddressEntity.class);
             userStorage.saveAddress(address);
+        } else {
+            address = new AddressEntity();
+            userStorage.saveAddress(address);
         }
 
         AppUserEntity newUser = new AppUserEntity(null, userCreationRequest.getPhone(), userCreationRequest.getEmail(), passwordMD5, userGroup, status, null, null, userCreationRequest.getFirstName(), userCreationRequest.getLastName(), address, orders);
@@ -135,14 +138,14 @@ public class AppUserResource {
         try {
             AppUserEntity user = userStorage.get(userId);
 
-            AddressEntity address = null;
-            if (request.getAddress() != null) {
-                address = mapper.map(request.getAddress(), AddressEntity.class);
-                userStorage.saveAddress(address);
-            }
-
             user.setFirstName(request.getFirstName());
             user.setLastName(request.getLastName());
+            user.getAddress().setAddress(request.getAddress().getAddress());
+            user.getAddress().setCity(request.getAddress().getCity());
+            user.getAddress().setCountry(request.getAddress().getCountry());
+            user.getAddress().setProvince(request.getAddress().getProvince());
+            user.getAddress().setPostal(request.getAddress().getPostal());
+            user.getAddress().setResidential(request.getAddress().getResidential());
 
             userStorage.update(user);
             AppUserModel userModel = mapper.map(user, AppUserModel.class);
