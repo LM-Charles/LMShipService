@@ -20,3 +20,6 @@ https://github.com/LM-Charles/LMShipService/tree/master/tooling/postman
 
 All security is not enforced for the current release.
 
+#### Schema
+
+https://github.com/LM-Charles/LMShipService/blob/master/docs/schema:ebdb.png
