@@ -23,9 +23,20 @@ public class AddressEntity implements DAOEntity {
     private Integer id;
 
     private String address;
+    private String address2;
     private String city;
     private String province;
     private String postal;
     private String country;
     private Boolean residential;
+
+    public void updateWithAddress(AddressEntity other) {
+        setAddress(other.getAddress());
+        setAddress2(other.getAddress2());
+        setCity(other.getCity());
+        setCountry(other.getCountry());
+        setProvince(other.getProvince());
+        setPostal(other.getPostal());
+        setResidential(other.getResidential());
+    }
 }

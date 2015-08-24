@@ -1,10 +1,8 @@
 package com.longmendelivery.service.model.order;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 /**
  * Created by desmond on 05/07/15.
@@ -13,22 +11,11 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressModel {
-    @JsonProperty
-    @NonNull
-    private String address = "";
-    @JsonProperty
-    @NonNull
-    private String city = "";
-    @JsonProperty
-    @NonNull
-    private String province = "";
-    @JsonProperty
-    @NonNull
-    private String country = "";
-    @JsonProperty
-    @NonNull
-    private String postal = "";
-
-    @JsonProperty
+    private String address;
+    private String address2;
+    private String city;
+    private String province;
+    private String country;
+    private String postal;
     private Boolean residential = false;
 }
