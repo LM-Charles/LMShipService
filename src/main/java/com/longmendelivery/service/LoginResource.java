@@ -72,4 +72,5 @@ public class LoginResource {
         userStorage.update(user);
         return ResourceResponseUtil.generateOKMessage("successfully logged out");
     }
+
 }

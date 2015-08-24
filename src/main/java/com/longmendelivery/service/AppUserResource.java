@@ -219,20 +219,21 @@ public class AppUserResource {
         return new StringBuilder().append("Dear customer (").append(username).append("), your verification code is: ").append(randomVerification).toString();
     }
 
+
     @POST
-    @Path("/{userId}/resetPassword")
+    @Path("/resetPassword")
     @Transactional(readOnly = false)
-    public Response sendChangePasswordVerification(@PathParam("userId") Integer userId) throws DependentServiceException, DependentServiceRequestException {
-        ThrottleSecurity.getInstance().throttle(userId);
+    public Response sendChangePasswordVerification(@QueryParam("email") String email) throws DependentServiceException, DependentServiceRequestException {
+        ThrottleSecurity.getInstance().throttle(email);
 
         String randomVerification = SecurityUtil.generateSecureVerificationCode();
 
 
         AppUserEntity user = null;
         try {
-            user = userStorage.get(userId);
+            user = userStorage.getByEmail(email);
         } catch (ResourceNotFoundException e) {
-            return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            return ResourceResponseUtil.generateNotFoundMessage("User not found for email: " + email);
         }
 
         if (user.getUserStatus().equals(AppUserStatusType.DISABLED)) {
@@ -252,19 +253,18 @@ public class AppUserResource {
         }
     }
 
-
     @POST
-    @Path("/{userId}/resetPassword/{verificationCode}")
+    @Path("/resetPassword/{verificationCode}")
     @Transactional(readOnly = false)
-    public Response changePassword(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, @QueryParam("newPassword") String password) {
-        ThrottleSecurity.getInstance().throttle(userId);
+    public Response changePassword(@QueryParam("email") String email, @PathParam("verificationCode") String verificationCode, @QueryParam("newPassword") String password) {
+        ThrottleSecurity.getInstance().throttle(email);
 
 
         AppUserEntity user = null;
         try {
-            user = userStorage.get(userId);
+            user = userStorage.getByEmail(email);
         } catch (ResourceNotFoundException e) {
-            return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + email);
         }
         if (user.getUserStatus().equals(AppUserStatusType.DISABLED)) {
             return ResourceResponseUtil.generateBadRequestMessage("Cannot request password change of disabled user");
@@ -301,4 +301,5 @@ public class AppUserResource {
 
         return ResourceResponseUtil.generateOKMessage("Password changed, token refreshed");
     }
+
 }
