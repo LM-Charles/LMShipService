@@ -16,11 +16,25 @@ import java.util.Set;
 /**
  * Created by desmond on 04/06/15.
  */
-@Entity(name = "OrderStatusHistoryEntity")
+@Entity(name = "OrderStatusHistory")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "OrderStatusHistory", indexes = {@Index(name = "OrderStatusHistory_order", columnList = "order_id"), @Index(name = "OrderStatusHistory_statusDate", columnList = "statusDate")})
+
 public class OrderStatusHistoryEntity implements DAOEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
+    @Enumerated(value = EnumType.STRING)
+    OrderStatusType status;
+    @ManyToOne
+    ShipOrderEntity order;
+    String statusDescription;
+    String handler;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    DateTime statusDate;
+
     public static OrderStatusHistoryEntity getMostRecentOrderStatusHistoryEntity(Set<OrderStatusHistoryEntity> entities) {
         OrderStatusHistoryEntity[] entitiesArray = entities.toArray(new OrderStatusHistoryEntity[entities.size()]);
         Arrays.sort(entitiesArray, new Comparator<OrderStatusHistoryEntity>() {
@@ -31,21 +45,4 @@ public class OrderStatusHistoryEntity implements DAOEntity {
         });
         return entitiesArray[0];
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-
-    @Enumerated(value = EnumType.STRING)
-    OrderStatusType status;
-
-    @ManyToOne
-    ShipOrderEntity order;
-
-    String statusDescription;
-
-    String handler;
-
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    DateTime statusDate;
 }

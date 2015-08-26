@@ -21,6 +21,8 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"shipments", "orderStatuses"})
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "ShipOrder", indexes = {@Index(name = "ShipOrder_client", columnList = "client_id"), @Index(name = "ShipOrder_orderDate", columnList = "orderDate")})
+
 public class ShipOrderEntity implements DAOEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

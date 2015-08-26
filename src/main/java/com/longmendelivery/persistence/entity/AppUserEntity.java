@@ -19,6 +19,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"orders"})
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "AppUser", indexes = {@Index(name = "AppUser_email", columnList = "email", unique = true), @Index(name = "AppUser_phone", columnList = "phone")})
 public class AppUserEntity implements DAOEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
