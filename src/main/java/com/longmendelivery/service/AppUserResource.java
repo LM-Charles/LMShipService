@@ -57,6 +57,14 @@ public class AppUserResource {
     @Transactional(readOnly = false)
     public Response register(UserCreationRequest userCreationRequest) {
         ThrottleSecurity.getInstance().throttle();
+
+        try {
+            AppUserEntity existing = userStorage.getByEmail(userCreationRequest.getEmail());
+            return ResourceResponseUtil.generateConflictMessage("user already exist with email: " + userCreationRequest.getEmail());
+        } catch (ResourceNotFoundException e) {
+            // expected
+        }
+
         byte[] passwordMD5 = SecurityUtil.md5(userCreationRequest.getPassword());
         AppUserGroupType userGroup = AppUserGroupType.APP_USER;
         AppUserStatusType status = AppUserStatusType.NEW;
