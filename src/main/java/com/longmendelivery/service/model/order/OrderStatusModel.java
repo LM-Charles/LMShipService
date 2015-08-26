@@ -15,5 +15,5 @@ public class OrderStatusModel {
     private OrderStatusType status;
     private String statusDescription;
     private String handler;
-    private DateTime statusTime;
+    private DateTime statusDate;
 }
