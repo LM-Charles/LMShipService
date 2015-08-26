@@ -41,16 +41,12 @@ public class RSIScriptEngine {
             T response = objectMapper.readValue(value, valueTypeRef);
             return response;
         } catch (ScriptException e) {
-            e.printStackTrace();
             throw new DependentServiceException(e);
         } catch (JsonMappingException e) {
-            e.printStackTrace();
             throw new DependentServiceException(e);
         } catch (JsonParseException e) {
-            e.printStackTrace();
             throw new DependentServiceException(e);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new DependentServiceException(e);
         }
     }
