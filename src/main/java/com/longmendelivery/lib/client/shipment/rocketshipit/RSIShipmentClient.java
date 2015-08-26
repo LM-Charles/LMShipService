@@ -37,12 +37,14 @@ public class RSIShipmentClient implements ShipmentClient {
             generator.withDestinationAddress(destinationAddress);
             generator.withDimensions(new DimensionModel(shipmentModel.getLength(), shipmentModel.getWidth(), shipmentModel.getHeight(), shipmentModel.getWeight()));
             String script = generator.generate();
-            List<RSIRateEntry> result = engine.executeScript(script, new TypeReference<List<RSIRateEntry>>() {
-            });
-
-
-            for (RSIRateEntry entry : result) {
-                rateMap.put(CourierServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
+            try {
+                List<RSIRateEntry> result = engine.executeScript(script, new TypeReference<List<RSIRateEntry>>() {
+                });
+                for (RSIRateEntry entry : result) {
+                    rateMap.put(CourierServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
+                }
+            } catch (DependentServiceException e) {
+                System.out.println("Invalid query for shipment " + shipmentModel.toString());
             }
         }
 
