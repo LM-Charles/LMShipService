@@ -142,11 +142,14 @@
 			"version": 2,
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
 			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1440619627093,
+		  "helperAttributes": "{}",
+		  "time": 1440624481159,
 			"name": "full order status for UPS",
 			"description": "",
-			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e"
+		  "collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+		  "rawModeData": null,
+		  "descriptionFormat": null,
+		  "folder": null
 		},
 		{
 			"headers": "",
@@ -323,20 +326,25 @@
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"nickName\" : \"good1\",\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"MORNING\"\n}"
 		},
 		{
-			"headers": "",
-			"url": "{{path}}/rest/order/{{current_order}}/status?token=userToken",
+		  "id": "3ce4a681-e22e-f192-f6f5-5dbbac4ba403",
+		  "headers": "Content-Type: application/json\n",
+		  "url": "{{path}}/rest/order/{{current_order}}/status?backendUserId=1&token=userToken",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "POST",
 			"data": [],
-			"dataMode": "params",
+		  "dataMode": "raw",
+		  "version": 2,
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": "{}",
-			"name": "order update status - BROKEN",
+		  "time": 1440624386313,
+		  "name": "order update status ",
 			"description": "",
-			"id": "3ce4a681-e22e-f192-f6f5-5dbbac4ba403",
-			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e"
+		  "collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+		  "descriptionFormat": null,
+		  "folder": null,
+		  "rawModeData": "{\n   \"status\" : \"PROCESSING\",\n   \"statusDescription\" : \"I have picked up this order\"\n}"
 		},
 		{
 			"headers": "",
