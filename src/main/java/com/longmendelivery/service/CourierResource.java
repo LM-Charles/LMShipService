@@ -5,7 +5,6 @@ import com.longmendelivery.lib.client.shipment.rocketshipit.RSIShipmentClient;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.order.DimensionModel;
 import com.longmendelivery.service.model.order.RateEntryModel;
-import com.longmendelivery.service.model.order.ShipmentModel;
 import com.longmendelivery.service.model.shipment.*;
 import com.longmendelivery.service.security.ThrottleSecurity;
 import com.longmendelivery.service.util.ResourceResponseUtil;
@@ -36,7 +35,7 @@ public class CourierResource {
 
         try {
             CourierType type = CourierType.valueOf(courierCode);
-            ShipmentTrackingResponse trackingResult = client.getTracking(type, trackingNumber);
+            ShipmentTrackingModel trackingResult = client.getTracking(type, trackingNumber);
             return Response.status(Response.Status.OK).entity(trackingResult).build();
 
         } catch (ResourceNotFoundException e) {

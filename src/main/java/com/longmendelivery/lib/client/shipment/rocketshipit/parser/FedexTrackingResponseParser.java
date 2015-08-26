@@ -2,7 +2,7 @@ package com.longmendelivery.lib.client.shipment.rocketshipit.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
-import com.longmendelivery.service.model.shipment.ShipmentTrackingResponse;
+import com.longmendelivery.service.model.shipment.ShipmentTrackingModel;
 import org.joda.time.DateTime;
 
 /**
@@ -19,7 +19,7 @@ public class FedexTrackingResponseParser implements TrackingResponseParser {
     //            'CountryCode' => "CN"
     //            'Residential' => "false"
     @Override
-    public ShipmentTrackingResponse parseResponse(JsonNode jsonNode) throws DependentServiceException {
+    public ShipmentTrackingModel parseResponse(JsonNode jsonNode) throws DependentServiceException {
         System.out.println(jsonNode.toString());
         String status = jsonNode.at("/TrackReply/Notifications/Severity").asText();
         if (!status.equals("SUCCESS"))
@@ -29,7 +29,7 @@ public class FedexTrackingResponseParser implements TrackingResponseParser {
         String trackingCity = jsonNode.at("/TrackReply/TrackDetails/Events/0/Address/City").asText();
         String trackingCountry = jsonNode.at("/TrackReply/TrackDetails/Events/0/Address/CountryCode").asText();
         String trackingStatus = jsonNode.at("/TrackReply/TrackDetails/Events/0/EventDescription").asText();
-        ShipmentTrackingResponse model = new ShipmentTrackingResponse(pickUpDate, trackingDate, trackingCity, trackingCountry, trackingStatus);
+        ShipmentTrackingModel model = new ShipmentTrackingModel(pickUpDate, trackingDate, trackingCity, trackingCountry, trackingStatus);
         return model;
     }
 }

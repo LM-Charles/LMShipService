@@ -6,7 +6,7 @@ import com.longmendelivery.service.model.order.AddressModel;
 import com.longmendelivery.service.model.order.DimensionModel;
 import com.longmendelivery.service.model.shipment.CourierServiceType;
 import com.longmendelivery.service.model.shipment.CourierType;
-import com.longmendelivery.service.model.shipment.ShipmentTrackingResponse;
+import com.longmendelivery.service.model.shipment.ShipmentTrackingModel;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -17,5 +17,5 @@ import java.util.Map;
 public interface ShipmentClient {
     Map<CourierServiceType, BigDecimal> getAllRates(AddressModel source, AddressModel destination, DimensionModel dimension) throws DependentServiceException;
 
-    ShipmentTrackingResponse getTracking(CourierType type, String trackingNumber) throws DependentServiceException, ResourceNotFoundException;
+    ShipmentTrackingModel getTracking(CourierType type, String trackingNumber) throws DependentServiceException, ResourceNotFoundException;
 }

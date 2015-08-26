@@ -10,7 +10,7 @@ import com.longmendelivery.service.model.order.AddressModel;
 import com.longmendelivery.service.model.order.DimensionModel;
 import com.longmendelivery.service.model.shipment.CourierServiceType;
 import com.longmendelivery.service.model.shipment.CourierType;
-import com.longmendelivery.service.model.shipment.ShipmentTrackingResponse;
+import com.longmendelivery.service.model.shipment.ShipmentTrackingModel;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
@@ -53,13 +53,13 @@ public class LongmenShipmentClient implements ShipmentClient {
     }
 
     @Override
-    public ShipmentTrackingResponse getTracking(CourierType type, String shipmentId) throws DependentServiceException, ResourceNotFoundException {
+    public ShipmentTrackingModel getTracking(CourierType type, String shipmentId) throws DependentServiceException, ResourceNotFoundException {
         ShipmentEntity shipment = shipmentStorage.get(Integer.valueOf(shipmentId));
         DateTime pickUpDate = shipment.getOrder().getOrderDate();
         DateTime trackDate = getFirstOrderStatusHistoryEntity(shipment.getOrder().getOrderStatuses()).getStatusDate();
         String trackingLocation = "N/A";
         String trackingStatus = getFirstOrderStatusHistoryEntity(shipment.getOrder().getOrderStatuses()).getStatusDescription();
-        return new ShipmentTrackingResponse(pickUpDate, trackDate, trackingLocation, trackingLocation, trackingStatus);
+        return new ShipmentTrackingModel(pickUpDate, trackDate, trackingLocation, trackingLocation, trackingStatus);
     }
 
     private OrderStatusHistoryEntity getFirstOrderStatusHistoryEntity(Set<OrderStatusHistoryEntity> status) {

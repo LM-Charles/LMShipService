@@ -1,4 +1,4 @@
-package com.longmendelivery.service.model.order;
+package com.longmendelivery.service.model.shipment;
 
 import com.longmendelivery.service.model.DTOModel;
 import lombok.AllArgsConstructor;
