@@ -42,7 +42,6 @@
 		"0730566b-65f4-9e9e-77f0-54c3dec9c7af",
 		"ba4234f1-d8cc-fe38-c7b4-4d481be195f1",
 		"7d5bc50a-88c8-ac25-3b87-ad5e42c477ea",
-		"0a6967c1-5dcb-ebc5-4673-f8472be331d8",
 		"3ce4a681-e22e-f192-f6f5-5dbbac4ba403",
 		"35e373d8-e5a3-5de8-08dd-56cc16182631",
 		"2e617d4a-1e8e-177c-07b0-7416e791463d",
@@ -111,22 +110,6 @@
 			"description": "",
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1000,\n            \"nickName\" : \"good1\",\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        },\n                {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"nickName\" : \"good1\",\n            \"shipmentPackageType\" : \"LARGE\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"MORNING\"\n}"
-		},
-		{
-			"headers": "Content-Type: application/json\n",
-			"url": "{{path}}/rest/courier/tracking/?trackingNumber=0104672000547745&courier=CANADA_POST",
-			"preRequestScript": "",
-			"pathVariables": {},
-			"method": "GET",
-			"data": [],
-			"dataMode": "params",
-			"tests": "",
-			"currentHelper": "normal",
-			"helperAttributes": "{}",
-			"name": "order total estimation - BROKEN",
-			"description": "",
-			"id": "0a6967c1-5dcb-ebc5-4673-f8472be331d8",
-			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e"
 		},
 		{
 			"headers": "",

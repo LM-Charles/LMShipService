@@ -9,12 +9,12 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum CourierServiceType {
-    UPS_STANDARD(CourierType.UPS, "UPS Standard", "11"),
-    UPS_WORLDWIDE_EXPEDITED(CourierType.UPS, "UPS Worldwide Expedited", "02"),
-    UPS_SAVER(CourierType.UPS, "UPS Saver", "13"),
-    UPS_EXPRESS(CourierType.UPS, "UPS Express", "01"),
-    FEDEX_GROUND(CourierType.FEDEX, "FedEx Ground", "FEDEX_GROUND"),
-    LONGMEN_STANDARD(CourierType.LONGMEN, "Long Men Standard", "LONGMEN_STANDARD");
+    UPS_STANDARD(CourierType.UPS, "UPS Standard", "11", "REGULAR"),
+    UPS_WORLDWIDE_EXPEDITED(CourierType.UPS, "UPS Worldwide Expedited", "02", "FAST"),
+    UPS_SAVER(CourierType.UPS, "UPS Saver", "13", "ECONOMY"),
+    UPS_EXPRESS(CourierType.UPS, "UPS Express", "01", "FAST"),
+    FEDEX_GROUND(CourierType.FEDEX, "FedEx Ground", "FEDEX_GROUND", "ECONOMY"),
+    LONGMEN_STANDARD(CourierType.LONGMEN, "Long Men Standard", "LONGMEN_STANDARD", "REGULAR");
 
     public static CourierServiceType getFromServiceCode(CourierType courier, String serviceCode) {
         for (CourierServiceType service : CourierServiceType.values()) {
@@ -28,4 +28,5 @@ public enum CourierServiceType {
     private CourierType courier;
     private String description;
     private String serviceCode;
+    public String category;
 }
