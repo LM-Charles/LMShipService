@@ -23,8 +23,10 @@ public class UPSTrackingResponseParser implements TrackingResponseParser {
     @Override
     public ShipmentTrackingModel parseResponse(JsonNode jsonNode) throws DependentServiceException {
         String status = jsonNode.at("/TrackResponse/Response/ResponseStatusDescription").asText();
-        if (!status.equals("Success"))
+        if (!status.equals("Success")) {
+            System.out.println(jsonNode.toString());
             throw new DependentServiceException("UPS Responded with failure message to this tracking request");
+        }
         DateTimeFormatter upsDateTimeFormat = DateTimeFormat.forPattern("yyyyMMDD");
         String pickupDateString = jsonNode.at("/TrackResponse/Shipment/PickupDate").asText();
         DateTime pickUpDate = pickupDateString.isEmpty() ? null : DateTime.parse(pickupDateString, upsDateTimeFormat);
