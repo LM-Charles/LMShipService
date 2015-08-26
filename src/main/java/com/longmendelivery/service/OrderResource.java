@@ -8,10 +8,7 @@ import com.longmendelivery.persistence.UserStorage;
 import com.longmendelivery.persistence.entity.*;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.order.*;
-import com.longmendelivery.service.model.shipment.CourierServiceType;
-import com.longmendelivery.service.model.shipment.CourierType;
-import com.longmendelivery.service.model.shipment.ShipmentAddTrackingRequest;
-import com.longmendelivery.service.model.shipment.ShipmentTrackingResponse;
+import com.longmendelivery.service.model.shipment.*;
 import com.longmendelivery.service.security.NotAuthorizedException;
 import com.longmendelivery.service.security.SecurityPower;
 import com.longmendelivery.service.security.TokenSecurity;
@@ -26,9 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @Path("/order")
@@ -147,21 +142,26 @@ public class OrderResource {
     public Response getOrderStatus(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) throws DependentServiceException {
         try {
             ShipOrderEntity order = orderStorage.get(orderId);
-
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
-            OrderStatusResponse orderStatusResponse = new OrderStatusResponse();
-            OrderStatusHistoryEntity orderStatusHistoryEntity = order.getOrderStatuses().toArray(new OrderStatusHistoryEntity[order.getOrderStatuses().size()])[0];
-            orderStatusResponse.setStatus(orderStatusHistoryEntity.getStatus());
-            orderStatusResponse.setStatusDescription(orderStatusHistoryEntity.getStatusDescription());
 
-            Map<ShipmentModel, ShipmentTrackingResponse> shipmentTracking = new HashMap<>();
+            ShipOrderWithStatusModel orderWithStatusModel = new ShipOrderWithStatusModel();
+            OrderStatusHistoryEntity orderStatusHistoryEntity = OrderStatusHistoryEntity.getMostRecentOrderStatusHistoryEntity(order.getOrderStatuses());
+
+            // Get most recent history
+            OrderStatusModel orderStatus = mapper.map(orderStatusHistoryEntity, OrderStatusModel.class);
+            orderWithStatusModel.setOrderStatusModel(orderStatus);
+            orderWithStatusModel.setShipments(new HashSet<ShipmentWithTrackingModel>());
+
+            CourierType courierType = order.getCourierServiceType().getCourier();
             for (ShipmentEntity shipmentEntity : order.getShipments()) {
-                ShipmentModel shipmentModel = mapper.map(shipmentEntity, ShipmentModel.class);
-                CourierType courierType = order.getCourierServiceType().getCourier();
-                ShipmentTrackingResponse shipmentTrackingResponse = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
-                shipmentTracking.put(shipmentModel, shipmentTrackingResponse);
+                ShipmentWithTrackingModel shipmentWithTrackingModel = mapper.map(shipmentEntity, ShipmentWithTrackingModel.class);
+                if (shipmentEntity.getTrackingNumber() != null) {
+                    ShipmentTrackingModel shipmentTrackingModel = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
+                    shipmentWithTrackingModel.setTracking(shipmentTrackingModel);
+                }
+                orderWithStatusModel.getShipments().add(shipmentWithTrackingModel);
             }
-            return Response.status(Response.Status.OK).entity(orderStatusResponse).build();
+            return Response.status(Response.Status.OK).entity(orderWithStatusModel).build();
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e);
         } catch (ResourceNotFoundException e) {

@@ -9,6 +9,9 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Set;
 
 /**
  * Created by  rabiddesireon 04/06/15.
@@ -18,6 +21,17 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderStatusHistoryEntity implements DAOEntity {
+    public static OrderStatusHistoryEntity getMostRecentOrderStatusHistoryEntity(Set<OrderStatusHistoryEntity> entities) {
+        OrderStatusHistoryEntity[] entitiesArray = entities.toArray(new OrderStatusHistoryEntity[entities.size()]);
+        Arrays.sort(entitiesArray, new Comparator<OrderStatusHistoryEntity>() {
+            @Override
+            public int compare(OrderStatusHistoryEntity entity, OrderStatusHistoryEntity other) {
+                return entity.getStatusDate().compareTo(other.getStatusDate());
+            }
+        });
+        return entitiesArray[0];
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
