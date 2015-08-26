@@ -10,10 +10,7 @@ import com.longmendelivery.lib.client.shipment.rocketshipit.script.TrackScriptGe
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.order.AddressModel;
 import com.longmendelivery.service.model.order.DimensionModel;
-import com.longmendelivery.service.model.shipment.CourierServiceType;
-import com.longmendelivery.service.model.shipment.CourierType;
-import com.longmendelivery.service.model.shipment.RSIRateEntry;
-import com.longmendelivery.service.model.shipment.ShipmentTrackingModel;
+import com.longmendelivery.service.model.shipment.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,14 +28,14 @@ public class RSIShipmentClient implements ShipmentClient {
     }
 
     @Override
-    public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, DimensionModel dimension) throws DependentServiceException {
+    public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, ShipmentModel shipmentModel) throws DependentServiceException {
         Map<CourierServiceType, BigDecimal> rateMap = new TreeMap<>();
 
         for (CourierType type : CourierType.ENABLED) {
             RateScriptGenerator generator = new RateScriptGenerator(type);
             generator.withSourceAddress(sourceAddress);
             generator.withDestinationAddress(destinationAddress);
-            generator.withDimensions(dimension);
+            generator.withDimensions(new DimensionModel(shipmentModel.getLength(), shipmentModel.getWidth(), shipmentModel.getHeight(), shipmentModel.getWeight()));
             String script = generator.generate();
             List<RSIRateEntry> result = engine.executeScript(script, new TypeReference<List<RSIRateEntry>>() {
             });

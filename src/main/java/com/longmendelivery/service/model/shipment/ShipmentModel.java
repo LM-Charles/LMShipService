@@ -1,7 +1,6 @@
 package com.longmendelivery.service.model.shipment;
 
 import com.longmendelivery.service.model.DTOModel;
-import com.longmendelivery.service.model.order.DimensionModel;
 import com.longmendelivery.service.model.order.GoodCategoryType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShipmentModel extends DimensionModel implements DTOModel {
+public class ShipmentModel implements DTOModel {
     private Integer id;
 
     private Integer height;
@@ -24,7 +23,6 @@ public class ShipmentModel extends DimensionModel implements DTOModel {
     private String trackingNumber;
     private String trackingDocumentType;
     private GoodCategoryType goodCategoryType;
-
 
     private String nickName;
     private ShipmentPackageType shipmentPackageType;
