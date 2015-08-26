@@ -33,7 +33,6 @@ public class OrderCreationRequest implements DTOModel {
     @NonNull
     private AddressModel toAddress;
     private String handler;
-    private GoodCategoryType goodCategoryType;
     private BigDecimal declareValue;
     private BigDecimal insuranceValue;
     private DateTime appointmentDate;
