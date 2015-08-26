@@ -50,7 +50,8 @@
 		"1629c31e-10fc-69f6-d060-e6661d277025",
 		"85ce11d0-ac30-2186-3af3-cfa3da41c70d",
 		"268fedca-7367-01ad-2616-61ea19067f84",
-		"86e31540-c69c-04e0-8ee4-bf4ff5415c8f"
+		"86e31540-c69c-04e0-8ee4-bf4ff5415c8f",
+		"985f77f2-dfe7-8041-1f87-994b68e62100"
 	],
 	"folders": [],
 	"timestamp": 0,
@@ -716,6 +717,24 @@
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e"
 		},
 		{
+			"id": "985f77f2-dfe7-8041-1f87-994b68e62100",
+			"headers": "",
+			"url": "{{path}}/public/index.html",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1440572858746,
+			"name": "website ping",
+			"description": "",
+			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e"
+		},
+		{
 			"headers": "",
 			"url": "{{path}}/rest/user/{{current_user}}/activation?token=UserToken&phone=1234",
 			"preRequestScript": "",
@@ -761,11 +780,14 @@
 			"version": 2,
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"FEDEX_GROUND\");",
 			"currentHelper": "normal",
-			"helperAttributes": {},
+			"helperAttributes": "{}",
 			"time": 1440569800556,
 			"name": "quote insurance",
 			"description": "",
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+			"folderId": null,
+			"timestamp": null,
+			"folder": null,
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 10,\n            \"nickName\" : \"good1\",\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        },\n                {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"nickName\" : \"good1\",\n            \"shipmentPackageType\" : \"LARGE\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 1500,\n    \"insuranceValue\" : 1500,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"MORNING\"\n}"
 		},
 		{
