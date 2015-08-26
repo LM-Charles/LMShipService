@@ -37,7 +37,7 @@ public class LongmenShipmentClient implements ShipmentClient {
         Map<CourierServiceType, BigDecimal> map;
         if (shipmentModel.getGoodCategoryType().equals(GoodCategoryType.COSMETICS)) {
             map = calculateCosmetics(total, weightInLb);
-        } else if (shipmentModel.getShipmentPackageType().equals(ShipmentPackageType.LETTER)) {
+        } else if (shipmentModel.getShipmentPackageType().equals(ShipmentPackageType.LETTER) && shipmentModel.getGoodCategoryType().equals(GoodCategoryType.DOCUMENT)) {
             map = Collections.singletonMap(CourierServiceType.LONGMEN_STANDARD, new BigDecimal("45"));
         } else {
             map = calculateRegular(total, weightInLb);
