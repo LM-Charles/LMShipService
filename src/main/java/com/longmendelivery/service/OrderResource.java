@@ -143,7 +143,7 @@ public class OrderResource {
             ShipOrderEntity order = orderStorage.get(orderId);
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
 
-            ShipOrderWithStatusModel orderWithStatusModel = new ShipOrderWithStatusModel();
+            ShipOrderWithStatusModel orderWithStatusModel = mapper.map(order, ShipOrderWithStatusModel.class);
             OrderStatusHistoryEntity orderStatusHistoryEntity = OrderStatusHistoryEntity.getMostRecentOrderStatusHistoryEntity(order.getOrderStatuses());
 
             // Get most recent history
