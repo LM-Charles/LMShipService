@@ -26,4 +26,7 @@ public class RateResponseModel {
 
     @NonNull
     RateEntryModel handlingRate;
+
+    @NonNull
+    RateEntryModel insuranceRate;
 }

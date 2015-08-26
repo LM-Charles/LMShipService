@@ -1,7 +1,6 @@
 package com.longmendelivery.persistence.entity;
 
 import com.longmendelivery.persistence.DAOEntity;
-import com.longmendelivery.service.model.order.GoodCategoryType;
 import com.longmendelivery.service.model.shipment.CourierServiceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,7 +39,6 @@ public class ShipOrderEntity implements DAOEntity {
     @ManyToOne
     private AddressEntity toAddress;
     private String handler;
-    private GoodCategoryType goodCategoryType;
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private Set<OrderStatusHistoryEntity> orderStatuses;
     private BigDecimal declareValue;

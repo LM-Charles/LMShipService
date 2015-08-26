@@ -7,33 +7,60 @@ import com.longmendelivery.persistence.entity.OrderStatusHistoryEntity;
 import com.longmendelivery.persistence.entity.ShipmentEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.order.AddressModel;
-import com.longmendelivery.service.model.order.DimensionModel;
-import com.longmendelivery.service.model.shipment.CourierServiceType;
-import com.longmendelivery.service.model.shipment.CourierType;
-import com.longmendelivery.service.model.shipment.ShipmentTrackingModel;
+import com.longmendelivery.service.model.order.GoodCategoryType;
+import com.longmendelivery.service.model.shipment.*;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by desmond on 15/08/15.
  */
+@Component
 public class LongmenShipmentClient implements ShipmentClient {
 
+    @Autowired
     private ShipmentStorage shipmentStorage;
 
-    LongmenShipmentClient(ShipmentStorage shipmentStorage) {
-        this.shipmentStorage = shipmentStorage;
+    public LongmenShipmentClient() {
     }
-    @Override
-    public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel source, AddressModel destination, DimensionModel dimension) throws DependentServiceException {
-        BigDecimal total = BigDecimal.ZERO;
-        BigDecimal weightInLb = BigDecimal.valueOf(dimension.getWeight()).multiply(new BigDecimal("2.20462"));
 
+    @Override
+    public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel source, AddressModel destination, ShipmentModel shipmentModel) throws DependentServiceException {
+        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal weightInLb = BigDecimal.valueOf(shipmentModel.getWeight()).multiply(new BigDecimal("2.20462"));
+        Map<CourierServiceType, BigDecimal> map;
+        if (shipmentModel.getGoodCategoryType().equals(GoodCategoryType.COSMETICS)) {
+            map = calculateCosmetics(total, weightInLb);
+        } else if (shipmentModel.getShipmentPackageType().equals(ShipmentPackageType.LETTER)) {
+            map = Collections.singletonMap(CourierServiceType.LONGMEN_STANDARD, new BigDecimal("45"));
+        } else {
+            map = calculateRegular(total, weightInLb);
+        }
+
+        return map;
+    }
+
+    private Map<CourierServiceType, BigDecimal> calculateCosmetics(BigDecimal total, BigDecimal weightInLb) {
+        // Weight Cost
+        total = total.add(weightInLb.multiply(new BigDecimal("6")));
+
+        // Box Surcharge
+        BigDecimal boxCount = weightInLb.divide(new BigDecimal("6"), 0, RoundingMode.CEILING);
+        total = total.add(boxCount);
+
+        // Box Weight Surcharge
+        total = total.add(boxCount.multiply(new BigDecimal("6")));
+
+        return Collections.singletonMap(CourierServiceType.LONGMEN_STANDARD, total);
+    }
+
+    private Map<CourierServiceType, BigDecimal> calculateRegular(BigDecimal total, BigDecimal weightInLb) {
         // Weight Cost
         total = total.add(weightInLb.multiply(new BigDecimal("5")));
 
@@ -56,13 +83,9 @@ public class LongmenShipmentClient implements ShipmentClient {
     public ShipmentTrackingModel getTracking(CourierType type, String shipmentId) throws DependentServiceException, ResourceNotFoundException {
         ShipmentEntity shipment = shipmentStorage.get(Integer.valueOf(shipmentId));
         DateTime pickUpDate = shipment.getOrder().getOrderDate();
-        DateTime trackDate = getFirstOrderStatusHistoryEntity(shipment.getOrder().getOrderStatuses()).getStatusDate();
+        DateTime trackDate = OrderStatusHistoryEntity.getMostRecentOrderStatusHistoryEntity(shipment.getOrder().getOrderStatuses()).getStatusDate();
         String trackingLocation = "N/A";
-        String trackingStatus = getFirstOrderStatusHistoryEntity(shipment.getOrder().getOrderStatuses()).getStatusDescription();
+        String trackingStatus = OrderStatusHistoryEntity.getMostRecentOrderStatusHistoryEntity(shipment.getOrder().getOrderStatuses()).getStatusDescription();
         return new ShipmentTrackingModel(pickUpDate, trackDate, trackingLocation, trackingLocation, trackingStatus);
-    }
-
-    private OrderStatusHistoryEntity getFirstOrderStatusHistoryEntity(Set<OrderStatusHistoryEntity> status) {
-        return status.toArray(new OrderStatusHistoryEntity[status.size()])[0];
     }
 }
