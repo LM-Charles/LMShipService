@@ -93,7 +93,7 @@ public class CourierResource {
         List<RateEntryModel> rates = new ArrayList<>();
         for (Map.Entry<CourierServiceType, BigDecimal> entry : totalRates.entrySet()) {
             if (totalRateCount.get(entry.getKey()) == order.getShipments().size()) {
-                RateEntryModel rateEntry = new RateEntryModel("", entry.getKey().name(), entry.getValue(), entry.getKey().name(), entry.getKey().name(), DateTime.now());
+                RateEntryModel rateEntry = new RateEntryModel("", entry.getKey().getCategory(), entry.getValue(), entry.getKey().getCourier().name(), entry.getKey().name(), DateTime.now());
                 rates.add(rateEntry);
             }
             // do not include those with only a partial rate
