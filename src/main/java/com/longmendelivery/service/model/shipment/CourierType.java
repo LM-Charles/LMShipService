@@ -20,7 +20,7 @@ public enum CourierType {
     LONGMEN("longmen", LongmenShipmentClient.class, "", null);
 
     public static EnumSet<CourierType> ALL = EnumSet.allOf(CourierType.class);
-    public static EnumSet<CourierType> ENABLED = EnumSet.of(FEDEX);
+    public static EnumSet<CourierType> ENABLED = EnumSet.of(FEDEX, UPS);
 
     private final String apiServiceId;
     private final Class<? extends ShipmentClient> shipmentClient;
