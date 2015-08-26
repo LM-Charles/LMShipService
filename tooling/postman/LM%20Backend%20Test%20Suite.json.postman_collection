@@ -37,6 +37,7 @@
 		"f9b91d3c-3c7c-ed53-bc4d-3860ad0e3f86",
 		"88d0e698-caf3-e5da-9781-9eaad2ba9392",
 		"596f0799-3259-fa55-dc5f-efb05a408971",
+		"65a36724-456e-05a4-5792-8e493175656b",
 		"390e6704-6b6a-3fe3-a317-6f750f247822",
 		"e02ef4c4-01e4-6b4f-b677-0ea727f52d4e",
 		"0730566b-65f4-9e9e-77f0-54c3dec9c7af",
@@ -438,6 +439,25 @@
 			"description": "",
 			"id": "60287460-5bb4-bf5c-7ac2-00016834fe58",
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e"
+		},
+		{
+			"id": "65a36724-456e-05a4-5792-8e493175656b",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{path}}/rest/courier/rate/",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"FEDEX_GROUND\");",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1440571088332,
+			"name": "quote letter",
+			"description": "",
+			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 1,\n            \"width\" : 1,\n            \"length\" : 1,\n            \"weight\" : 1,\n            \"nickName\" : \"document\",\n            \"shipmentPackageType\" : \"LETTER\",\n            \"goodCategoryType\" : \"DOCUMENT\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"MORNING\"\n}"
 		},
 		{
 			"headers": "",
