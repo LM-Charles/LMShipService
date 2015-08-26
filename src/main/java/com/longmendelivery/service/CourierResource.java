@@ -57,6 +57,8 @@ public class CourierResource {
     public Response calculateRate(OrderCreationRequest order, @QueryParam("token") String token) throws DependentServiceException {
         ThrottleSecurity.getInstance().throttle(order.hashCode());
         Map<CourierServiceType, BigDecimal> totalRates = new HashMap<>();
+        Map<CourierServiceType, Integer> totalRateCount = new HashMap<>();
+
         int numberOfBox = 0;
         for (ShipmentModel shipment : order.getShipments()) {
             if (ShipmentPackageType.BOXES.contains(shipment.getShipmentPackageType())) {
@@ -67,8 +69,11 @@ public class CourierResource {
                 BigDecimal oldTotal = totalRates.get(entry.getKey());
                 if (oldTotal == null) {
                     totalRates.put(entry.getKey(), entry.getValue());
+                    totalRateCount.put(entry.getKey(), 1);
                 } else {
                     totalRates.put(entry.getKey(), oldTotal.add(entry.getValue()));
+                    totalRateCount.put(entry.getKey(), totalRateCount.get(entry.getKey()) + 1);
+
                 }
             }
 
@@ -77,21 +82,26 @@ public class CourierResource {
                 BigDecimal oldTotal = totalRates.get(entry.getKey());
                 if (oldTotal == null) {
                     totalRates.put(entry.getKey(), entry.getValue());
+                    totalRateCount.put(entry.getKey(), 1);
                 } else {
                     totalRates.put(entry.getKey(), oldTotal.add(entry.getValue()));
+                    totalRateCount.put(entry.getKey(), totalRateCount.get(entry.getKey()) + 1);
                 }
             }
         }
 
         List<RateEntryModel> rates = new ArrayList<>();
         for (Map.Entry<CourierServiceType, BigDecimal> entry : totalRates.entrySet()) {
-            RateEntryModel rateEntry = new RateEntryModel("", entry.getKey().name(), entry.getValue(), entry.getKey().name(), entry.getKey().name(), DateTime.now());
-            rates.add(rateEntry);
+            if (totalRateCount.get(entry.getKey()) == order.getShipments().size()) {
+                RateEntryModel rateEntry = new RateEntryModel("", entry.getKey().name(), entry.getValue(), entry.getKey().name(), entry.getKey().name(), DateTime.now());
+                rates.add(rateEntry);
+            }
+            // do not include those with only a partial rate
         }
 
         BigDecimal handlingCharge = new BigDecimal(numberOfBox);
         RateEntryModel handling = new RateEntryModel("", "HANDLING", handlingCharge, "LM_DELIVERY", "HANDLING", DateTime.now());
-        BigDecimal insuranceCharge = order.getInsuranceValue().max(new BigDecimal("2000")).multiply(new BigDecimal("0.035"));
+        BigDecimal insuranceCharge = (order.getInsuranceValue().min(new BigDecimal("2000"))).multiply(new BigDecimal("0.035"));
         RateEntryModel insurance = new RateEntryModel("", "INSURANCE", insuranceCharge, "LM_DELIVERY", "INSURANCE", DateTime.now());
 
         RateResponseModel responseModel = new RateResponseModel(DateTime.now(), rates, handling, insurance);
