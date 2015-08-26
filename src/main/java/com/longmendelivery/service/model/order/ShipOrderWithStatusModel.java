@@ -3,7 +3,7 @@ package com.longmendelivery.service.model.order;
 import com.longmendelivery.persistence.entity.AppointmentSlotType;
 import com.longmendelivery.service.model.DTOModel;
 import com.longmendelivery.service.model.shipment.CourierServiceType;
-import com.longmendelivery.service.model.shipment.ShipmentModel;
+import com.longmendelivery.service.model.shipment.ShipmentWithTrackingModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShipOrderModel implements DTOModel {
+public class ShipOrderWithStatusModel implements DTOModel {
     @NonNull
     private Integer id;
     @NonNull
@@ -29,7 +29,7 @@ public class ShipOrderModel implements DTOModel {
     @NonNull
     private CourierServiceType courierServiceType;
     @NonNull
-    private Set<ShipmentModel> shipments;
+    private Set<ShipmentWithTrackingModel> shipments;
     private BigDecimal estimateCost;
     private BigDecimal finalCost;
     @NonNull
@@ -42,4 +42,5 @@ public class ShipOrderModel implements DTOModel {
     private BigDecimal insuranceValue;
     private DateTime appointmentDate;
     private AppointmentSlotType appointmentSlotType;
+    private OrderStatusModel orderStatusModel;
 }
