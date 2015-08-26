@@ -23,3 +23,7 @@ All security is not enforced for the current release.
 #### Schema
 
 https://github.com/LM-Charles/LMShipService/blob/master/docs/schema:ebdb.png
+
+#### Management App
+
+http://lmshipservice-devo.elasticbeanstalk.com/public/index.html
