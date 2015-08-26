@@ -56,8 +56,13 @@ public class RSIShipmentClient implements ShipmentClient {
         TrackScriptGenerator generator = new TrackScriptGenerator(type);
         generator.withTrackingNumber(trackingNumber);
         String script = generator.generate();
-        JsonNode result = engine.executeScriptToTree(script);
-
-        return type.getTrackingResponseParser().parseResponse(result);
+        try {
+            JsonNode result = engine.executeScriptToTree(script);
+            ShipmentTrackingModel responseModel = type.getTrackingResponseParser().parseResponse(result);
+            return responseModel;
+        } catch (DependentServiceException e) {
+            System.out.println("Invalid query for tracking " + type.toString() + " with " + trackingNumber);
+            return null;
+        }
     }
 }
