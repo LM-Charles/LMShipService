@@ -13,7 +13,7 @@ import com.longmendelivery.service.model.order.DimensionModel;
 import com.longmendelivery.service.model.shipment.CourierServiceType;
 import com.longmendelivery.service.model.shipment.CourierType;
 import com.longmendelivery.service.model.shipment.RSIRateEntry;
-import com.longmendelivery.service.model.shipment.ShipmentTrackingResponse;
+import com.longmendelivery.service.model.shipment.ShipmentTrackingModel;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -53,7 +53,7 @@ public class RSIShipmentClient implements ShipmentClient {
     }
 
     @Override
-    public ShipmentTrackingResponse getTracking(CourierType type, String trackingNumber) throws DependentServiceException, ResourceNotFoundException {
+    public ShipmentTrackingModel getTracking(CourierType type, String trackingNumber) throws DependentServiceException, ResourceNotFoundException {
         TrackScriptGenerator generator = new TrackScriptGenerator(type);
         generator.withTrackingNumber(trackingNumber);
         String script = generator.generate();

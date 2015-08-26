@@ -3,6 +3,7 @@ package com.longmendelivery.service.model.order;
 import com.longmendelivery.persistence.entity.AppointmentSlotType;
 import com.longmendelivery.service.model.DTOModel;
 import com.longmendelivery.service.model.shipment.CourierServiceType;
+import com.longmendelivery.service.model.shipment.ShipmentModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

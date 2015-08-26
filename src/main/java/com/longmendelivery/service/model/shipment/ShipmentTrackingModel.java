@@ -11,7 +11,7 @@ import org.joda.time.DateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShipmentTrackingResponse {
+public class ShipmentTrackingModel {
     DateTime pickUpDate;
     DateTime trackingDate;
     String trackingCity;

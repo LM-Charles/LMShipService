@@ -2,7 +2,7 @@ package com.longmendelivery.lib.client.shipment.rocketshipit.parser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
-import com.longmendelivery.service.model.shipment.ShipmentTrackingResponse;
+import com.longmendelivery.service.model.shipment.ShipmentTrackingModel;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -21,7 +21,7 @@ public class UPSTrackingResponseParser implements TrackingResponseParser {
 //            'PostalCode' => "30340"
 //            'CountryCode' => "US"
     @Override
-    public ShipmentTrackingResponse parseResponse(JsonNode jsonNode) throws DependentServiceException {
+    public ShipmentTrackingModel parseResponse(JsonNode jsonNode) throws DependentServiceException {
         String status = jsonNode.at("/TrackResponse/Response/ResponseStatusDescription").asText();
         if (!status.equals("Success"))
             throw new DependentServiceException("UPS Responded with failure message to this tracking request");
@@ -34,7 +34,7 @@ public class UPSTrackingResponseParser implements TrackingResponseParser {
         String trackingCountry = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/ActivityLocation/Address/CountryCode").asText();
 
         String trackingStatus = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/Status/StatusType/Description").asText();
-        ShipmentTrackingResponse model = new ShipmentTrackingResponse(pickUpDate, trackingDate, trackingCity, trackingCountry, trackingStatus);
+        ShipmentTrackingModel model = new ShipmentTrackingModel(pickUpDate, trackingDate, trackingCity, trackingCountry, trackingStatus);
         return model;
     }
 }
