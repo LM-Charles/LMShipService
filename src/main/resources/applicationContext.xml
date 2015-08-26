@@ -11,6 +11,7 @@
     <context:component-scan base-package="com.longmendelivery.lib.conversion"/>
 
 
+
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://aa1cn3gfajee4lg.cc1rijt3nzv9.us-west-1.rds.amazonaws.com:3306/ebdb"/>
@@ -39,6 +40,10 @@
 
     <!-- Activate annotation-driven transactions -->
     <tx:annotation-driven/>
+
+    <!-- DA Components -->
+    <bean class="com.longmendelivery.lib.client.shipment.longmendelivery.LongmenShipmentClient"/>
+    <bean class="com.longmendelivery.lib.client.shipment.rocketshipit.RSIShipmentClient"/>
 
     <!-- Rest Endpoints -->
     <bean class="com.longmendelivery.service.AppUserResource"/>

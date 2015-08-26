@@ -1,6 +1,7 @@
 package com.longmendelivery.persistence.entity;
 
 import com.longmendelivery.persistence.DAOEntity;
+import com.longmendelivery.service.model.order.GoodCategoryType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,4 +28,6 @@ public class ShipmentEntity implements DAOEntity {
     private Integer weight;
     private String trackingNumber;
     private String nickName;
+    private GoodCategoryType goodCategoryType;
+
 }

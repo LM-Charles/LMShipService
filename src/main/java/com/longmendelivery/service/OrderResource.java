@@ -89,7 +89,6 @@ public class OrderResource {
             AddressEntity toAddress = mapper.map(orderCreationRequest.getToAddress(), AddressEntity.class);
 
             String handler = orderCreationRequest.getHandler();
-            GoodCategoryType goodCategoryType = orderCreationRequest.getGoodCategoryType();
             Set<OrderStatusHistoryEntity> orderStatus = new HashSet<>();
             Set<ShipmentEntity> shipments = new HashSet<>();
             BigDecimal estimatedCost = BigDecimal.ZERO;
@@ -98,12 +97,12 @@ public class OrderResource {
             BigDecimal insuranceValue = orderCreationRequest.getInsuranceValue();
             DateTime appointmentDate = orderCreationRequest.getAppointmentDate();
             AppointmentSlotType appointmentSlotType = orderCreationRequest.getAppointmentSlotType();
-            ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, shipments, estimatedCost, finalCost, fromAddress, toAddress, handler, goodCategoryType, orderStatus, declaredValue, insuranceValue, appointmentDate, appointmentSlotType);
+            ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, shipments, estimatedCost, finalCost, fromAddress, toAddress, handler, orderStatus, declaredValue, insuranceValue, appointmentDate, appointmentSlotType);
 
             Set<ShipmentEntity> shipmentEntities = new HashSet<>();
             for (ShipmentModel shipmentModel : orderCreationRequest.getShipments()) {
                 String trackingNumber = null;
-                ShipmentEntity shipmentEntity = new ShipmentEntity(null, shipOrderEntity, shipmentModel.getHeight(), shipmentModel.getWidth(), shipmentModel.getLength(), shipmentModel.getWeight(), trackingNumber, shipmentModel.getNickName());
+                ShipmentEntity shipmentEntity = new ShipmentEntity(null, shipOrderEntity, shipmentModel.getHeight(), shipmentModel.getWidth(), shipmentModel.getLength(), shipmentModel.getWeight(), trackingNumber, shipmentModel.getNickName(), shipmentModel.getGoodCategoryType());
                 shipmentEntities.add(shipmentEntity);
             }
             shipOrderEntity.setShipments(shipmentEntities);
