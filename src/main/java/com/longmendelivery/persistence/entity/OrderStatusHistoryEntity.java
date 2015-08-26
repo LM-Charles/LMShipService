@@ -26,7 +26,7 @@ public class OrderStatusHistoryEntity implements DAOEntity {
         Arrays.sort(entitiesArray, new Comparator<OrderStatusHistoryEntity>() {
             @Override
             public int compare(OrderStatusHistoryEntity entity, OrderStatusHistoryEntity other) {
-                return entity.getStatusDate().compareTo(other.getStatusDate());
+                return -entity.getStatusDate().compareTo(other.getStatusDate());
             }
         });
         return entitiesArray[0];
