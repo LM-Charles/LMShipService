@@ -1,19 +1,13 @@
 var ContentPage = React.createClass({
-    render()
-{
-    return (
-        < div
-    className = "component-Application-container" >
-        < EditorWithState / >
-        < / div >
-)
-    ;
-}
-})
-;
+    render() {
+        return (
+            <div className="component-Application-container">
+                <EditorWithState />
+            </div>
+        );
+    }
+});
 
-React.render( < ContentPage / >, document.body
-)
-;
+React.render(<ContentPage />, document.body);
 
 
