@@ -15,6 +15,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Shipment")
+@Table(name = "Shipment", indexes = {@Index(name = "Shipment_order", columnList = "order_id")})
 public class ShipmentEntity implements DAOEntity {
 
     @Id
