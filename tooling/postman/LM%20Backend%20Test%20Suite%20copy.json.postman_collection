@@ -1,5 +1,6 @@
 {
 	"id": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+	"owner": "59825",
 	"name": "LM Backend Test Suite copy",
 	"description": "Collection that execute all available endpoints in sequence\nand validate the expected outcome, should be executed against a \nfresh database.\n\nThe steps that start with $ are duplicates that intend to set up \nthe data for the next steps.",
 	"order": [
@@ -36,6 +37,10 @@
 		"3ce4a681-e22e-f192-f6f5-5dbbac4ba403",
 		"2423217e-e215-ec3c-27fa-ca6a008b756a",
 		"1629c31e-10fc-69f6-d060-e6661d277025",
+		"6c4c5c4e-1b4f-6f57-a8e5-4f070d79f5bc",
+		"ffd3ad62-927d-4f69-fd6b-3bd265f4974d",
+		"db40c041-9e3f-6df6-af3d-1876f6ea1b46",
+		"85ce11d0-ac30-2186-3af3-cfa3da41c70d",
 		"f9b91d3c-3c7c-ed53-bc4d-3860ad0e3f86",
 		"88d0e698-caf3-e5da-9781-9eaad2ba9392",
 		"596f0799-3259-fa55-dc5f-efb05a408971",
@@ -48,16 +53,20 @@
 		"35e373d8-e5a3-5de8-08dd-56cc16182631",
 		"2e617d4a-1e8e-177c-07b0-7416e791463d",
 		"95450bf6-90c5-15f0-34f4-7ee1193f35fa",
-		"85ce11d0-ac30-2186-3af3-cfa3da41c70d",
 		"268fedca-7367-01ad-2616-61ea19067f84",
 		"86e31540-c69c-04e0-8ee4-bf4ff5415c8f",
 		"985f77f2-dfe7-8041-1f87-994b68e62100"
 	],
 	"folders": [],
 	"timestamp": 0,
-	"owner": "59825",
 	"remoteLink": "",
 	"public": false,
+	"lastUpdatedBy": {
+		"id": "59825",
+		"username": "desmondz"
+	},
+	"lastRevision": 48471174,
+	"team": null,
 	"requests": [
 		{
 			"folder": null,
@@ -142,14 +151,14 @@
 			"version": 2,
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
 			"currentHelper": "normal",
-		  "helperAttributes": "{}",
-		  "time": 1440624481159,
+			"helperAttributes": "{}",
+			"time": 1440624481159,
 			"name": "full order status for UPS",
 			"description": "",
-		  "collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
-		  "rawModeData": null,
-		  "descriptionFormat": null,
-		  "folder": null
+			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+			"rawModeData": null,
+			"descriptionFormat": null,
+			"folder": null
 		},
 		{
 			"headers": "",
@@ -326,25 +335,25 @@
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"nickName\" : \"good1\",\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"MORNING\"\n}"
 		},
 		{
-		  "id": "3ce4a681-e22e-f192-f6f5-5dbbac4ba403",
-		  "headers": "Content-Type: application/json\n",
-		  "url": "{{path}}/rest/order/{{current_order}}/status?backendUserId=1&token=userToken",
+			"id": "3ce4a681-e22e-f192-f6f5-5dbbac4ba403",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{path}}/rest/order/{{current_order}}/status?backendUserId=1&token=userToken",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "POST",
 			"data": [],
-		  "dataMode": "raw",
-		  "version": 2,
+			"dataMode": "raw",
+			"version": 2,
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": "{}",
-		  "time": 1440624386313,
-		  "name": "order update status ",
+			"time": 1440624580633,
+			"name": "order update status ",
 			"description": "",
-		  "collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
-		  "descriptionFormat": null,
-		  "folder": null,
-		  "rawModeData": "{\n   \"status\" : \"PROCESSING\",\n   \"statusDescription\" : \"I have picked up this order\"\n}"
+			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+			"descriptionFormat": null,
+			"folder": null,
+			"rawModeData": "{\n   \"status\" : \"IN_TRANSIT\",\n   \"statusDescription\" : \"I have shipped this order\"\n}"
 		},
 		{
 			"headers": "",
@@ -494,6 +503,27 @@
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e"
 		},
 		{
+			"id": "6c4c5c4e-1b4f-6f57-a8e5-4f070d79f5bc",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{path}}/rest/order?token=userToken",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Body matches string\"] = responseBody.has(\"UPS_STANDARD\");\n\ntests[\"Body matches string\"] = responseBody.has(\"television\");\n\ntry {\n  var data = JSON.parse(responseBody);\n  postman.setGlobalVariable(\"current_order\", data.id);\n} catch (e) {\n    tests[\"Able to populate order id\"] = false;\n}\n",
+			"currentHelper": "normal",
+			"helperAttributes": "{}",
+			"time": 1440624732534,
+			"name": "order create Fedex $current_order",
+			"description": "",
+			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+			"descriptionFormat": null,
+			"folder": null,
+			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"Canada\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"Canada\"\n    },\n    \"courierServiceType\" : \"FEDEX_GROUND\",\n    \"shipments\" : [\n        {\n            \"height\" : 1,\n            \"width\" : 1,\n            \"length\" : 1,\n            \"weight\" : 1,\n            \"nickName\" : \"mom's cosmetics\",\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"REGULAR\"\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 150,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"MORNING\"\n}"
+		},
+		{
 			"headers": "",
 			"url": "{{path}}/rest/user/{{current_user}}?token=admin",
 			"preRequestScript": "",
@@ -604,20 +634,25 @@
 			"rawModeData": "require '{{phproot}}';\n\n$rate = new \\RocketShipIt\\Rate('UPS');\n\n$rate->setParameter('shipCode','V4C0A9');\n$rate->setParameter('shipCountry','CA');\n$rate->setParameter('toCode','V7C2X4');\n$rate->setParameter('toCountry','CA');\n$rate->setParameter('weight','5');\n$rate->setParameter('residentialAddressIndicator','0');\n$rate->setParameter('packagingType','02');\n\n$response = $rate->getSimpleRates();\necho serialize($response);\n"
 		},
 		{
+			"id": "85ce11d0-ac30-2186-3af3-cfa3da41c70d",
 			"headers": "Content-Type: application/json\n",
-			"url": "{{path}}/rest/courier/tracking/?trackingNumber=804923501702&courier=FEDEX",
+			"url": "{{path}}/rest/order/{{current_order}}/status?token=userToken",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "GET",
 			"data": [],
 			"dataMode": "params",
+			"version": 2,
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": "{}",
-			"name": "order status Fedex - BROKEN",
+			"time": 1440624801959,
+			"name": "full order status Fedex",
 			"description": "",
-			"id": "85ce11d0-ac30-2186-3af3-cfa3da41c70d",
-			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e"
+			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+			"rawModeData": null,
+			"descriptionFormat": null,
+			"folder": null
 		},
 		{
 			"headers": "Content-Type: application/json\n",
@@ -844,6 +879,27 @@
 			"rawModeData": "{\n    \"firstName\" : \"optional\",\n    \"lastName\" : \"optional2\",\n    \"address\" : {\n        \"address\" : \"optional2\",\n        \n        \"address2\" : \"optional\",\n        \"city\" : \"optional\",\n        \"province\" : \"optional\",\n        \"country\" : \"optional\",\n        \"postal\" : \"optionalchange\",\n        \"residential\" : \"true\"\n    }\n}"
 		},
 		{
+			"id": "db40c041-9e3f-6df6-af3d-1876f6ea1b46",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{path}}/rest/order/{{current_order}}/tracking/{{current_shipment}}?token=userToken",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
+			"currentHelper": "normal",
+			"helperAttributes": "{}",
+			"time": 1440624791747,
+			"name": "shipment add tracking for Fedex",
+			"description": "",
+			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+			"descriptionFormat": null,
+			"folder": null,
+			"rawModeData": "{\n  \"trackingNumber\": \"804923501702\"\n}"
+		},
+		{
 			"headers": "",
 			"url": "{{path}}/rest/login/{{current_user}}?token=token",
 			"preRequestScript": "",
@@ -951,6 +1007,25 @@
 			"rawModeData": "",
 			"id": "feced186-f1ad-5ffa-dbe9-4e8557a622ee",
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e"
+		},
+		{
+			"id": "ffd3ad62-927d-4f69-fd6b-3bd265f4974d",
+			"headers": "",
+			"url": "{{path}}/rest/order/{{current_order}}?token=userToken",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\n\ntry {\n  var data = JSON.parse(responseBody);\n  postman.setGlobalVariable(\"current_shipment\", data.shipments[0].id);\n} catch (e) {\n    tests[\"Able to populate shipment id\"] = false;\n}\n",
+			"currentHelper": "normal",
+			"helperAttributes": "{}",
+			"name": "order get $current_shipment",
+			"description": "",
+			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+			"rawModeData": null,
+			"descriptionFormat": null,
+			"folder": null
 		}
 	]
 }
