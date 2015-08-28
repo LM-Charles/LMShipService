@@ -170,8 +170,13 @@ public class AppUserResource {
                     return ResourceResponseUtil.generateForbiddenMessage("provided password doesn't match password on file, cannot activate with different phone number");
                 }
                 user.setPhone(phone);
+                user.setUserStatus(AppUserStatusType.PENDING_VERIFICATION_REGISTER);
+            } else if (user.getUserStatus().equals(AppUserStatusType.DISABLED)) {
+                return ResourceResponseUtil.generateForbiddenMessage("User is disabled and cannot be activated");
+            } else if (user.getUserStatus().equals(AppUserStatusType.NEW)) {
+                user.setUserStatus(AppUserStatusType.PENDING_VERIFICATION_REGISTER);
             }
-            user.setUserStatus(AppUserStatusType.PENDING_VERIFICATION_REGISTER);
+
             user.setVerificationCode(randomVerification);
             userStorage.update(user);
             String smsBody = buildRegistrationVerificationMessage(user.getEmail(), randomVerification);
