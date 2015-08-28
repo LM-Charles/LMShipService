@@ -37,4 +37,5 @@ public class OrderCreationRequest implements DTOModel {
     private BigDecimal insuranceValue;
     private DateTime appointmentDate;
     private AppointmentSlotType appointmentSlotType;
+    private String nickname;
 }

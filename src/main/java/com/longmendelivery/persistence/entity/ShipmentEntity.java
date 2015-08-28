@@ -28,7 +28,6 @@ public class ShipmentEntity implements DAOEntity {
     private Integer length;
     private Integer weight;
     private String trackingNumber;
-    private String nickName;
     private GoodCategoryType goodCategoryType;
 
 }
