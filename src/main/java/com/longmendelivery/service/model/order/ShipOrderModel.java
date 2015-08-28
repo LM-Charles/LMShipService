@@ -38,7 +38,10 @@ public class ShipOrderModel implements DTOModel {
     private AddressModel toAddress;
     private String handler;
     private BigDecimal declareValue;
+
     private BigDecimal insuranceValue;
     private DateTime appointmentDate;
     private AppointmentSlotType appointmentSlotType;
+    private String nickname;
+
 }
