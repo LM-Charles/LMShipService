@@ -1,6 +1,5 @@
 {
 	"id": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
-	"owner": "59825",
 	"name": "LM Backend Test Suite copy",
 	"description": "Collection that execute all available endpoints in sequence\nand validate the expected outcome, should be executed against a \nfresh database.\n\nThe steps that start with $ are duplicates that intend to set up \nthe data for the next steps.",
 	"order": [
@@ -17,6 +16,7 @@
 		"da4d1cd7-6a71-aa7d-8cfe-380b3d849623",
 		"687fb14d-59d5-084d-b7cd-0a5e5af51620",
 		"9ac2c039-5911-2030-0d21-b309677a03ad",
+	  "cb0c9418-6a2c-cfa6-ba89-d5fe9a759725",
 		"181be9be-6a45-c7f4-c014-379a3504ef04",
 		"8d1d9e5c-5a5a-9a3d-0d11-6dbdd8ce9ab4",
 		"89450cf9-cec2-e6ed-40b7-182aefdab251",
@@ -60,14 +60,9 @@
 	],
 	"folders": [],
 	"timestamp": 0,
+  "owner": "59825",
 	"remoteLink": "",
 	"public": false,
-	"lastUpdatedBy": {
-		"id": "59825",
-		"username": "desmondz"
-	},
-	"lastRevision": 48474822,
-	"team": null,
 	"requests": [
 		{
 			"id": "04685575-b77c-d6ca-b946-fb2be1725015",
@@ -170,7 +165,7 @@
 		{
 			"id": "181be9be-6a45-c7f4-c014-379a3504ef04",
 			"headers": "",
-			"url": "{{path}}/rest/user/{{current_user}}/activation?token=UserToken&phone=6047821542",
+		  "url": "{{path}}/rest/user/activation?phone=6047821542&email=right{{current_email_postfix}}@gmail.com&password=qwerty",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "POST",
@@ -179,14 +174,12 @@
 			"version": 2,
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"to 6047821542\");",
 			"currentHelper": "normal",
-			"helperAttributes": "{}",
-			"time": 1440625211043,
+		  "helperAttributes": {},
+		  "time": 1440734087724,
 			"name": "users post activation update phone",
 			"description": "",
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
-			"rawModeData": "",
-			"descriptionFormat": null,
-			"folder": null
+		  "rawModeData": ""
 		},
 		{
 			"headers": "Content-Type: text/plain\n",
@@ -208,7 +201,7 @@
 		{
 			"id": "22eb5c71-a829-910c-c96b-f5e164178f87",
 			"headers": "",
-			"url": "{{path}}/rest/user/{{current_user}}/activation/{{current_code}}",
+		  "url": "{{path}}/rest/user/activation/{{current_code}}?email=right{{current_email_postfix}}@gmail.com",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "POST",
@@ -217,14 +210,12 @@
 			"version": 2,
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
 			"currentHelper": "normal",
-			"helperAttributes": "{}",
-			"time": 1440625574350,
+		  "helperAttributes": {},
+		  "time": 1440733768924,
 			"name": "users activate correct code",
 			"description": "need to populate current_activation_code",
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
-			"rawModeData": "",
-			"descriptionFormat": null,
-			"folder": null
+		  "rawModeData": ""
 		},
 		{
 			"id": "2423217e-e215-ec3c-27fa-ca6a008b756a",
@@ -532,7 +523,7 @@
 		{
 			"id": "687fb14d-59d5-084d-b7cd-0a5e5af51620",
 			"headers": "",
-			"url": "{{path}}/rest/user/{{current_user}}/activation",
+		  "url": "{{path}}/rest/user/activation?email=right{{current_email_postfix}}@gmail.com",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "POST",
@@ -541,14 +532,12 @@
 			"version": 2,
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"to 6047821542\");",
 			"currentHelper": "normal",
-			"helperAttributes": "{}",
-			"time": 1440625203479,
+		  "helperAttributes": {},
+		  "time": 1440733890884,
 			"name": "users activation",
 			"description": "",
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
-			"rawModeData": "",
-			"descriptionFormat": null,
-			"folder": null
+		  "rawModeData": ""
 		},
 		{
 			"id": "6c4c5c4e-1b4f-6f57-a8e5-4f070d79f5bc",
@@ -743,7 +732,7 @@
 		{
 			"id": "89450cf9-cec2-e6ed-40b7-182aefdab251",
 			"headers": "",
-			"url": "{{path}}/rest/user/{{current_user}}/activation/wrongcode",
+		  "url": "{{path}}/rest/user/activation/wrongcode?email=right{{current_email_postfix}}@gmail.com",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "POST",
@@ -752,14 +741,12 @@
 			"version": 2,
 			"tests": "tests[\"Status code is 403\"] = responseCode.code === 403;\ntests[\"Body matches string\"] = responseBody.has(\"Verification code not accepted\");",
 			"currentHelper": "normal",
-			"helperAttributes": "{}",
-			"time": 1440625568097,
+		  "helperAttributes": {},
+		  "time": 1440733756628,
 			"name": "users activation wrong code",
 			"description": "",
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
-			"rawModeData": "",
-			"descriptionFormat": null,
-			"folder": null
+		  "rawModeData": ""
 		},
 		{
 			"headers": "",
@@ -837,21 +824,23 @@
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e"
 		},
 		{
+		  "id": "9ac2c039-5911-2030-0d21-b309677a03ad",
 			"headers": "",
-			"url": "{{path}}/rest/user/{{current_user}}/activation?token=UserToken&phone=1234",
+		  "url": "{{path}}/rest/user/activation?phone=604782&email=right{{current_email_postfix}}@gmail.com&password=qwerty",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "POST",
 			"data": [],
 			"dataMode": "raw",
+		  "version": 2,
 			"tests": "tests[\"Status code is 400\"] = responseCode.code === 400;\ntests[\"Body matches string\"] = responseBody.has(\"Unable to activate due to invalid phone number: 1234\");",
 			"currentHelper": "normal",
-			"helperAttributes": "{}",
-			"name": "users activation invalid phone",
+		  "helperAttributes": {},
+		  "time": 1440733912801,
+		  "name": "users activation update invalid phone",
 			"description": "",
-			"rawModeData": "",
-			"id": "9ac2c039-5911-2030-0d21-b309677a03ad",
-			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e"
+		  "collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+		  "rawModeData": ""
 		},
 		{
 			"headers": "",
@@ -888,6 +877,25 @@
 			"description": "",
 			"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 10,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        },\n                {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"LARGE\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 1500,\n    \"insuranceValue\" : 1500,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
+		},
+	  {
+		"id": "cb0c9418-6a2c-cfa6-ba89-d5fe9a759725",
+		"headers": "",
+		"url": "{{path}}/rest/user/activation?phone=6047821543&email=right{{current_email_postfix}}@gmail.com&password=12345678",
+		"preRequestScript": "",
+		"pathVariables": {},
+		"method": "POST",
+		"data": [],
+		"dataMode": "raw",
+		"version": 2,
+		"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"to 6047821542\");",
+		"currentHelper": "normal",
+		"helperAttributes": {},
+		"time": 1440734069555,
+		"name": "users activation update wrong password",
+		"description": "",
+		"collectionId": "2f0e4404-5eaa-3bc2-d367-10b212a5257e",
+		"rawModeData": ""
 		},
 		{
 			"headers": "",
