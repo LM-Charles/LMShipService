@@ -24,6 +24,5 @@ public class ShipmentModel implements DTOModel {
     private String trackingDocumentType;
     private GoodCategoryType goodCategoryType;
 
-    private String nickName;
     private ShipmentPackageType shipmentPackageType;
 }

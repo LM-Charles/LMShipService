@@ -22,7 +22,6 @@ public class ShipmentWithTrackingModel implements DTOModel {
     private String trackingNumber;
     private String trackingDocumentType;
 
-    private String nickName;
     private ShipmentPackageType shipmentPackageType;
 
     private ShipmentTrackingModel tracking;

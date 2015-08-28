@@ -48,4 +48,6 @@ public class ShipOrderEntity implements DAOEntity {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime appointmentDate;
     private AppointmentSlotType appointmentSlotType;
+    private String nickname;
+
 }
