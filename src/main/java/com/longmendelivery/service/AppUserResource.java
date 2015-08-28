@@ -171,10 +171,12 @@ public class AppUserResource {
                 }
                 user.setPhone(phone);
                 user.setUserStatus(AppUserStatusType.PENDING_VERIFICATION_REGISTER);
-            } else if (user.getUserStatus().equals(AppUserStatusType.DISABLED)) {
-                return ResourceResponseUtil.generateForbiddenMessage("User is disabled and cannot be activated");
             } else if (user.getUserStatus().equals(AppUserStatusType.NEW)) {
                 user.setUserStatus(AppUserStatusType.PENDING_VERIFICATION_REGISTER);
+            } else if (user.getUserStatus().equals(AppUserStatusType.PENDING_VERIFICATION_REGISTER)) {
+                // keep going
+            } else {
+                return ResourceResponseUtil.generateForbiddenMessage("User is already activated, if changing phone number, please add phone and password parameter");
             }
 
             user.setVerificationCode(randomVerification);
