@@ -97,12 +97,13 @@ public class OrderResource {
             BigDecimal insuranceValue = orderCreationRequest.getInsuranceValue();
             DateTime appointmentDate = orderCreationRequest.getAppointmentDate();
             AppointmentSlotType appointmentSlotType = orderCreationRequest.getAppointmentSlotType();
-            ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, shipments, estimatedCost, finalCost, fromAddress, toAddress, handler, orderStatus, declaredValue, insuranceValue, appointmentDate, appointmentSlotType);
+            String nickname = orderCreationRequest.getNickname();
+            ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, shipments, estimatedCost, finalCost, fromAddress, toAddress, handler, orderStatus, declaredValue, insuranceValue, appointmentDate, appointmentSlotType, nickname);
 
             Set<ShipmentEntity> shipmentEntities = new HashSet<>();
             for (ShipmentModel shipmentModel : orderCreationRequest.getShipments()) {
                 String trackingNumber = null;
-                ShipmentEntity shipmentEntity = new ShipmentEntity(null, shipOrderEntity, shipmentModel.getHeight(), shipmentModel.getWidth(), shipmentModel.getLength(), shipmentModel.getWeight(), trackingNumber, shipmentModel.getNickName(), shipmentModel.getGoodCategoryType());
+                ShipmentEntity shipmentEntity = new ShipmentEntity(null, shipOrderEntity, shipmentModel.getHeight(), shipmentModel.getWidth(), shipmentModel.getLength(), shipmentModel.getWeight(), trackingNumber, shipmentModel.getGoodCategoryType());
                 shipmentEntities.add(shipmentEntity);
             }
             shipOrderEntity.setShipments(shipmentEntities);
