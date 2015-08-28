@@ -1,5 +1,7 @@
 package com.longmendelivery.service.model.shipment;
 
+import com.longmendelivery.persistence.entity.LengthUnit;
+import com.longmendelivery.persistence.entity.WeightUnit;
 import com.longmendelivery.service.model.DTOModel;
 import com.longmendelivery.service.model.order.GoodCategoryType;
 import lombok.AllArgsConstructor;
@@ -25,4 +27,7 @@ public class ShipmentModel implements DTOModel {
     private GoodCategoryType goodCategoryType;
 
     private ShipmentPackageType shipmentPackageType;
+    //There two are for display preference only, all measurements are standardized using the metric system in the system.
+    private LengthUnit displayLengthPreference;
+    private WeightUnit displayWeightPreference;
 }
