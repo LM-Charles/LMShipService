@@ -29,5 +29,8 @@ public class ShipmentEntity implements DAOEntity {
     private Integer weight;
     private String trackingNumber;
     private GoodCategoryType goodCategoryType;
+    //There two are for display preference only, all measurements are standardized using the metric system in the system.
+    private LengthUnit displayLengthPreference;
+    private WeightUnit displayWeightPreference;
 
 }
