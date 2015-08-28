@@ -23,10 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Path("/user")
 @Produces("application/json")
@@ -100,7 +97,7 @@ public class AppUserResource {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, userId);
         } catch (NotAuthorizedException e) {
-            e.printStackTrace();
+            return ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
         try {
@@ -120,7 +117,7 @@ public class AppUserResource {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN, userId);
         } catch (NotAuthorizedException e) {
-            ResourceResponseUtil.generateForbiddenMessage(e);
+            return ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
         try {
@@ -140,7 +137,7 @@ public class AppUserResource {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
         } catch (NotAuthorizedException e) {
-            ResourceResponseUtil.generateForbiddenMessage(e);
+            return ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
         try {
@@ -160,22 +157,18 @@ public class AppUserResource {
     }
 
     @POST
-    @Path("/{userId}/activation")
+    @Path("/activation")
     @Transactional(readOnly = false)
-    public Response sendActivationVerification(@PathParam("userId") Integer userId, @QueryParam("phone") String phone, @QueryParam("token") String token) throws DependentServiceException {
-        try {
-            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
-        } catch (NotAuthorizedException e) {
-            ResourceResponseUtil.generateForbiddenMessage(e);
-        }
-
+    public Response sendActivationVerification(@QueryParam("email") String email, @QueryParam("phone") String phone, @QueryParam("password") String password) throws DependentServiceException {
         String randomVerification = SecurityUtil.generateSecureVerificationCode();
-
         TwilioSMSClient twilioSMSClient = new TwilioSMSClient();
 
         try {
-            AppUserEntity user = userStorage.get(userId);
+            AppUserEntity user = userStorage.getByEmail(email);
             if (phone != null && !phone.equals(user.getPhone())) {
+                if (!Arrays.equals(user.getPassword_md5(), SecurityUtil.md5(password))) {
+                    return ResourceResponseUtil.generateForbiddenMessage("provided password doesn't match password on file, cannot activate with different phone number");
+                }
                 user.setPhone(phone);
             }
             user.setUserStatus(AppUserStatusType.PENDING_VERIFICATION_REGISTER);
@@ -189,26 +182,19 @@ public class AppUserResource {
             }
             return ResourceResponseUtil.generateOKMessage("Register verification sent for " + user.getEmail() + " to " + user.getPhone());
         } catch (ResourceNotFoundException e) {
-            return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + email);
         }
     }
 
     @POST
-    @Path("/{userId}/activation/{verificationCode}")
+    @Path("/activation/{verificationCode}")
     @Transactional(readOnly = false)
-    public Response activate(@PathParam("userId") Integer userId, @PathParam("verificationCode") String verificationCode, @QueryParam("token") String token) {
-        try {
-            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
-        } catch (NotAuthorizedException e) {
-            ResourceResponseUtil.generateForbiddenMessage(e);
-        }
-
-
+    public Response activate(@QueryParam("email") String email, @PathParam("verificationCode") String verificationCode) {
         AppUserEntity user = null;
         try {
-            user = userStorage.get(userId);
+            user = userStorage.getByEmail(email);
         } catch (ResourceNotFoundException e) {
-            return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + userId);
+            return ResourceResponseUtil.generateNotFoundMessage("User not found for: " + email);
         }
 
         if (!user.getUserStatus().equals(AppUserStatusType.PENDING_VERIFICATION_REGISTER)) {
@@ -233,9 +219,7 @@ public class AppUserResource {
     @Transactional(readOnly = false)
     public Response sendChangePasswordVerification(@QueryParam("email") String email) throws DependentServiceException, DependentServiceRequestException {
         ThrottleSecurity.getInstance().throttle(email);
-
         String randomVerification = SecurityUtil.generateSecureVerificationCode();
-
 
         AppUserEntity user = null;
         try {
@@ -266,7 +250,6 @@ public class AppUserResource {
     @Transactional(readOnly = false)
     public Response changePassword(@QueryParam("email") String email, @PathParam("verificationCode") String verificationCode, @QueryParam("newPassword") String password) {
         ThrottleSecurity.getInstance().throttle(email);
-
 
         AppUserEntity user = null;
         try {
