@@ -103,7 +103,7 @@ public class OrderResource {
             Set<ShipmentEntity> shipmentEntities = new HashSet<>();
             for (ShipmentModel shipmentModel : orderCreationRequest.getShipments()) {
                 String trackingNumber = null;
-                ShipmentEntity shipmentEntity = new ShipmentEntity(null, shipOrderEntity, shipmentModel.getHeight(), shipmentModel.getWidth(), shipmentModel.getLength(), shipmentModel.getWeight(), trackingNumber, shipmentModel.getGoodCategoryType());
+                ShipmentEntity shipmentEntity = new ShipmentEntity(null, shipOrderEntity, shipmentModel.getHeight(), shipmentModel.getWidth(), shipmentModel.getLength(), shipmentModel.getWeight(), trackingNumber, shipmentModel.getGoodCategoryType(), shipmentModel.getDisplayLengthPreference(), shipmentModel.getDisplayWeightPreference());
                 shipmentEntities.add(shipmentEntity);
             }
             shipOrderEntity.setShipments(shipmentEntities);
