@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -33,7 +34,7 @@ public class ShipOrderEntity implements DAOEntity {
     private DateTime orderDate;
     private CourierServiceType courierServiceType;
     @OneToMany(mappedBy = "order")
-    private Set<ShipmentEntity> shipments;
+    private List<ShipmentEntity> shipments;
     private BigDecimal estimateCost;
     private BigDecimal finalCost;
     @ManyToOne

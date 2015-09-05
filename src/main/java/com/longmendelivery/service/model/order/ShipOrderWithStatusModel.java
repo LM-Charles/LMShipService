@@ -11,7 +11,7 @@ import lombok.NonNull;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by desmond on 20/06/15.
@@ -29,7 +29,7 @@ public class ShipOrderWithStatusModel implements DTOModel {
     @NonNull
     private CourierServiceType courierServiceType;
     @NonNull
-    private Set<ShipmentWithTrackingModel> shipments;
+    private List<ShipmentWithTrackingModel> shipments;
     private BigDecimal estimateCost;
     private BigDecimal finalCost;
     @NonNull
