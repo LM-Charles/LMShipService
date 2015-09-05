@@ -11,7 +11,7 @@ import lombok.NonNull;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by desmond on 20/06/15.
@@ -27,7 +27,7 @@ public class OrderCreationRequest implements DTOModel {
     @NonNull
     private CourierServiceType courierServiceType;
     @NonNull
-    private Set<ShipmentModel> shipments;
+    private List<ShipmentModel> shipments;
     @NonNull
     private AddressModel fromAddress;
     @NonNull
