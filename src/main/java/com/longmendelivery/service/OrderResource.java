@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -150,7 +151,7 @@ public class OrderResource {
             // Get most recent history
             OrderStatusModel orderStatus = mapper.map(orderStatusHistoryEntity, OrderStatusModel.class);
             orderWithStatusModel.setOrderStatusModel(orderStatus);
-            orderWithStatusModel.setShipments(new HashSet<ShipmentWithTrackingModel>());
+            orderWithStatusModel.setShipments(new ArrayList<ShipmentWithTrackingModel>());
 
             CourierType courierType = order.getCourierServiceType().getCourier();
             for (ShipmentEntity shipmentEntity : order.getShipments()) {
