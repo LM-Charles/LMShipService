@@ -5,11 +5,15 @@ package com.longmendelivery.service.initializer;
  */
 public class EnvironmentUtil {
     public static EnvironmentStage getStage() {
-        String ebsStage = System.getProperty("EBS_STAGE");
+        String ebsStage = System.getenv("EBS_STAGE");
         if (ebsStage == null || ebsStage.isEmpty()) {
             return EnvironmentStage.DESKTOP;
         }
-        return EnvironmentStage.valueOf(ebsStage);
+        return EnvironmentStage.valueOf(ebsStage.toUpperCase());
     }
 
+    public static String getApplicationPHPRoot() {
+        String applicationPHPRoot = System.getenv("APP_PHP_ROOT");
+        return applicationPHPRoot;
+    }
 }

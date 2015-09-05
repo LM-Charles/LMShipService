@@ -39,6 +39,13 @@ public class RSIShipmentClient implements ShipmentClient {
         }
 
         private void getRateForCourier() {
+            RSIScriptEngine engine = null;
+            try {
+                engine = new RSIScriptEngine();
+            } catch (DependentServiceException e) {
+                System.out.println("WARN GetAllRate failed to initialize some of the couriers.");
+                return;
+            }
             RateScriptGenerator generator = new RateScriptGenerator(type);
             generator.withSourceAddress(sourceAddress);
             generator.withDestinationAddress(destinationAddress);
@@ -52,21 +59,20 @@ public class RSIShipmentClient implements ShipmentClient {
                 }
             } catch (DependentServiceException e) {
                 System.out.println("Invalid query for shipment " + shipmentModel.toString());
+                return;
             }
         }
     }
 
-    private final RSIScriptEngine engine;
     private static final int MAX_THREAD_POOL = 16;
 
     public RSIShipmentClient() throws DependentServiceException {
-        this.engine = new RSIScriptEngine();
     }
 
     @Override
     public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, ShipmentModel shipmentModel) throws DependentServiceException {
         ConcurrentHashMap<CourierServiceType, BigDecimal> targetRateMap = new ConcurrentHashMap<>();
-        ExecutorService executor = Executors.newFixedThreadPool(Math.max(CourierType.ENABLED.size(), MAX_THREAD_POOL));
+        ExecutorService executor = Executors.newFixedThreadPool(Math.min(CourierType.ENABLED.size(), MAX_THREAD_POOL));
 
         for (CourierType type : CourierType.ENABLED) {
             executor.submit(new GetRateForCourierTask(sourceAddress, destinationAddress, shipmentModel, targetRateMap, type));
@@ -74,9 +80,9 @@ public class RSIShipmentClient implements ShipmentClient {
         executor.shutdown();
 
         try {
-            boolean isExecutorTimedOut = executor.awaitTermination(TIMEOUT, TimeUnit.SECONDS);
-            if (isExecutorTimedOut) {
-                System.out.println("WARN GetAllRate timed out for some of the couriers.");
+            boolean isExecutorComplete = executor.awaitTermination(TIMEOUT, TimeUnit.SECONDS);
+            if (!isExecutorComplete) {
+                System.out.println("WARN GetAllRate timed out for some of the couriers");
             }
         } catch (InterruptedException e) {
             System.out.println("WARN GetAllRate is interrupted for some of the couriers.");
@@ -87,6 +93,7 @@ public class RSIShipmentClient implements ShipmentClient {
 
     @Override
     public ShipmentTrackingModel getTracking(CourierType type, String trackingNumber) throws DependentServiceException, ResourceNotFoundException {
+        RSIScriptEngine engine = new RSIScriptEngine();
         TrackScriptGenerator generator = new TrackScriptGenerator(type);
         generator.withTrackingNumber(trackingNumber);
         String script = generator.generate();
