@@ -1,0 +1,27 @@
+lmdevo account: Hkduf4KUYSteWEKf
+lmprod account: 3nX5UStRBgZWtUKp
+order notifications send to donotreply@lmexpress.ca
+
+Access Key ID:
+AKIAII5SSQWJPYZNVF6A
+Secret Access Key:
+6ne2pqdDHX0Y3ZgenM8Wb270CZojRGO+3CPll9Yu
+
+
+Desktop Environmental Variable:
+
+EBS_STAGE                 desktop
+APP_PHP_ROOT              ./src/main/php/php-rocket-shipit/autoload.php
+JDBC_CONNECTION_STRING    jdbc:mysql://aa1ocjxj7xik49d.costzmua3eod.us-west-2.rds.amazonaws.com:3306/ebdb?user=lmdevo&password=Hkduf4KUYSteWEKf
+
+Devo Environmental Variable
+
+EBS_STAGE                 devo
+APP_PHP_ROOT              ./src/main/php/php-rocket-shipit/autoload.php
+JDBC_CONNECTION_STRING    jdbc:mysql://aa1ocjxj7xik49d.costzmua3eod.us-west-2.rds.amazonaws.com:3306/ebdb?user=lmdevo&password=Hkduf4KUYSteWEKf
+
+Prod Environmental Variable
+
+EBS_STAGE                 prod
+APP_PHP_ROOT              /var/lib/tomcat7/webapps/ROOT/WEB-INF/classes/php-rocket-shipit/autoload.php
+JDBC_CONNECTION_STRING    jdbc:mysql://aa1qdrqwg09ufhg.costzmua3eod.us-west-2.rds.amazonaws.com:3306/ebdb?user=lmprod&password=3nX5UStRBgZWtUKp
