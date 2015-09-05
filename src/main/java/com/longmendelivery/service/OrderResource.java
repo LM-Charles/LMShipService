@@ -25,6 +25,7 @@ import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Path("/order")
@@ -91,7 +92,7 @@ public class OrderResource {
 
             String handler = orderCreationRequest.getHandler();
             Set<OrderStatusHistoryEntity> orderStatus = new HashSet<>();
-            Set<ShipmentEntity> shipments = new HashSet<>();
+            List<ShipmentEntity> shipments = new ArrayList<>();
             BigDecimal estimatedCost = BigDecimal.ZERO;
             BigDecimal finalCost = BigDecimal.ZERO;
             BigDecimal declaredValue = orderCreationRequest.getDeclareValue();
@@ -101,7 +102,7 @@ public class OrderResource {
             String nickname = orderCreationRequest.getNickname();
             ShipOrderEntity shipOrderEntity = new ShipOrderEntity(null, client, orderDate, courierServiceType, shipments, estimatedCost, finalCost, fromAddress, toAddress, handler, orderStatus, declaredValue, insuranceValue, appointmentDate, appointmentSlotType, nickname);
 
-            Set<ShipmentEntity> shipmentEntities = new HashSet<>();
+            List<ShipmentEntity> shipmentEntities = new ArrayList<>();
             for (ShipmentModel shipmentModel : orderCreationRequest.getShipments()) {
                 String trackingNumber = null;
                 ShipmentEntity shipmentEntity = new ShipmentEntity(null, shipOrderEntity, shipmentModel.getHeight(), shipmentModel.getWidth(), shipmentModel.getLength(), shipmentModel.getWeight(), trackingNumber, shipmentModel.getGoodCategoryType(), shipmentModel.getShipmentPackageType(), shipmentModel.getDisplayLengthPreference(), shipmentModel.getDisplayWeightPreference());
