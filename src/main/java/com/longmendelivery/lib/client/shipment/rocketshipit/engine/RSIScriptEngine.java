@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.longmendelivery.lib.client.exceptions.DependentServiceException;
-import com.longmendelivery.service.initializer.EnvironmentStage;
 import com.longmendelivery.service.initializer.EnvironmentUtil;
 import php.java.script.InteractivePhpScriptEngineFactory;
 
@@ -18,11 +17,7 @@ import java.io.IOException;
  */
 public class RSIScriptEngine {
     public static String getRocketShipItPath() {
-        if (EnvironmentUtil.getStage().equals(EnvironmentStage.DESKTOP)) {
-            return "'./src/main/php/php-rocket-shipit/autoload.php'";
-        } else {
-            return "'/var/lib/tomcat7/webapps/ROOT/WEB-INF/classes/php-rocket-shipit/autoload.php'";
-        }
+        return EnvironmentUtil.getApplicationPHPRoot();
     }
 
     private javax.script.ScriptEngine engine;
@@ -32,7 +27,7 @@ public class RSIScriptEngine {
     public RSIScriptEngine() throws DependentServiceException {
         engine = new InteractivePhpScriptEngineFactory().getScriptEngine();
         objectMapper = new ObjectMapper();
-        this.executeScriptToString("require " + getRocketShipItPath());
+        this.executeScriptToString("require '" + getRocketShipItPath() + "'");
     }
 
     public <T> T executeScript(String script, TypeReference<T> valueTypeRef) throws DependentServiceException {

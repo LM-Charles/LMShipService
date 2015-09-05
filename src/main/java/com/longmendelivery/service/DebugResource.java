@@ -17,7 +17,6 @@ import javax.script.ScriptException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Map;
-import java.util.Properties;
 
 @Path("/debug")
 @Produces("application/json")
@@ -50,8 +49,8 @@ public class DebugResource {
     @Path("testEnvironment")
     @Consumes("text/plain")
     public Response testEnvironment(String variable) throws DependentServiceException, ScriptException {
-        Properties properties = System.getProperties();
-        return Response.status(Response.Status.OK).entity(properties).build();
+        Map<String, String> envVar = System.getenv();
+        return Response.status(Response.Status.OK).entity(envVar).build();
     }
 
     @GET
