@@ -14,9 +14,10 @@
 
 
 
+
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="${JDBC_CONNECTION_STRING}"/>
+        <property name="url" value="#{systemProperties['JDBC_CONNECTION_STRING']}"/>
     </bean>
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
