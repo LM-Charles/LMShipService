@@ -1,0 +1,36 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Deploy Prod - WARNING PRODUCTION" type="awselasticbeanstalk-deploy" factoryName="AWS ElasticBeanstalk Deployment" editBeforeRun="true" singleton="true" server-name="EB LMShipService Prod">
+    <deployment type="artifact" name="LMShipService:war">
+      <settings>
+        <option name="IAMRoles">
+          <list>
+            <option value="aws-elasticbeanstalk-ec2-role" />
+          </list>
+        </option>
+        <option name="availableEnvironments">
+          <list>
+            <EBEnvironmentWrapperImpl>
+              <option name="CName" value="lmshipservice-devo.elasticbeanstalk.com" />
+              <option name="environmentName" value="lmshipservice-devo" />
+              <option name="solutionStackName" value="64bit Amazon Linux 2015.03 v2.0.0 running Tomcat 7 Java 7" />
+              <option name="status" value="Ready" />
+            </EBEnvironmentWrapperImpl>
+            <EBEnvironmentWrapperImpl>
+              <option name="CName" value="lmshipservice-prod.elasticbeanstalk.com" />
+              <option name="environmentName" value="lmshipservice-prod" />
+              <option name="solutionStackName" value="64bit Amazon Linux 2015.03 v2.0.0 running Tomcat 7 Java 7" />
+              <option name="status" value="Ready" />
+            </EBEnvironmentWrapperImpl>
+          </list>
+        </option>
+        <option name="defaultDeploymentName" value="false" />
+        <option name="deploymentName" value="LMShipService" />
+        <option name="environmentName" value="lmshipservice-prod" />
+        <option name="region" value="US West (Oregon)" />
+        <option name="selectedIAMRole" value="aws-elasticbeanstalk-ec2-role" />
+        <option name="solutionStack" value="64bit Amazon Linux 2015.03 v2.0.0 running Tomcat 7 Java 7" />
+      </settings>
+    </deployment>
+    <method />
+  </configuration>
+</component>
