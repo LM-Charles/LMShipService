@@ -11,27 +11,34 @@ import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.order.AddressModel;
 import com.longmendelivery.service.model.order.DimensionModel;
 import com.longmendelivery.service.model.shipment.*;
+import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.*;
 
 /**
  * Created by  rabiddesireon 20/06/15.
  */
 public class RSIShipmentClient implements ShipmentClient {
-    private final RSIScriptEngine engine;
 
-    public RSIShipmentClient() throws DependentServiceException {
-        this.engine = new RSIScriptEngine();
-    }
+    public static final int TIMEOUT = 20;
 
-    @Override
-    public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, ShipmentModel shipmentModel) throws DependentServiceException {
-        Map<CourierServiceType, BigDecimal> rateMap = new TreeMap<>();
+    @AllArgsConstructor
+    private final class GetRateForCourierTask implements Runnable {
+        private AddressModel sourceAddress;
+        private AddressModel destinationAddress;
+        private ShipmentModel shipmentModel;
+        private ConcurrentMap<CourierServiceType, BigDecimal> rateMap;
+        private CourierType type;
 
-        for (CourierType type : CourierType.ENABLED) {
+        @Override
+        public void run() {
+            getRateForCourier();
+        }
+
+        private void getRateForCourier() {
             RateScriptGenerator generator = new RateScriptGenerator(type);
             generator.withSourceAddress(sourceAddress);
             generator.withDestinationAddress(destinationAddress);
@@ -47,8 +54,35 @@ public class RSIShipmentClient implements ShipmentClient {
                 System.out.println("Invalid query for shipment " + shipmentModel.toString());
             }
         }
+    }
 
-        return rateMap;
+    private final RSIScriptEngine engine;
+    private static final int MAX_THREAD_POOL = 16;
+
+    public RSIShipmentClient() throws DependentServiceException {
+        this.engine = new RSIScriptEngine();
+    }
+
+    @Override
+    public Map<CourierServiceType, BigDecimal> getAllRates(AddressModel sourceAddress, AddressModel destinationAddress, ShipmentModel shipmentModel) throws DependentServiceException {
+        ConcurrentHashMap<CourierServiceType, BigDecimal> targetRateMap = new ConcurrentHashMap<>();
+        ExecutorService executor = Executors.newFixedThreadPool(Math.max(CourierType.ENABLED.size(), MAX_THREAD_POOL));
+
+        for (CourierType type : CourierType.ENABLED) {
+            executor.submit(new GetRateForCourierTask(sourceAddress, destinationAddress, shipmentModel, targetRateMap, type));
+        }
+        executor.shutdown();
+
+        try {
+            boolean isExecutorTimedOut = executor.awaitTermination(TIMEOUT, TimeUnit.SECONDS);
+            if (isExecutorTimedOut) {
+                System.out.println("WARN GetAllRate timed out for some of the couriers.");
+            }
+        } catch (InterruptedException e) {
+            System.out.println("WARN GetAllRate is interrupted for some of the couriers.");
+        }
+
+        return targetRateMap;
     }
 
     @Override
