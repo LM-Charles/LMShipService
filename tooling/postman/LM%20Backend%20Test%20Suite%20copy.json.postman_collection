@@ -45,10 +45,13 @@
 		"d6aef4c2-726b-af50-53da-d3e74e5393f6",
 		"106a4885-8baa-92ff-09fe-e79542c5ce5c",
 		"e5b2683d-b767-14ef-8b27-7a84e300abb4",
+	  "30f4cffc-53bf-6f4a-24d6-7692e8dee402",
 		"fb301277-be3d-714a-1e22-5dc7bdcc6f74",
 		"ed0aa1a6-1a8a-4fc5-2bf3-6a5ce79f1d94",
 		"7e834d8c-bcf6-8b09-67da-61ecb7fa845c",
+	  "8bfd5539-5b01-77e0-db49-5058d2243992",
 		"a04a5772-eb15-d914-ff44-82f0295a84b2",
+	  "2fd5028c-6d51-1f81-ed81-5c1863a79518",
 		"d7e990c5-4e0c-f8fc-f9c0-14ff04488cb7",
 		"6b8b673c-e15e-a6ca-24cc-c58bedd9bf96",
 		"4c3020f5-3c3c-52d9-ffd0-e22af06c14a0",
@@ -115,14 +118,14 @@
 			"data": [],
 			"dataMode": "raw",
 			"version": 2,
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"FEDEX_GROUND\");\ntests[\"Body matches string\"] = responseBody.has(\"UPS_EXPRESS\");\ntests[\"Body matches string\"] = responseBody.has(\"LONGMEN_STANDARD\");",
+		  "tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"FEDEX_GROUND\");\ntests[\"Body matches string\"] = responseBody.has(\"UPS_EXPRESS\");\n",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1440731953076,
+		  "time": 1441491991627,
 			"name": "quote basic",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
-			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"REGULAR\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
+		  "rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"812 Wharf Street\",\n        \"city\" : \"Victoria\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V8W1T3\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"REGULAR\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
 		},
 		{
 			"headers": "",
@@ -261,6 +264,44 @@
 			"rawModeData": "{\n    \"client\" : 1,\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"Canada\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"Canada\"\n    },\n    \"courierServiceType\" : \"UPS_STANDARD\",\n    \"shipments\" : [\n        {\n            \"height\" : 1,\n            \"width\" : 1,\n            \"length\" : 1,\n            \"weight\" : 1,\n            \"nickName\" : \"mom's ring\",\n            \"shipmentPackageType\" : \"CUSTOM\"\n        },\n        {\n            \"height\" : 100,\n            \"width\" : 100,\n            \"length\" : 100,\n            \"weight\" : 100,\n            \"nickName\" : \"television\",\n            \"shipmentPackageType\" : \"SMALL\"\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"goodCategoryType\" : \"COSMETICS\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 150\n}"
 		},
 		{
+		  "id": "2fd5028c-6d51-1f81-ed81-5c1863a79518",
+		  "headers": "Content-Type: application/json\n",
+		  "url": "{{path}}/rest/courier/rate/",
+		  "preRequestScript": "",
+		  "pathVariables": {},
+		  "method": "POST",
+		  "data": [],
+		  "dataMode": "raw",
+		  "version": 2,
+		  "tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"LONGMEN_STANDARD\");\n",
+		  "currentHelper": "normal",
+		  "helperAttributes": {},
+		  "time": 1441492348084,
+		  "name": "quote box multiple vancouver",
+		  "description": "",
+		  "collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
+		  "rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        },\n                {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"LARGE\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
+		},
+	  {
+		"id": "30f4cffc-53bf-6f4a-24d6-7692e8dee402",
+		"headers": "Content-Type: application/json\n",
+		"url": "{{path}}/rest/courier/rate/",
+		"preRequestScript": "",
+		"pathVariables": {},
+		"method": "POST",
+		"data": [],
+		"dataMode": "raw",
+		"version": 2,
+		"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"LONGMEN_STANDARD\");\n",
+		"currentHelper": "normal",
+		"helperAttributes": {},
+		"time": 1441492326452,
+		"name": "quote multiple shipment vancouver",
+		"description": "",
+		"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
+		"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"REGULAR\"\n\n        },\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 30,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"REGULAR\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
+	  },
+	  {
 			"id": "35238093-7fc8-bb4f-3919-92460dc90a9c",
 			"headers": "",
 			"url": "{{path}}/rest/user/activation?phone=604782&email=right{{current_email_postfix}}@gmail.com&password=qwerty",
@@ -402,8 +443,8 @@
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"LONGMEN_STANDARD\");\ntests[\"Body matches string for insurance number\"] = responseBody.has(\"70\");",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1440732012036,
-			"name": "quote insurance max",
+		  "time": 1441492426531,
+		  "name": "quote insurance max vancouver",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1000,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        },\n                {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"LARGE\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10000,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
@@ -502,7 +543,7 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1440732004101,
-			"name": "quote insurance",
+		  "name": "quote insurance vancouver",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 10,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        },\n                {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"LARGE\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 1500,\n    \"insuranceValue\" : 1500,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
@@ -577,11 +618,11 @@
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"FEDEX_GROUND\");\ntests[\"Body matches handling\"] = responseBody.has(\"1,\");",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1440731984772,
+		  "time": 1441492099606,
 			"name": "quote box",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
-			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
+		  "rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"812 Wharf Street\",\n        \"city\" : \"Victoria\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V8W1T3\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
 		},
 		{
 			"id": "81cf87a8-5de6-6226-aa29-6e9eeab42fc6",
@@ -686,6 +727,25 @@
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb"
 		},
 		{
+		  "id": "8bfd5539-5b01-77e0-db49-5058d2243992",
+		  "headers": "Content-Type: application/json\n",
+		  "url": "{{path}}/rest/courier/rate/",
+		  "preRequestScript": "",
+		  "pathVariables": {},
+		  "method": "POST",
+		  "data": [],
+		  "dataMode": "raw",
+		  "version": 2,
+		  "tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"LONGMEN_STANDARD\");\ntests[\"Body matches handling\"] = responseBody.has(\"1,\");",
+		  "currentHelper": "normal",
+		  "helperAttributes": {},
+		  "time": 1441492342557,
+		  "name": "quote box vancouver",
+		  "description": "",
+		  "collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
+		  "rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
+		},
+	  {
 			"id": "8f4b53c1-ea5a-65b6-b8ad-c451b39c0b0a",
 			"headers": "",
 			"url": "{{path}}/rest/user/resetPassword?email=right{{current_email_postfix}}@gmail.com",
@@ -754,11 +814,11 @@
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"FEDEX_GROUND\");",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1440731989724,
+		  "time": 1441492175362,
 			"name": "quote box multiple",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
-			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        },\n                {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"LARGE\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
+		  "rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"812 Wharf Street\",\n        \"city\" : \"Victoria\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V8W1T3\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        },\n                {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"LARGE\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
 		},
 		{
 			"headers": "",
@@ -903,14 +963,14 @@
 			"data": [],
 			"dataMode": "raw",
 			"version": 2,
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"LONGMEN_STANDARD\");",
+		  "tests": "tests[\"Status code is 404\"] = responseCode.code === 404;\ntests[\"Body matches string\"] = responseBody.has(\"No valid rate available for the given order\");",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1440731998303,
-			"name": "quote special size",
+		  "time": 1441492393375,
+		  "name": "quote no valid result",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
-			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1000,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        },\n                {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"LARGE\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
+		  "rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"812 Wharf Street\",\n        \"city\" : \"Victoria\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V8W1T3\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1000,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        },\n                {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"LARGE\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
 		},
 		{
 			"id": "d94ac65f-7299-4a51-3455-cef8ccf54836",
@@ -981,11 +1041,11 @@
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"FEDEX_GROUND\");",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1440731960761,
+		  "time": 1441492046981,
 			"name": "quote multiple shipment",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
-			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"REGULAR\"\n\n        },\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 30,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"REGULAR\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
+		  "rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"812 Wharf Street\",\n        \"city\" : \"Victoria\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V8W1T3\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"REGULAR\"\n\n        },\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 30,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"REGULAR\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
 		},
 		{
 			"headers": "",
@@ -1056,11 +1116,11 @@
 			"data": [],
 			"dataMode": "raw",
 			"version": 2,
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"LONGMEN_STANDARD\");\n\ntests[\"Body matches string price\"] = responseBody.has(\"45\");",
+		  "tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"LONGMEN_STANDARD\");\ntests[\"Body matches string price\"] = responseBody.has(\"45\");",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1440731980396,
-			"name": "quote letter",
+		  "time": 1441492333158,
+		  "name": "quote letter vancouver",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 1,\n            \"width\" : 1,\n            \"length\" : 1,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"LETTER\",\n            \"goodCategoryType\" : \"DOCUMENT\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
@@ -1100,7 +1160,7 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1440731975470,
-			"name": "quote cosmetic",
+		  "name": "quote cosmetic vancouver",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"

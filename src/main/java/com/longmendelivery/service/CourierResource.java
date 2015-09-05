@@ -16,10 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Path("/courier")
 @Produces("application/json")
@@ -64,29 +61,13 @@ public class CourierResource {
             if (ShipmentPackageType.BOXES.contains(shipment.getShipmentPackageType())) {
                 numberOfBox++;
             }
-            Map<CourierServiceType, BigDecimal> packageRate = rsiClient.getAllRates(order.getFromAddress(), order.getToAddress(), shipment);
-            for (Map.Entry<CourierServiceType, BigDecimal> entry : packageRate.entrySet()) {
-                BigDecimal oldTotal = totalRates.get(entry.getKey());
-                if (oldTotal == null) {
-                    totalRates.put(entry.getKey(), entry.getValue());
-                    totalRateCount.put(entry.getKey(), 1);
-                } else {
-                    totalRates.put(entry.getKey(), oldTotal.add(entry.getValue()));
-                    totalRateCount.put(entry.getKey(), totalRateCount.get(entry.getKey()) + 1);
 
-                }
-            }
-
-            Map<CourierServiceType, BigDecimal> longmenRate = longmenShipmentClient.getAllRates(order.getFromAddress(), order.getToAddress(), shipment);
-            for (Map.Entry<CourierServiceType, BigDecimal> entry : longmenRate.entrySet()) {
-                BigDecimal oldTotal = totalRates.get(entry.getKey());
-                if (oldTotal == null) {
-                    totalRates.put(entry.getKey(), entry.getValue());
-                    totalRateCount.put(entry.getKey(), 1);
-                } else {
-                    totalRates.put(entry.getKey(), oldTotal.add(entry.getValue()));
-                    totalRateCount.put(entry.getKey(), totalRateCount.get(entry.getKey()) + 1);
-                }
+            if (isLocalDelivery(order.getFromAddress().getCity(), order.getToAddress().getCity())) {
+                Map<CourierServiceType, BigDecimal> longmenRate = longmenShipmentClient.getAllRates(order.getFromAddress(), order.getToAddress(), shipment);
+                mergeResult(totalRates, totalRateCount, longmenRate);
+            } else {
+                Map<CourierServiceType, BigDecimal> packageRate = rsiClient.getAllRates(order.getFromAddress(), order.getToAddress(), shipment);
+                mergeResult(totalRates, totalRateCount, packageRate);
             }
         }
 
@@ -99,6 +80,10 @@ public class CourierResource {
             // do not include those with only a partial rate
         }
 
+        if (rates.isEmpty()) {
+            return ResourceResponseUtil.generateNotFoundMessage("No valid rate available for the given shipment");
+        }
+
         BigDecimal handlingCharge = new BigDecimal(numberOfBox);
         RateEntryModel handling = new RateEntryModel("", "HANDLING", handlingCharge, "LM_DELIVERY", "HANDLING", DateTime.now());
         BigDecimal insuranceCharge = (order.getInsuranceValue().min(new BigDecimal("2000"))).multiply(new BigDecimal("0.035"));
@@ -107,5 +92,31 @@ public class CourierResource {
         RateResponseModel responseModel = new RateResponseModel(DateTime.now(), rates, handling, insurance);
 
         return Response.status(Response.Status.OK).entity(responseModel).build();
+    }
+
+    private boolean isLocalDelivery(String sourceCity, String destinationCity) {
+        Set<String> citiesInVan = new HashSet<>();
+        citiesInVan.add("VANCOUVER");
+        citiesInVan.add("NORTH VANCOUVER");
+        citiesInVan.add("WEST VANCOUVER");
+        citiesInVan.add("RICHMOND");
+        citiesInVan.add("SURREY");
+        citiesInVan.add("DELTA");
+        citiesInVan.add("BURNABY");
+        citiesInVan.add("COQUITLAM");
+        return (citiesInVan.contains(sourceCity.toUpperCase()) && citiesInVan.contains(destinationCity.toUpperCase()));
+    }
+
+    private void mergeResult(Map<CourierServiceType, BigDecimal> totalRates, Map<CourierServiceType, Integer> totalRateCount, Map<CourierServiceType, BigDecimal> packageRate) {
+        for (Map.Entry<CourierServiceType, BigDecimal> entry : packageRate.entrySet()) {
+            BigDecimal oldTotal = totalRates.get(entry.getKey());
+            if (oldTotal == null) {
+                totalRates.put(entry.getKey(), entry.getValue());
+                totalRateCount.put(entry.getKey(), 1);
+            } else {
+                totalRates.put(entry.getKey(), oldTotal.add(entry.getValue()));
+                totalRateCount.put(entry.getKey(), totalRateCount.get(entry.getKey()) + 1);
+            }
+        }
     }
 }
