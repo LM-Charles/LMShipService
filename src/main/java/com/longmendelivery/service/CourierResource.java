@@ -74,7 +74,7 @@ public class CourierResource {
         List<RateEntryModel> rates = new ArrayList<>();
         for (Map.Entry<CourierServiceType, BigDecimal> entry : totalRates.entrySet()) {
             if (totalRateCount.get(entry.getKey()) == order.getShipments().size()) {
-                RateEntryModel rateEntry = new RateEntryModel("", entry.getKey().getCategory(), entry.getValue(), entry.getKey().getCourier().name(), entry.getKey().name(), DateTime.now());
+                RateEntryModel rateEntry = new RateEntryModel(entry.getKey().getIconURL(), entry.getKey().getCategory(), entry.getValue(), entry.getKey().getCourier().name(), entry.getKey().name(), DateTime.now());
                 rates.add(rateEntry);
             }
             // do not include those with only a partial rate
@@ -85,9 +85,11 @@ public class CourierResource {
         }
 
         BigDecimal handlingCharge = new BigDecimal(numberOfBox);
-        RateEntryModel handling = new RateEntryModel("", "HANDLING", handlingCharge, "LM_DELIVERY", "HANDLING", DateTime.now());
+        CourierServiceType longmenHandling = CourierServiceType.LONGMEN_HANDLING;
+        RateEntryModel handling = new RateEntryModel(longmenHandling.getIconURL(), longmenHandling.getCategory(), handlingCharge, longmenHandling.getCourier().name(), longmenHandling.getDescription(), DateTime.now());
         BigDecimal insuranceCharge = (order.getInsuranceValue().min(new BigDecimal("2000"))).multiply(new BigDecimal("0.035"));
-        RateEntryModel insurance = new RateEntryModel("", "INSURANCE", insuranceCharge, "LM_DELIVERY", "INSURANCE", DateTime.now());
+        CourierServiceType longmenInsurance = CourierServiceType.LONGMEN_INSURANCE;
+        RateEntryModel insurance = new RateEntryModel(longmenInsurance.getIconURL(), longmenInsurance.getCategory(), insuranceCharge, longmenInsurance.getCourier().name(), longmenInsurance.getDescription(), DateTime.now());
 
         RateResponseModel responseModel = new RateResponseModel(DateTime.now(), rates, handling, insurance);
 
