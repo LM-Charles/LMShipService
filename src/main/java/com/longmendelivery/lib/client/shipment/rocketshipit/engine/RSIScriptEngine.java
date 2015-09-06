@@ -14,6 +14,8 @@ import javax.script.ScriptException;
 import java.io.IOException;
 
 /**
+ * This engine must be released explicitly by calling release().
+ *
  * Created by  rabiddesireon 21/06/15.
  */
 public class RSIScriptEngine {
