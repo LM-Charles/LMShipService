@@ -42,8 +42,13 @@ public class DebugResource {
     @Path("testPHP")
     @Consumes("text/plain")
     public Response testPHP(String script) throws DependentServiceException, ScriptException {
-        String message = new RSIScriptEngine().executeScriptToString(script);
-        return ResourceResponseUtil.generateOKMessage(message);
+        RSIScriptEngine engine = new RSIScriptEngine();
+        try {
+            String message = engine.executeScriptToString(script);
+            return ResourceResponseUtil.generateOKMessage(message);
+        } finally {
+            engine.release();
+        }
     }
 
     @GET
