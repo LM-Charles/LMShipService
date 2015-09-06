@@ -7,7 +7,6 @@ import com.longmendelivery.service.model.shipment.ShipmentModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
@@ -20,21 +19,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShipOrderModel implements DTOModel {
-    @NonNull
     private Integer id;
-    @NonNull
     private Integer client;
-    @NonNull
     private DateTime orderDate;
-    @NonNull
     private CourierServiceType courierServiceType;
-    @NonNull
     private List<ShipmentModel> shipments;
     private BigDecimal estimateCost;
     private BigDecimal finalCost;
-    @NonNull
     private AddressModel fromAddress;
-    @NonNull
     private AddressModel toAddress;
     private String handler;
     private BigDecimal declareValue;
