@@ -41,30 +41,37 @@ public class RSIShipmentClient implements ShipmentClient {
         private void getRateForCourier() {
             RSIScriptEngine engine = null;
             try {
+                System.out.println("Create Engine");
                 engine = new RSIScriptEngine();
+                System.out.println("Create Engine done: " + engine.toString());
             } catch (DependentServiceException e) {
                 System.out.println("WARN GetAllRate failed to initialize some of the couriers.");
                 return;
             }
-            RateScriptGenerator generator = new RateScriptGenerator(type);
-            generator.withSourceAddress(sourceAddress);
-            generator.withDestinationAddress(destinationAddress);
-            generator.withDimensions(new DimensionModel(shipmentModel.getLength(), shipmentModel.getWidth(), shipmentModel.getHeight(), shipmentModel.getWeight()));
-            String script = generator.generate();
+
             try {
-                List<RSIRateEntry> result = engine.executeScript(script, new TypeReference<List<RSIRateEntry>>() {
-                });
-                for (RSIRateEntry entry : result) {
-                    rateMap.put(CourierServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
+                RateScriptGenerator generator = new RateScriptGenerator(type);
+                generator.withSourceAddress(sourceAddress);
+                generator.withDestinationAddress(destinationAddress);
+                generator.withDimensions(new DimensionModel(shipmentModel.getLength(), shipmentModel.getWidth(), shipmentModel.getHeight(), shipmentModel.getWeight()));
+                String script = generator.generate();
+                try {
+                    List<RSIRateEntry> result = engine.executeScript(script, new TypeReference<List<RSIRateEntry>>() {
+                    });
+                    for (RSIRateEntry entry : result) {
+                        rateMap.put(CourierServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
+                    }
+                } catch (DependentServiceException e) {
+                    System.out.println("Invalid query for shipment " + shipmentModel.toString());
+                    return;
                 }
-            } catch (DependentServiceException e) {
-                System.out.println("Invalid query for shipment " + shipmentModel.toString());
-                return;
+            } finally {
+                engine.release();
             }
         }
     }
 
-    private static final int MAX_THREAD_POOL = 16;
+    private static final int MAX_THREAD_POOL = 2;
 
     public RSIShipmentClient() throws DependentServiceException {
     }
@@ -94,16 +101,20 @@ public class RSIShipmentClient implements ShipmentClient {
     @Override
     public ShipmentTrackingModel getTracking(CourierType type, String trackingNumber) throws DependentServiceException, ResourceNotFoundException {
         RSIScriptEngine engine = new RSIScriptEngine();
-        TrackScriptGenerator generator = new TrackScriptGenerator(type);
-        generator.withTrackingNumber(trackingNumber);
-        String script = generator.generate();
         try {
-            JsonNode result = engine.executeScriptToTree(script);
-            ShipmentTrackingModel responseModel = type.getTrackingResponseParser().parseResponse(result);
-            return responseModel;
-        } catch (DependentServiceException e) {
-            System.out.println("Invalid query for tracking " + type.toString() + " with " + trackingNumber);
-            return null;
+            TrackScriptGenerator generator = new TrackScriptGenerator(type);
+            generator.withTrackingNumber(trackingNumber);
+            String script = generator.generate();
+            try {
+                JsonNode result = engine.executeScriptToTree(script);
+                ShipmentTrackingModel responseModel = type.getTrackingResponseParser().parseResponse(result);
+                return responseModel;
+            } catch (DependentServiceException e) {
+                System.out.println("Invalid query for tracking " + type.toString() + " with " + trackingNumber);
+                return null;
+            }
+        } finally {
+            engine.release();
         }
     }
 }
