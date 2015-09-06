@@ -31,8 +31,10 @@
 		"aeb2d2e1-52bd-753a-51af-13729d75ab9f",
 		"8ae711b3-b321-030c-c870-c0f664d899e6",
 		"bbdc0509-d38d-75f8-bac3-b23ebe05352f",
-		"6cf8cc12-b9b6-c858-58e7-946019b5b298",
+		"775dc410-bfb6-5a24-c836-e4002f14f152",
 		"abb68f3d-6973-e8d2-933e-78b16a904b14",
+		"6cf8cc12-b9b6-c858-58e7-946019b5b298",
+		"af95670e-4c52-5396-0373-04699c11b684",
 		"e879089f-6e47-cee1-8904-30a2574ee4e5",
 		"2d82264d-8f9b-2123-f68c-41452d7af861",
 		"dee56a12-bd0e-2d32-4b7f-3701fd33cd0b",
@@ -121,11 +123,11 @@
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"FEDEX_GROUND\");\ntests[\"Body matches string\"] = responseBody.has(\"UPS_EXPRESS\");\ntests[\"Body matches string\"] = responseBody.has(\"62.18\");\n",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1441493038916,
+			"time": 1441493720833,
 			"name": "quote basic",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
-			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"812 Wharf Street\",\n        \"city\" : \"Victoria\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V8W1T3\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"REGULAR\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
+			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"812 Wharf Street\",\n        \"city\" : \"Victoria\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V8W1T3\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"REGULAR\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
 		},
 		{
 			"headers": "",
@@ -473,6 +475,7 @@
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb"
 		},
 		{
+			"id": "578534e5-707a-bef9-43ef-bf3ca6788c2c",
 			"headers": "Content-Type: text/plain\n",
 			"url": "{{path}}/rest/debug/testPHP",
 			"preRequestScript": "",
@@ -480,14 +483,15 @@
 			"method": "POST",
 			"data": [],
 			"dataMode": "raw",
+			"version": 2,
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
 			"currentHelper": "normal",
-			"helperAttributes": "{}",
+			"helperAttributes": {},
+			"time": 1441497655274,
 			"name": "debug php path",
 			"description": "",
-			"id": "578534e5-707a-bef9-43ef-bf3ca6788c2c",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
-			"rawModeData": "echo getcwd();"
+			"rawModeData": "$txt = \"Hello world!\";\n$x = 5;\n$y = 10.5;\necho $txt;"
 		},
 		{
 			"headers": "Content-Type: text/plain\n",
@@ -561,8 +565,8 @@
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Body matches string\"] = responseBody.has(\"UPS_STANDARD\");\n\ntests[\"Body matches string\"] = responseBody.has(\"television\");\n\ntry {\n  var data = JSON.parse(responseBody);\n  postman.setGlobalVariable(\"current_order\", data.id);\n} catch (e) {\n    tests[\"Able to populate order id\"] = false;\n}\n",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1440732948259,
-			"name": "order create $current_order",
+			"time": 1441494135999,
+			"name": "order create $current_order with date",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"Canada\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"Canada\"\n    },\n    \"courierServiceType\" : \"UPS_STANDARD\",\n    \"shipments\" : [\n        {\n            \"height\" : 1,\n            \"width\" : 1,\n            \"length\" : 1,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"COSMETICS\",\n            \"displayLengthPreference\" : \"CM\",\n            \"displayWeightPreference\" : \"KG\"\n\n        },\n        {\n            \"height\" : 100,\n            \"width\" : 100,\n            \"length\" : 100,\n            \"weight\" : 100,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"REGULAR\",\n            \"displayLengthPreference\" : \"INCH\",\n            \"displayWeightPreference\" : \"LB\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 150,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\",\n    \"nickname\" : \"mom's television\"\n}"
@@ -604,6 +608,25 @@
 			"description": "need to populate current_activation_code",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
 			"rawModeData": ""
+		},
+		{
+			"id": "775dc410-bfb6-5a24-c836-e4002f14f152",
+			"headers": "Content-Type: application/json\n",
+			"url": "{{path}}/rest/order?token=userToken",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Body matches string\"] = responseBody.has(\"UPS_STANDARD\");\n\ntests[\"Body matches string\"] = responseBody.has(\"television\");\n\ntry {\n  var data = JSON.parse(responseBody);\n  postman.setGlobalVariable(\"current_order\", data.id);\n} catch (e) {\n    tests[\"Able to populate order id\"] = false;\n}\n",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1441493819038,
+			"name": "order create $current_order default date",
+			"description": "",
+			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb",
+			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"Canada\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"Canada\"\n    },\n    \"courierServiceType\" : \"UPS_STANDARD\",\n    \"shipments\" : [\n        {\n            \"height\" : 1,\n            \"width\" : 1,\n            \"length\" : 1,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"COSMETICS\",\n            \"displayLengthPreference\" : \"CM\",\n            \"displayWeightPreference\" : \"KG\"\n\n        },\n        {\n            \"height\" : 100,\n            \"width\" : 100,\n            \"length\" : 100,\n            \"weight\" : 100,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"REGULAR\",\n            \"displayLengthPreference\" : \"INCH\",\n            \"displayWeightPreference\" : \"LB\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 150,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\",\n    \"nickname\" : \"mom's television\"\n}"
 		},
 		{
 			"id": "7e834d8c-bcf6-8b09-67da-61ecb7fa845c",
@@ -821,6 +844,7 @@
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"812 Wharf Street\",\n        \"city\" : \"Victoria\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V8W1T3\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"SMALL\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        },\n                {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"LARGE\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
 		},
 		{
+			"id": "abb68f3d-6973-e8d2-933e-78b16a904b14",
 			"headers": "",
 			"url": "{{path}}/rest/order/{{current_order}}?token=userToken",
 			"preRequestScript": "",
@@ -828,12 +852,13 @@
 			"method": "GET",
 			"data": [],
 			"dataMode": "params",
+			"version": 2,
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\n\ntry {\n  var data = JSON.parse(responseBody);\n  postman.setGlobalVariable(\"current_shipment\", data.shipments[0].id);\n} catch (e) {\n    tests[\"Able to populate shipment id\"] = false;\n}\n",
 			"currentHelper": "normal",
-			"helperAttributes": "{}",
+			"helperAttributes": {},
+			"time": 1441493841403,
 			"name": "order get 1 $current_shipment",
 			"description": "",
-			"id": "abb68f3d-6973-e8d2-933e-78b16a904b14",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb"
 		},
 		{
@@ -851,6 +876,24 @@
 			"description": "",
 			"rawModeData": "",
 			"id": "aeb2d2e1-52bd-753a-51af-13729d75ab9f",
+			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb"
+		},
+		{
+			"id": "af95670e-4c52-5396-0373-04699c11b684",
+			"headers": "",
+			"url": "{{path}}/rest/order/{{current_order}}?token=userToken",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches given date\"] = responseBody.has(\"1441493865852\");\n\ntry {\n  var data = JSON.parse(responseBody);\n  postman.setGlobalVariable(\"current_shipment\", data.shipments[0].id);\n} catch (e) {\n    tests[\"Able to populate shipment id\"] = false;\n}\n\n",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1441493988870,
+			"name": "order get 1 $current_shipment check date",
+			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb"
 		},
 		{
