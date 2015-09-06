@@ -9,17 +9,17 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum CourierServiceType {
-    UPS_STANDARD(CourierType.UPS, "UPS Standard", "11", "ECONOMY_COURIER", "/image/ups.png"),
-    UPS_WORLDWIDE_EXPEDITED(CourierType.UPS, "UPS Worldwide Expedited", "02", " MEDIUM_COURIER", "/image/ups.png"),
-    UPS_SAVER(CourierType.UPS, "UPS Saver", "13", "ECONOMY_COURIER", "/image/ups.png"),
-    UPS_EXPRESS(CourierType.UPS, "UPS Express", "01", "FASTEST_COURIER", "/image/ups.png"),
-    UPS_EXPRESS_EARLY_AM(CourierType.UPS, "UPS Express Early AM", "14", "FASTEST_COURIER", "/image/ups.png"),
+    UPS_STANDARD(CourierType.UPS, "UPS Standard", "11", "ECONOMY_COURIER", "/public/image/ups.png"),
+    UPS_WORLDWIDE_EXPEDITED(CourierType.UPS, "UPS Worldwide Expedited", "02", " MEDIUM_COURIER", "/public/image/ups.png"),
+    UPS_SAVER(CourierType.UPS, "UPS Saver", "13", "ECONOMY_COURIER", "/public/image/ups.png"),
+    UPS_EXPRESS(CourierType.UPS, "UPS Express", "01", "FASTEST_COURIER", "/public/image/ups.png"),
+    UPS_EXPRESS_EARLY_AM(CourierType.UPS, "UPS Express Early AM", "14", "FASTEST_COURIER", "/public/image/ups.png"),
 
-    FEDEX_GROUND(CourierType.FEDEX, "FedEx Ground", "FEDEX_GROUND", "ECONOMY_COURIER", "/image/fedex.jpg"),
-    LONGMEN_STANDARD(CourierType.LONGMEN, "Long Men Standard", "LONGMEN_STANDARD", "MEDIUM_COURIER", "/image/longmen.jpg"),
+    FEDEX_GROUND(CourierType.FEDEX, "FedEx Ground", "FEDEX_GROUND", "ECONOMY_COURIER", "/public/image/fedex.jpg"),
+    LONGMEN_STANDARD(CourierType.LONGMEN, "Long Men Standard", "LONGMEN_STANDARD", "MEDIUM_COURIER", "/public/image/longmen.jpg"),
 
-    LONGMEN_HANDLING(CourierType.LONGMEN, "Long Men Handling Fee", "LONGMEN_HANDLING", "HANDLING", "/image/longmen.jpg"),
-    LONGMEN_INSURANCE(CourierType.LONGMEN, "Long Men Insurance", "LONGMEN_INSURANCE", "INSURANCE", "/image/longmen.jpg");
+    LONGMEN_HANDLING(CourierType.LONGMEN, "Long Men Handling Fee", "LONGMEN_HANDLING", "HANDLING", "/public/image/longmen.jpg"),
+    LONGMEN_INSURANCE(CourierType.LONGMEN, "Long Men Insurance", "LONGMEN_INSURANCE", "INSURANCE", "/public/image/longmen.jpg");
 
     public static CourierServiceType getFromServiceCode(CourierType courier, String serviceCode) {
         for (CourierServiceType service : CourierServiceType.values()) {
