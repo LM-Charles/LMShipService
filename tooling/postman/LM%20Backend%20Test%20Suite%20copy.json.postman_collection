@@ -888,10 +888,10 @@
 			"data": [],
 			"dataMode": "params",
 			"version": 2,
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches given date\"] = responseBody.has(\"1441493865852\");\n\ntry {\n  var data = JSON.parse(responseBody);\n  postman.setGlobalVariable(\"current_shipment\", data.shipments[0].id);\n} catch (e) {\n    tests[\"Able to populate shipment id\"] = false;\n}\n\n",
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches given date\"] = responseBody.has(\"1335205544000\");\n\ntry {\n  var data = JSON.parse(responseBody);\n  postman.setGlobalVariable(\"current_shipment\", data.shipments[0].id);\n} catch (e) {\n    tests[\"Able to populate shipment id\"] = false;\n}\n\n",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1441493988870,
+			"time": 1441501009524,
 			"name": "order get 1 $current_shipment check date",
 			"description": "",
 			"collectionId": "df95128c-7dab-c694-ee2a-08ad49dce6eb"
