@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 public enum CourierServiceType {
     UPS_STANDARD(CourierType.UPS, "UPS Standard", "11", "ECONOMY_COURIER", "/public/image/ups.png"),
-    UPS_WORLDWIDE_EXPEDITED(CourierType.UPS, "UPS Worldwide Expedited", "02", " MEDIUM_COURIER", "/public/image/ups.png"),
+    UPS_WORLDWIDE_EXPEDITED(CourierType.UPS, "UPS Worldwide Expedited", "02", "MEDIUM_COURIER", "/public/image/ups.png"),
     UPS_SAVER(CourierType.UPS, "UPS Saver", "13", "ECONOMY_COURIER", "/public/image/ups.png"),
     UPS_EXPRESS(CourierType.UPS, "UPS Express", "01", "FASTEST_COURIER", "/public/image/ups.png"),
     UPS_EXPRESS_EARLY_AM(CourierType.UPS, "UPS Express Early AM", "14", "FASTEST_COURIER", "/public/image/ups.png"),
