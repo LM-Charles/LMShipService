@@ -85,6 +85,9 @@ public class OrderResource {
         try {
             AppUserEntity client = userStorage.get(userId);
             DateTime orderDate = orderCreationRequest.getOrderDate();
+            if (orderDate == null) {
+                orderDate = DateTime.now();
+            }
             CourierServiceType courierServiceType = orderCreationRequest.getCourierServiceType();
             AddressEntity fromAddress = mapper.map(orderCreationRequest.getFromAddress(), AddressEntity.class);
             AddressEntity toAddress = mapper.map(orderCreationRequest.getToAddress(), AddressEntity.class);
