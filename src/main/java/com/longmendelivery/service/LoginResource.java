@@ -47,7 +47,7 @@ public class LoginResource {
                 user.setApiToken(token);
                 userStorage.update(user);
             }
-            return Response.status(Response.Status.OK).entity(new LoginResponse(user.getId(), user.getApiToken())).build();
+            return Response.status(Response.Status.OK).entity(new LoginResponse(user.getId(), user.getApiToken(), user.getUserStatus())).build();
         } else {
             return ResourceResponseUtil.generateForbiddenMessage("Incorrect combination of email and password");
         }
