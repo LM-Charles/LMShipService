@@ -107,7 +107,7 @@ public class RSIShipmentClient implements ShipmentClient {
             String script = generator.generate();
             try {
                 JsonNode result = engine.executeScriptToTree(script);
-                ShipmentTrackingModel responseModel = type.getTrackingResponseParser().parseResponse(result);
+                ShipmentTrackingModel responseModel = type.getTrackingResponseParser().parseResponse(result, trackingNumber);
                 return responseModel;
             } catch (DependentServiceException e) {
                 System.out.println("Invalid query for tracking " + type.toString() + " with " + trackingNumber);
@@ -117,4 +117,16 @@ public class RSIShipmentClient implements ShipmentClient {
             engine.release();
         }
     }
+
+//    public String buildTrackingURL(CourierType courier, String trackingNumber){
+//        if(courier.equals(CourierType.FEDEX)){
+//            return "https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber="+ trackingNumber +"";
+//        } else if(courier.equals(CourierType.CANADA_POST)){
+//            return "https://www.canadapost.ca/cpotools/apps/track/personal/findByTrackNumber?trackingNumber="+trackingNumber+"";
+//        } else if (courier.equals(CourierType.UPS)){
+//            return "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums="+trackingNumber+"";
+//        } else {
+//            return null;
+//        }
+//    }
 }

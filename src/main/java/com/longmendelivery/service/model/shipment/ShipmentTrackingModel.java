@@ -17,4 +17,5 @@ public class ShipmentTrackingModel {
     String trackingCity;
     String trackingCountry;
     String trackingStatus;
+    String trackingURL;
 }
