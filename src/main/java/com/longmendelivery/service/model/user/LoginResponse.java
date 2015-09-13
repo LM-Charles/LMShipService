@@ -17,4 +17,5 @@ public class LoginResponse implements DTOModel {
     private Integer id;
     @NonNull
     private String apiToken;
+    private AppUserStatusType status;
 }
