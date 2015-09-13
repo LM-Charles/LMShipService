@@ -3,7 +3,6 @@ package com.longmendelivery.service.model.order;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 
@@ -20,6 +19,4 @@ public class RateEntryModel {
     private BigDecimal taxEstimate;
     private String courierName;
     private String serviceName;
-
-    private DateTime estimatedDelivery;
 }
