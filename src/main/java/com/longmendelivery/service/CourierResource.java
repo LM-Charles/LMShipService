@@ -23,6 +23,8 @@ import java.util.*;
 @Component
 public class CourierResource {
     private static final BigDecimal TAX_RATE = new BigDecimal("0.05");
+    public static final BigDecimal MAX_INSURANCE = new BigDecimal("2000");
+    public static final BigDecimal INSURANCE_COMMISSION = new BigDecimal("0.035");
     @Autowired
     private RSIShipmentClient rsiClient;
     @Autowired
@@ -54,6 +56,15 @@ public class CourierResource {
     @Path("/rate")
     public Response calculateRate(OrderCreationRequest order, @QueryParam("token") String token) throws DependentServiceException {
         ThrottleSecurity.getInstance().throttle(order.hashCode());
+        RateResponseModel responseModel = calculateRate(order);
+
+        if (responseModel == null) {
+            return ResourceResponseUtil.generateNotFoundMessage("no rate available");
+        }
+        return Response.status(Response.Status.OK).entity(responseModel).build();
+    }
+
+    public RateResponseModel calculateRate(OrderCreationRequest order) throws DependentServiceException {
         Map<CourierServiceType, BigDecimal> totalRates = new HashMap<>();
         Map<CourierServiceType, Integer> totalRateCount = new HashMap<>();
 
@@ -82,19 +93,19 @@ public class CourierResource {
         }
 
         if (rates.isEmpty()) {
-            return ResourceResponseUtil.generateNotFoundMessage("No valid rate available for the given shipment");
+            return null;
         }
 
         BigDecimal handlingCharge = new BigDecimal(numberOfBox);
         CourierServiceType longmenHandling = CourierServiceType.LONGMEN_HANDLING;
         RateEntryModel handling = new RateEntryModel(longmenHandling.getIconURL(), longmenHandling.getCategory(), handlingCharge, handlingCharge.multiply(TAX_RATE), longmenHandling.getCourier().name(), longmenHandling.getDescription(), DateTime.now());
-        BigDecimal insuranceCharge = (order.getInsuranceValue().min(new BigDecimal("2000"))).multiply(new BigDecimal("0.035"));
+        BigDecimal insuranceCharge = (order.getInsuranceValue().min(MAX_INSURANCE)).multiply(INSURANCE_COMMISSION);
         CourierServiceType longmenInsurance = CourierServiceType.LONGMEN_INSURANCE;
         RateEntryModel insurance = new RateEntryModel(longmenInsurance.getIconURL(), longmenInsurance.getCategory(), insuranceCharge, insuranceCharge.multiply(TAX_RATE), longmenInsurance.getCourier().name(), longmenInsurance.getDescription(), DateTime.now());
 
         RateResponseModel responseModel = new RateResponseModel(DateTime.now(), rates, handling, insurance);
 
-        return Response.status(Response.Status.OK).entity(responseModel).build();
+        return responseModel;
     }
 
     private boolean isLocalDelivery(String sourceCity, String destinationCity) {

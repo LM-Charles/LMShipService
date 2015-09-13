@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.joda.time.DateTime;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Created by desmond on 05/07/15.
@@ -29,4 +31,22 @@ public class RateResponseModel {
 
     @NonNull
     RateEntryModel insuranceRate;
+
+    public BigDecimal calculateTotalWithService(CourierServiceType courierServiceType) {
+        boolean isFound = false;
+        BigDecimal total = BigDecimal.ZERO;
+        for (RateEntryModel rate : courierRates) {
+            if (rate.getServiceName().equals(courierServiceType.name())) {
+                total = total.add(rate.getEstimate()).add(rate.getTaxEstimate());
+                isFound = true;
+            }
+        }
+
+        if (!isFound) throw new NoSuchElementException("The specified service is not available from this quote");
+
+        total = total.add(handlingRate.getEstimate()).add(handlingRate.getTaxEstimate());
+        total = total.add(insuranceRate.getEstimate()).add(insuranceRate.getTaxEstimate());
+
+        return total;
+    }
 }
