@@ -23,10 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Path("/order")
 @Produces("application/json")
@@ -40,6 +37,8 @@ public class OrderResource {
     @Autowired
     private ShipmentStorage shipmentStorage;
     private RSIShipmentClient shipmentClient;
+    @Autowired
+    private CourierResource courierResource;
 
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 
@@ -93,8 +92,18 @@ public class OrderResource {
             String handler = orderCreationRequest.getHandler();
             Set<OrderStatusHistoryEntity> orderStatus = new HashSet<>();
             List<ShipmentEntity> shipments = new ArrayList<>();
-            BigDecimal estimatedCost = BigDecimal.ZERO;
-            BigDecimal finalCost = BigDecimal.ZERO;
+            BigDecimal calculatedEstimateTotal = null;
+            try {
+                RateResponseModel rateResponseModel = courierResource.calculateRate(orderCreationRequest);
+                if (rateResponseModel == null) {
+                    return ResourceResponseUtil.generateNotFoundMessage("No courier service are available for this order, please verify with get quote");
+                }
+                calculatedEstimateTotal = rateResponseModel.calculateTotalWithService(orderCreationRequest.getCourierServiceType());
+            } catch (NoSuchElementException e) {
+                return ResourceResponseUtil.generateNotFoundMessage("The specified courier service " + orderCreationRequest.getCourierServiceType() + " is not available for this order, please verify with get quote");
+            }
+            BigDecimal estimatedCost = calculatedEstimateTotal;
+            BigDecimal finalCost = calculatedEstimateTotal;
             BigDecimal declaredValue = orderCreationRequest.getDeclareValue();
             BigDecimal insuranceValue = orderCreationRequest.getInsuranceValue();
             DateTime appointmentDate = orderCreationRequest.getAppointmentDate();
@@ -121,6 +130,8 @@ public class OrderResource {
             return Response.status(Response.Status.OK).entity(shipOrderModel).build();
         } catch (ResourceNotFoundException e) {
             return ResourceResponseUtil.generateBadRequestMessage("order client user not found");
+        } catch (DependentServiceException e) {
+            return ResourceResponseUtil.generateServiceMessage("order rating system is not temporarily not available for courier");
         }
     }
 
