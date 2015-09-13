@@ -19,7 +19,7 @@ public class FedexTrackingResponseParser implements TrackingResponseParser {
     //            'CountryCode' => "CN"
     //            'Residential' => "false"
     @Override
-    public ShipmentTrackingModel parseResponse(JsonNode jsonNode) throws DependentServiceException {
+    public ShipmentTrackingModel parseResponse(JsonNode jsonNode, String trackingNumber) throws DependentServiceException {
         System.out.println(jsonNode.toString());
         String status = jsonNode.at("/TrackReply/Notifications/Severity").asText();
         if (!status.equals("SUCCESS"))
@@ -29,7 +29,11 @@ public class FedexTrackingResponseParser implements TrackingResponseParser {
         String trackingCity = jsonNode.at("/TrackReply/TrackDetails/Events/0/Address/City").asText();
         String trackingCountry = jsonNode.at("/TrackReply/TrackDetails/Events/0/Address/CountryCode").asText();
         String trackingStatus = jsonNode.at("/TrackReply/TrackDetails/Events/0/EventDescription").asText();
-        ShipmentTrackingModel model = new ShipmentTrackingModel(pickUpDate, trackingDate, trackingCity, trackingCountry, trackingStatus);
+        ShipmentTrackingModel model = new ShipmentTrackingModel(pickUpDate, trackingDate, trackingCity, trackingCountry, trackingStatus, buildTrackingURL(trackingNumber));
         return model;
+    }
+
+    public String buildTrackingURL(String trackingNumber) {
+        return "http://www.fedex.com/Tracking?action=track&tracknumbers=" + trackingNumber + "";
     }
 }
