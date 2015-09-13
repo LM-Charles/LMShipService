@@ -3,14 +3,17 @@
  */
 var EditorWithState = React.createClass({
     getInitialState(){
-        var client = new DeferralEditorAjaxClient();
         return {
-            showUpdateOrderStatus: false
+            showUpdateOrderStatus: false,
+            parameter: {
+                orderId: null
+            }
         };
     },
     closeUpdateOrderStatus(){
         this.setState({
-            showUpdateOrderStatus: false
+            showUpdateOrderStatus: false,
+            order: null
         });
     },
     updateOrderStatusConfirm(){
@@ -21,12 +24,96 @@ var EditorWithState = React.createClass({
             showUpdateOrderStatus: true
         });
     },
-    render() {
-        var mockOrder = "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"Canada\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"Canada\"\n    },\n    \"serviceName\" : \"UPS_STANDARD\",\n    \"shipments\" : [\n        {\n            \"height\" : 1,\n            \"width\" : 1,\n            \"length\" : 1,\n            \"weight\" : 1,\n            \"nickName\" : \"mom's ring\",\n            \"shipmentPackageType\" : \"CUSTOM\"\t\n\t\t\t\"trackingNumber\": \"2314315423524352\",\n\t\t\t\"trackingDocumentType\": null,\n\t\t\t\"tracking\" : {\n\t\t\t  \"pickUpDate\": 1262908800000,\n\t\t\t  \"trackingDate\": 1263081600000,\n\t\t\t  \"trackingCity\": \"ANYTOWN\",\n\t\t\t  \"trackingCountry\": \"US\",\n\t\t\t  \"trackingStatus\": \"DELIVERED\"\n\t\t\t}\t\n        },\n        {\n            \"height\" : 100,\n            \"width\" : 100,\n            \"length\" : 100,\n            \"weight\" : 100,\n            \"nickName\" : \"television\",\n            \"shipmentPackageType\" : \"SMALL\"\t\n\t\t\t\"trackingNumber\": \"2314315423524352\",\n\t\t\t\"trackingDocumentType\": null,\n\t\t\t\"tracking\" : {\n\t\t\t  \"pickUpDate\": 1262908800000,\n\t\t\t  \"trackingDate\": 1263081600000,\n\t\t\t  \"trackingCity\": \"ANYTOWN\",\n\t\t\t  \"trackingCountry\": \"US\",\n\t\t\t  \"trackingStatus\": \"DELIVERED\"\n\t\t\t}\n        }\n    ],\n    \"handler\" : \"optional_handler_name\",\n    \"goodCategoryType\" : \"COSMETICS\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 150,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"MORNING\"\n\t\"status\" : {\n\t\t\"status\" : \"IN_TRANSIT\",\n\t\t\"description\" : \"Something about the overall status\"\n\t\t\"handler\" : \"can be used to store the person who made the update\"\n\t\t\"date\" : 1263110400000\n\t}\n}";
-        var mockShipment = "{\n            \"height\" : 1,\n            \"width\" : 1,\n            \"length\" : 1,\n            \"weight\" : 1,\n            \"nickName\" : \"mom's ring\",\n            \"shipmentPackageType\" : \"CUSTOM\"\t\n\t\t\t\"trackingNumber\": \"2314315423524352\",\n\t\t\t\"trackingDocumentType\": null,\n\t\t\t\"tracking\" : {\n\t\t\t  \"pickUpDate\": 1262908800000,\n\t\t\t  \"trackingDate\": 1263081600000,\n\t\t\t  \"trackingCity\": \"ANYTOWN\",\n\t\t\t  \"trackingCountry\": \"US\",\n\t\t\t  \"trackingStatus\": \"DELIVERED\"\n\t\t\t}\t\n        }";
-        var queryShipmentButton = (
-            <Button bsStyle="primary">Query Shipment</Button>
+    onClickQueryOrder(){
+        var result = new AjaxClient().ajaxLoadOrder(this.refs.orderId.getValue());
+        console.log(JSON.stringify(result));
+        this.setState({
+            order: result
+        })
+    },
+    onClickUpdateTracking(sequence){
+        var result = new AjaxClient().ajaxSaveTracking(this.state.order.id, this.state.order.shipments[sequence].id, this.refs["tracking" + sequence].getValue());
+        this.onClickQueryOrder();
+    },
+    onClickUpdateDimension(sequence){
+        var result = new AjaxClient().ajaxUpdateDimension(this.state.order.id, this.state.order.shipments[sequence].id,
+            this.refs["length" + sequence].getValue(),
+            this.refs["width" + sequence].getValue(),
+            this.refs["height" + sequence].getValue(),
+            this.refs["packaging" + sequence].getValue(),
+            this.refs["weight" + sequence].getValue()
         );
+        this.onClickQueryOrder();
+    },
+    generateShipmentLines(){
+        var rows = [];
+        if (this.state.order == null) {
+            return [];
+        }
+        for (var i = 0; i < this.state.order.shipments.length; i++) {
+            console.log("GO " + i + " " + this.state.order.shipments[i]);
+            var rowHeader = ">> Shipment #" + i;
+            rows.push(
+                <Row>
+                    <Col mdOffset="1" md="11">
+                        <div>
+                            <Panel collapsible header={rowHeader} eventKey="1">
+                        <textarea rows="15" value={JSON.stringify(this.state.order.shipments[i], null, 4)}>
+                        </textarea>
+                                <Input label='Update Tracking Number'>
+                                    <Input type='text' ref={'tracking' + i} placeholder='Enter Tracking Number'/>
+                                    <Button onClick={this.onClickUpdateTracking.bind(null, i)}>Update Tracking</Button>
+                                </Input>
+                                <Input label='Update Dimension'>
+                                    <Row>
+                                        <Col md="4"><Input ref={'length' + i} type='text' placeholder='Length'/></Col>
+                                        <Col md="4"><Input ref={'width' + i} type='text' placeholder='Width'/></Col>
+                                        <Col md="4"><Input ref={'height' + i} type='text' placeholder='Height'/></Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md="12">
+                                            <Input ref={'packaging' + i} type='select' placeholder='Packaging'>
+                                                <option value='CUSTOM'>Self Package</option>
+                                                <option value='SMALL'>Small Box</option>
+                                                <option value='MEDIUM'>Medium Box</option>
+                                                <option value='LARGE'>Large Box</option>
+                                            </Input>
+                                        </Col>
+                                        <Col md="12"> <Input ref={'weight' + i} type='text' placeholder='Weight'/></Col>
+                                    </Row>
+                                    <Button onClick={this.onClickUpdateDimension.bind(null, i)}>Update
+                                        Dimension</Button>
+                                </Input>
+                            </Panel>
+                        </div>
+                    </Col>
+                </Row>
+            )
+        }
+        return rows;
+    },
+    generateOrder(){
+        if (this.state.order == null) {
+            return null;
+        }
+        var orderHeader = ">> Order Details for " + this.state.order.id;
+
+        return (
+            <Row>
+                <Col md="12">
+                    <Panel collapsible header={{orderHeader}}>
+                            <textarea value={JSON.stringify(this.state.order, null, 4)} rows="30">
+                            </textarea>
+                    </Panel>
+                </Col>
+            </Row>
+        )
+    },
+    render() {
+        var queryShipmentButton = (
+            <Button bsStyle="primary" onClick={this.onClickQueryOrder}>Query Order</Button>
+        );
+
 
         return (
             <div className="component-EditorWithState-container">
@@ -36,57 +123,16 @@ var EditorWithState = React.createClass({
                     <Col md="6"><Input type='password' label='Password'/></Col>
                 </Row>
                 <Row>
-                    <Col md="12"> <Input type='text' label='Search for Order by ID' placeholder='Enter Order ID'
-                                         buttonAfter={queryShipmentButton}/></Col>
+                    <Col md="12"> <Input type='text' ref='orderId' label='Search for Order by ID'
+                                         placeholder='Enter Order ID' buttonAfter={queryShipmentButton}/></Col>
                 </Row>
-                <Row>
-                    <Col md="12">
-                        <Panel collapsible header="&#9654; Order Details for #11241498">
-                            <textarea rows="20">
-                                {mockOrder}
-                            </textarea>
-                        </Panel>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col mdOffset="1" md="11">
-                        <div>
-                            <Panel collapsible header="&#9654; Shipment #1: Mom's Ring" eventKey="1">
-                        <textarea rows="15">
-                                {mockShipment}
-                        </textarea>
-                                <Input label='Update Tracking Number'>
-                                    <Input type='text' placeholder='Enter Tracking Number'/>
-                                    <Button>Update Tracking</Button>
-                                </Input>
-                                <Input label='Update Dimension'>
-                                    <Row>
-                                        <Col md="4"><Input type='text' placeholder='Length'/></Col>
-                                        <Col md="4"><Input type='text' placeholder='Width'/></Col>
-                                        <Col md="4"><Input type='text' placeholder='Height'/></Col>
-                                    </Row>
-                                    <Row>
-                                        <Col md="12">
-                                            <Input type='select' placeholder='Packaging'>
-                                                <option value='CUSTOM'>Self Package</option>
-                                                <option value='SMALL'>Small Box</option>
-                                                <option value='MEDIUM'>Medium Box</option>
-                                                <option value='LARGE'>Large Box</option>
-                                            </Input>
-                                        </Col>
-                                        <Col md="12"> <Input type='text' placeholder='Weight'/></Col>
-                                    </Row>
-                                    <Button>Update Dimension</Button>
-                                </Input>
-                            </Panel>
-                        </div>
-                    </Col>
-                </Row>
+                {this.generateOrder()}
+                {this.generateShipmentLines()}
                 <Row>
                     <Col md="12">
                         <Panel>
                             <Row>
-                                <Col md="2"><Button className="fill">Re-calculate Rate...</Button></Col>
+                                <Col md="2"><Button className="fill">Re-calculate Rate</Button></Col>
                                 <Col md="2"><Button className="fill" onClick={this.openUpdateOrderStatus}>Update
                                     Status...</Button></Col>
                             </Row>
