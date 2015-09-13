@@ -21,7 +21,7 @@ public class UPSTrackingResponseParser implements TrackingResponseParser {
 //            'PostalCode' => "30340"
 //            'CountryCode' => "US"
     @Override
-    public ShipmentTrackingModel parseResponse(JsonNode jsonNode) throws DependentServiceException {
+    public ShipmentTrackingModel parseResponse(JsonNode jsonNode, String trackingNumber) throws DependentServiceException {
         String status = jsonNode.at("/TrackResponse/Response/ResponseStatusDescription").asText();
         if (!status.equals("Success")) {
             System.out.println(jsonNode.toString());
@@ -36,7 +36,11 @@ public class UPSTrackingResponseParser implements TrackingResponseParser {
         String trackingCountry = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/ActivityLocation/Address/CountryCode").asText();
 
         String trackingStatus = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/Status/StatusType/Description").asText();
-        ShipmentTrackingModel model = new ShipmentTrackingModel(pickUpDate, trackingDate, trackingCity, trackingCountry, trackingStatus);
+        ShipmentTrackingModel model = new ShipmentTrackingModel(pickUpDate, trackingDate, trackingCity, trackingCountry, trackingStatus, buildTrackingURL(trackingNumber));
         return model;
+    }
+
+    public String buildTrackingURL(String trackingNumber) {
+        return "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=" + trackingNumber + "";
     }
 }
