@@ -86,7 +86,7 @@ public class CourierResource {
         List<RateEntryModel> rates = new ArrayList<>();
         for (Map.Entry<CourierServiceType, BigDecimal> entry : totalRates.entrySet()) {
             if (totalRateCount.get(entry.getKey()) == order.getShipments().size()) {
-                RateEntryModel rateEntry = new RateEntryModel(entry.getKey().getIconURL(), entry.getKey().getCategory(), entry.getValue(), entry.getValue().multiply(TAX_RATE), entry.getKey().getCourier().name(), entry.getKey().name(), DateTime.now());
+                RateEntryModel rateEntry = new RateEntryModel(entry.getKey().getIconURL(), entry.getKey().getCategory(), entry.getValue(), entry.getValue().multiply(TAX_RATE), entry.getKey().getCourier().name(), entry.getKey().name());
                 rates.add(rateEntry);
             }
             // do not include those with only a partial rate
@@ -98,10 +98,10 @@ public class CourierResource {
 
         BigDecimal handlingCharge = new BigDecimal(numberOfBox);
         CourierServiceType longmenHandling = CourierServiceType.LONGMEN_HANDLING;
-        RateEntryModel handling = new RateEntryModel(longmenHandling.getIconURL(), longmenHandling.getCategory(), handlingCharge, handlingCharge.multiply(TAX_RATE), longmenHandling.getCourier().name(), longmenHandling.getDescription(), DateTime.now());
+        RateEntryModel handling = new RateEntryModel(longmenHandling.getIconURL(), longmenHandling.getCategory(), handlingCharge, handlingCharge.multiply(TAX_RATE), longmenHandling.getCourier().name(), longmenHandling.getDescription());
         BigDecimal insuranceCharge = (order.getInsuranceValue().min(MAX_INSURANCE)).multiply(INSURANCE_COMMISSION);
         CourierServiceType longmenInsurance = CourierServiceType.LONGMEN_INSURANCE;
-        RateEntryModel insurance = new RateEntryModel(longmenInsurance.getIconURL(), longmenInsurance.getCategory(), insuranceCharge, insuranceCharge.multiply(TAX_RATE), longmenInsurance.getCourier().name(), longmenInsurance.getDescription(), DateTime.now());
+        RateEntryModel insurance = new RateEntryModel(longmenInsurance.getIconURL(), longmenInsurance.getCategory(), insuranceCharge, insuranceCharge.multiply(TAX_RATE), longmenInsurance.getCourier().name(), longmenInsurance.getDescription());
 
         RateResponseModel responseModel = new RateResponseModel(DateTime.now(), rates, handling, insurance);
 
