@@ -8,5 +8,6 @@ import com.longmendelivery.service.model.shipment.ShipmentTrackingModel;
  * Created by  rabiddesireon 15/08/15.
  */
 public interface TrackingResponseParser {
-    ShipmentTrackingModel parseResponse(JsonNode jsonNode) throws DependentServiceException;
+    ShipmentTrackingModel parseResponse(JsonNode jsonNode, String trackingNumber) throws DependentServiceException;
+
 }
