@@ -32,4 +32,8 @@ public class ResourceResponseUtil {
     public static Response generateConflictMessage(String message) {
         return Response.status(Response.Status.CONFLICT).entity(new GeneralMessageResponseModel(message)).build();
     }
+
+    public static Response generateServiceMessage(String message) {
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new GeneralMessageResponseModel(message)).build();
+    }
 }

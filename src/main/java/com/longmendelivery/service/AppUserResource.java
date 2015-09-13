@@ -185,7 +185,7 @@ public class AppUserResource {
             try {
                 twilioSMSClient.sendSMS(user.getPhone(), smsBody);
             } catch (DependentServiceRequestException e) {
-                return ResourceResponseUtil.generateBadRequestMessage("Unable to activate due to invalid phone number: " + phone);
+                return ResourceResponseUtil.generateBadRequestMessage("Unable to activate due to invalid phone number: " + user.getPhone());
             }
             return ResourceResponseUtil.generateOKMessage("Register verification sent for " + user.getEmail() + " to " + user.getPhone());
         } catch (ResourceNotFoundException e) {
