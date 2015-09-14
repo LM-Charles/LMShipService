@@ -41,12 +41,15 @@ function AjaxClient() {
 
     this.ajaxUpdateDimension = function (orderId, shipmentId, length, width, height, packaging, weight) {
         var tracking = {
-            "trackingNumber": trackingNumber
+            "length": length,
+            "width": width,
+            "height": height,
+            "weight": weight
         };
         var settings = {
             "async": false,
             "crossDomain": true,
-            "url": "/rest/order/" + orderId + "/tracking/" + shipmentId + "?token=userToken",
+            "url": "/rest/order/" + orderId + "/dimension/" + shipmentId + "?packageType=" + packaging + "&token=userToken",
             "data": JSON.stringify(tracking),
             "datatype": "json",
             Accept: "application/json",

@@ -225,4 +225,26 @@ public class OrderResource {
             return ResourceResponseUtil.generateNotFoundMessage("shipment " + shipmentId + " does not exist");
         }
     }
+
+    @POST
+    @Path("/{orderId}/dimension/{shipmentId}")
+    @Transactional(readOnly = false)
+    public Response setDimension(@PathParam("orderId") Integer orderId, @PathParam("shipmentId") Integer shipmentId, DimensionModel dimension, @QueryParam("packageType") ShipmentPackageType shipmentPackageType, @QueryParam("token") String token) {
+        TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE);
+
+        try {
+            ShipmentEntity shipmentEntity = shipmentStorage.get(shipmentId);
+            shipmentEntity.setWeight(dimension.getWeight());
+            shipmentEntity.setHeight(dimension.getHeight());
+            shipmentEntity.setLength(dimension.getLength());
+            shipmentEntity.setWidth(dimension.getWidth());
+            shipmentEntity.setShipmentPackageType(shipmentPackageType);
+
+            shipmentStorage.update(shipmentEntity);
+            ShipmentModel shipmentModel = mapper.map(shipmentEntity, ShipmentModel.class);
+            return Response.status(Response.Status.OK).entity(shipmentModel).build();
+        } catch (ResourceNotFoundException e) {
+            return ResourceResponseUtil.generateNotFoundMessage("shipment " + shipmentId + " does not exist");
+        }
+    }
 }
