@@ -1,7 +1,6 @@
 package com.longmendelivery.lib.client.shipment.rocketshipit.script;
 
 import com.longmendelivery.service.model.shipment.CourierType;
-import org.apache.commons.lang.NotImplementedException;
 
 import java.util.EnumSet;
 
@@ -34,7 +33,7 @@ public class TrackScriptGenerator {
 
     protected void validate(CourierType courierType) {
         if (!SUPPORTED.contains(courierType)) {
-            throw new NotImplementedException("RocketShip tracking does not support courier: " + courierType);
+            throw new IllegalArgumentException("RocketShip tracking does not support courier: " + courierType);
         }
     }
 

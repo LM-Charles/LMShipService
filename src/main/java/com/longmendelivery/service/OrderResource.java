@@ -172,8 +172,12 @@ public class OrderResource {
             for (ShipmentEntity shipmentEntity : order.getShipments()) {
                 ShipmentWithTrackingModel shipmentWithTrackingModel = mapper.map(shipmentEntity, ShipmentWithTrackingModel.class);
                 if (shipmentEntity.getTrackingNumber() != null) {
-                    ShipmentTrackingModel shipmentTrackingModel = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
-                    shipmentWithTrackingModel.setTracking(shipmentTrackingModel);
+                    try {
+                        ShipmentTrackingModel shipmentTrackingModel = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
+                        shipmentWithTrackingModel.setTracking(shipmentTrackingModel);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("WARN: one of the shipment for " + shipmentEntity.getId() + " cannot be tracked.");
+                    }
                 }
                 orderWithStatusModel.getShipments().add(shipmentWithTrackingModel);
             }
