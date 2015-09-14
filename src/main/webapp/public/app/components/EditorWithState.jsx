@@ -101,6 +101,7 @@ var EditorWithState = React.createClass({
         var orderId = this.state.order == null ? "??" : this.state.order.id;
         var order = this.state.order == null ? "Query for Order first" : deepClone(this.state.order);
         delete order.shipments;
+        delete order.orderStatusModel;
         var orderStatusModel = this.state.order == null ? "Query for Order first" : this.state.order.orderStatusModel;
         var orderHeader = ">> Order Details for #" + orderId;
 
