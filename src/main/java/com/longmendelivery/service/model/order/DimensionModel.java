@@ -1,36 +1,18 @@
 package com.longmendelivery.service.model.order;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Created by  rabiddesireon 04/06/15.
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DimensionModel {
-    private final Integer length;
-    private final Integer width;
-    private final Integer height;
-
-    private final Integer weight;
-
-
-    public DimensionModel(Integer length, Integer width, Integer height, Integer weight) {
-        this.length = length;
-        this.width = width;
-        this.height = height;
-        this.weight = weight;
-    }
-
-    public Integer getLength() {
-        return length;
-    }
-
-    public Integer getWidth() {
-        return width;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
+    private Integer length;
+    private Integer width;
+    private Integer height;
+    private Integer weight;
 }
