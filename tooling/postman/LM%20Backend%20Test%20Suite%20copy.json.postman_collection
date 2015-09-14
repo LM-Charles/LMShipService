@@ -45,6 +45,7 @@
 		"c96957bd-989f-2675-ae43-3d5e4255cf68",
 		"d5fa70c6-d3f2-5d02-bd2b-241012eb6ce6",
 		"708cdbb0-a496-f8e4-773f-bb8bb888ae08",
+	  "19f147c4-755b-62d8-a919-99efad37a1fb",
 		"b6e7ff6c-7ab9-97c3-a98d-925693996a00",
 		"b408a965-98ed-b270-7632-a693e5ae7297",
 		"2a348a39-061a-e133-b797-6ad69e767818",
@@ -63,8 +64,7 @@
 		"e00477d2-25dd-d3ed-e840-85cdcbfb6ca9",
 		"c84d44a7-60dd-1fd9-1fe4-14bb1320fd74",
 		"b2d25ec9-e190-65f3-7e78-439cd7d38143",
-		"503510af-1b43-0d61-4d2e-c172603796da",
-		"fdba12ca-949a-fb57-f243-afef35582c37"
+	  "503510af-1b43-0d61-4d2e-c172603796da"
 	],
 	"folders": [],
 	"timestamp": 0,
@@ -131,6 +131,25 @@
 			"rawModeData": "{\n    \"client\" : \"{{current_user}}\",\n    \"orderDate\" : \"2012-04-23T18:25:43.511Z\",\n    \"fromAddress\" : {\n        \"address\" : \"8000 Delsom Way\",\n        \"address2\" : \"unit 10\",\n        \"city\" : \"Delta\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V4C0A9\",\n        \"country\" : \"CA\"\n    },\n    \"toAddress\" : {\n        \"address\" : \"9188 Hemlock Drive\",\n        \"city\" : \"Richmond\",\n        \"province\" : \"BC\",\n        \"postal\" : \"V7C2X4\",\n        \"country\" : \"CA\"\n    },\n    \"shipments\" : [\n        {\n            \"height\" : 10,\n            \"width\" : 10,\n            \"length\" : 10,\n            \"weight\" : 1,\n            \"shipmentPackageType\" : \"CUSTOM\",\n            \"goodCategoryType\" : \"COSMETICS\"\n\n        }\n    ],\n    \"handler\" : \"optional_handler\",\n    \"declareValue\" : 100,\n    \"insuranceValue\" : 10,\n    \"appointmentDate\" : 1263110400000,\n    \"appointmentSlotType\" : \"SLOT_1\"\n}"
 		},
 		{
+		  "id": "19f147c4-755b-62d8-a919-99efad37a1fb",
+		  "headers": "Content-Type: application/json\n",
+		  "url": "{{path}}/rest/order/{{current_order}}/dimension/{{current_shipment}}?packageType=SMALL&token=userToken",
+		  "preRequestScript": "",
+		  "pathVariables": {},
+		  "method": "POST",
+		  "data": [],
+		  "dataMode": "raw",
+		  "version": 2,
+		  "tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
+		  "currentHelper": "normal",
+		  "helperAttributes": {},
+		  "time": 1442192278863,
+		  "name": "shipment add shipment",
+		  "description": "",
+		  "collectionId": "cbb92ce9-3a2a-8667-fa42-b955255f3bcf",
+		  "rawModeData": "{\n  \"length\" : \"1\",\n  \"width\": \"2\",\n  \"height\": \"3\",\n  \"weight\": \"4\"\n}"
+		},
+	  {
 			"id": "1e3c8f52-098d-d004-7c58-b70a848167c9",
 			"headers": "Content-Type: application/json\n",
 			"url": "{{path}}/rest/courier/rate/",
@@ -428,7 +447,7 @@
 			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body matches string\"] = responseBody.has(\"FEDEX_GROUND\");\ntests[\"Body matches handling\"] = responseBody.has(\"1,\");",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1441502774455,
+		  "time": 1442170731869,
 			"name": "quote box",
 			"description": "",
 			"collectionId": "cbb92ce9-3a2a-8667-fa42-b955255f3bcf",
@@ -1228,24 +1247,6 @@
 			"name": "users get 1 admin $current_code",
 			"description": "also populate current_code",
 			"id": "ec67ff25-00ef-06e4-4e3a-7ad101536574",
-			"collectionId": "cbb92ce9-3a2a-8667-fa42-b955255f3bcf"
-		},
-		{
-			"id": "fdba12ca-949a-fb57-f243-afef35582c37",
-			"headers": "",
-			"url": "{{path}}/rest/user/{{current_user}}/admin",
-			"preRequestScript": "",
-			"pathVariables": {},
-			"method": "GET",
-			"data": [],
-			"dataMode": "params",
-			"version": 2,
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;",
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1442170165773,
-			"name": "user get copy copy",
-			"description": "",
 			"collectionId": "cbb92ce9-3a2a-8667-fa42-b955255f3bcf"
 		}
 	]
