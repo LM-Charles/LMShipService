@@ -109,7 +109,7 @@ var EditorWithState = React.createClass({
             <Row>
                 <Col md="12">
                     <Panel collapsible header={{orderHeader}}>
-                            <textarea value={JSON.stringify(order, null, 4)} rows="37">
+                            <textarea value={JSON.stringify(order, null, 4)} rows="31">
                             </textarea>
                             <textarea value={JSON.stringify(orderStatusModel, null, 4)} rows="6">
                             </textarea>
