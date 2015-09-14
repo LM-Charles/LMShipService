@@ -13,10 +13,11 @@ var EditorWithState = React.createClass({
     closeUpdateOrderStatus(){
         this.setState({
             showUpdateOrderStatus: false,
-            order: null
         });
     },
     updateOrderStatusConfirm(){
+        var result = new AjaxClient().ajaxUpdateStatus(this.state.order.id, this.refs.newStatus.getValue(), this.refs.newStatusDescription.getValue());
+        this.onClickQueryOrder();
         this.closeUpdateOrderStatus();
     },
     openUpdateOrderStatus(){
@@ -59,6 +60,7 @@ var EditorWithState = React.createClass({
                         <div>
                             <Panel collapsible header={rowHeader} eventKey="1">
                         <textarea rows="15" value={JSON.stringify(this.state.order.shipments[i], null, 4)}>
+
                         </textarea>
                                 <Input label='Update Tracking Number'>
                                     <Input type='text' ref={'tracking' + i} placeholder='Enter Tracking Number'/>
@@ -93,20 +95,60 @@ var EditorWithState = React.createClass({
         return rows;
     },
     generateOrder(){
-        if (this.state.order == null) {
-            return null;
-        }
-        var orderHeader = ">> Order Details for " + this.state.order.id;
+        var orderId = this.state.order == null ? "??" : this.state.order.id;
+        var order = this.state.order == null ? "Query for Order first" : this.state.order;
+
+        var orderStatusModel = this.state.order == null ? "Query for Order first" : this.state.order.orderStatusModel;
+        var orderHeader = ">> Order Details for " + orderId;
 
         return (
             <Row>
                 <Col md="12">
                     <Panel collapsible header={{orderHeader}}>
-                            <textarea value={JSON.stringify(this.state.order, null, 4)} rows="30">
+                            <textarea value={JSON.stringify(order, null, 4)} rows="40">
+                            </textarea>
+                            <textarea value={JSON.stringify(orderStatusModel, null, 4)} rows="8">
                             </textarea>
                     </Panel>
                 </Col>
             </Row>
+        )
+    },
+    generateUpdateOrderModal(){
+        var order = this.state.order == null ? "??" : this.state.order.id;
+
+        return (
+            <Modal show={this.state.showUpdateOrderStatus} onHide={this.closeUpdateOrderStatus}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Order Status #{order}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Input ref="newStatus" label="New Status" type='select' placeholder="Select status">
+                        <option value='ORDER_PLACED'>Pending Pickup</option>
+                        <option value='PROCESSING'>Processing</option>
+                        <option value='IN_TRANSIT'>In Transit</option>
+                        <option value='ERROR'>Exception</option>
+                        <option value='COMPLETE'>Complete</option>
+                    </Input>
+                    <Input ref="newStatusDescription" label="Message" type='textarea'
+                           placeholder='Describe your change'/>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Row>
+                        <Col md="6"><Button onClick={this.closeUpdateOrderStatus}>Close</Button></Col>
+                        <Col md="6"><Button bsStyle="primary"
+                                            onClick={this.updateOrderStatusConfirm}>Save</Button></Col>
+                    </Row>
+                </Modal.Footer>
+            </Modal>
+        )
+    },
+    generateUpdateOrderButton(){
+        var orderId = this.state.order == null ? "??" : this.state.order.id;
+
+        return (
+            <Col md="2"><Button className="fill" onClick={this.openUpdateOrderStatus}>Update Status
+                #{orderId}...</Button></Col>
         )
     },
     render() {
@@ -133,33 +175,12 @@ var EditorWithState = React.createClass({
                         <Panel>
                             <Row>
                                 <Col md="2"><Button className="fill">Re-calculate Rate</Button></Col>
-                                <Col md="2"><Button className="fill" onClick={this.openUpdateOrderStatus}>Update
-                                    Status...</Button></Col>
+                                {this.generateUpdateOrderButton()}
+                                {this.generateUpdateOrderModal()}
                             </Row>
                         </Panel>
                     </Col>
                 </Row>
-                <Modal show={this.state.showUpdateOrderStatus} onHide={this.closeUpdateOrderStatus}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Update Order Status</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Input label="New Status" type='select' placeholder="Select status">
-                            <option value='PENDING_PICKUP'>Pending Pickup</option>
-                            <option value='PROCESSING'>Processing</option>
-                            <option value='IN_TRANSIT'>In Transit</option>
-                            <option value='EXCEPTION'>Exception</option>
-                            <option value='COMPLETE'>Complete</option>
-                        </Input>
-                        <Input label="Message" type='textarea' placeholder='Describe your change'/>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Row>
-                            <Col md="6"><Button onClick={this.closeUpdateOrderStatus}>Close</Button></Col>
-                            <Col md="6"><Button bsStyle="primary" onClick={this.updateOrderStatusConfirm}>Save</Button></Col>
-                        </Row>
-                    </Modal.Footer>
-                </Modal>
             </div>
         )
     }
