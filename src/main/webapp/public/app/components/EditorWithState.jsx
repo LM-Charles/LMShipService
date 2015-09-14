@@ -59,7 +59,7 @@ var EditorWithState = React.createClass({
                     <Col mdOffset="1" md="11">
                         <div>
                             <Panel collapsible header={rowHeader} eventKey="1">
-                        <textarea rows="15" value={JSON.stringify(this.state.order.shipments[i], null, 4)}>
+                        <textarea rows="20" value={JSON.stringify(this.state.order.shipments[i], null, 4)}>
 
                         </textarea>
                                 <Input label='Update Tracking Number'>
