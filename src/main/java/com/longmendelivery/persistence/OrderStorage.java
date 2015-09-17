@@ -24,4 +24,6 @@ public interface OrderStorage {
     Integer recursiveCreate(ShipOrderEntity shipOrderEntity);
 
     List<ShipOrderEntity> getOrderForUser(AppUserEntity user, Integer limit, Integer offset);
+
+    List<OrderStatusHistoryEntity> getOrderStatusHistory(ShipOrderEntity order);
 }
