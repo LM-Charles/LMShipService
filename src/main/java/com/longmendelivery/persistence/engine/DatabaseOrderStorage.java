@@ -106,6 +106,14 @@ public class DatabaseOrderStorage implements OrderStorage {
         return query.list();
     }
 
+    @Override
+    public List<OrderStatusHistoryEntity> getOrderStatusHistory(ShipOrderEntity order) {
+        Session session = getSession();
+        Query query = session.createQuery("from OrderStatusHistory history where history.order = :order order by history.id desc");
+        query.setParameter("order", order);
+        return query.list();
+    }
+
     private Integer calculateOffset(Integer offset) {
         return (offset == null) ? 0 : offset;
     }
