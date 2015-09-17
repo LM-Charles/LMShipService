@@ -22,6 +22,8 @@ public class AddressEntity implements DAOEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String name;
+    private String phone;
     private String address;
     private String address2;
     private String city;
@@ -31,6 +33,8 @@ public class AddressEntity implements DAOEntity {
     private Boolean residential;
 
     public void updateWithAddress(AddressEntity other) {
+        setName(other.getName());
+        setPhone(other.getPhone());
         setAddress(other.getAddress());
         setAddress2(other.getAddress2());
         setCity(other.getCity());
