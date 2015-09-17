@@ -1,5 +1,6 @@
 package com.longmendelivery.persistence;
 
+import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.entity.OrderStatusHistoryEntity;
 import com.longmendelivery.persistence.entity.ShipOrderEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
@@ -21,4 +22,6 @@ public interface OrderStorage {
     void createHistory(OrderStatusHistoryEntity orderStatusHistoryEntity);
 
     Integer recursiveCreate(ShipOrderEntity shipOrderEntity);
+
+    List<ShipOrderEntity> getOrderForUser(AppUserEntity user, Integer limit, Integer offset);
 }
