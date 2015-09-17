@@ -23,6 +23,7 @@
             </EBEnvironmentWrapperImpl>
           </list>
         </option>
+        <option name="debugPort" value="58995" />
         <option name="defaultDeploymentName" value="false" />
         <option name="deploymentName" value="LMShipService" />
         <option name="environmentName" value="lmshipservice-devo" />
