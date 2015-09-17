@@ -133,6 +133,7 @@ var EditorWithState = React.createClass({
                         <option value='IN_TRANSIT'>In Transit</option>
                         <option value='ERROR'>Exception</option>
                         <option value='COMPLETE'>Complete</option>
+                        <option value='CANCELLED'>Complete</option>
                     </Input>
                     <Input ref="newStatusDescription" label="Message" type='textarea'
                            placeholder='Describe your change'/>
