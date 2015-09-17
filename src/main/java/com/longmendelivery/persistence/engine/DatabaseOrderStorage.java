@@ -1,11 +1,13 @@
 package com.longmendelivery.persistence.engine;
 
 import com.longmendelivery.persistence.OrderStorage;
+import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.entity.OrderStatusHistoryEntity;
 import com.longmendelivery.persistence.entity.ShipOrderEntity;
 import com.longmendelivery.persistence.entity.ShipmentEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,5 +96,21 @@ public class DatabaseOrderStorage implements OrderStorage {
         return result;
     }
 
+    @Override
+    public List<ShipOrderEntity> getOrderForUser(AppUserEntity user, Integer limit, Integer offset) {
+        Session session = getSession();
+        Query query = session.createQuery("from ShipOrder shipOrder where shipOrder.client = :user order by shipOrder.orderDate, shipOrder.id desc");
+        query.setParameter("user", user);
+        query.setMaxResults(calculateLimit(limit));
+        query.setFirstResult(calculateOffset(offset));
+        return query.list();
+    }
 
+    private Integer calculateOffset(Integer offset) {
+        return (offset == null) ? 0 : offset;
+    }
+
+    private int calculateLimit(Integer limit) {
+        return Math.min(limit, 32);
+    }
 }

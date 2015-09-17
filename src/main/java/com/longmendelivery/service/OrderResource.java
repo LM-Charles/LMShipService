@@ -47,7 +47,7 @@ public class OrderResource {
     }
 
     @GET
-    public Response listOrdersForUser(@QueryParam("userId") Integer userId, @QueryParam("token") String token) {
+    public Response listOrdersForUser(@QueryParam("userId") Integer userId, @QueryParam("limit") @DefaultValue(value = "36") Integer limit, @QueryParam("offset") @DefaultValue("0") Integer offset, @QueryParam("token") String token) throws DependentServiceException {
         try {
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, userId);
         } catch (NotAuthorizedException e) {
@@ -56,20 +56,16 @@ public class OrderResource {
 
         try {
             AppUserEntity user = userStorage.get(userId);
-            Set<ShipOrderEntity> ordersEntity = user.getOrders();
-            Set<ShipOrderModel> ordersModel = mapSetEntityToModel(ordersEntity);
-            return Response.status(Response.Status.OK).entity(ordersModel).build();
+            List<ShipOrderEntity> ordersEntity = orderStorage.getOrderForUser(user, limit, offset);
+            ArrayList<ShipOrderWithStatusModel> orderWithStatuses = new ArrayList<>();
+            for (ShipOrderEntity order : ordersEntity) {
+                orderWithStatuses.add(this.calculateOrderWithStatus(order));
+            }
+
+            return Response.status(Response.Status.OK).entity(orderWithStatuses).build();
         } catch (ResourceNotFoundException e) {
             return ResourceResponseUtil.generateNotFoundMessage("user is not found");
         }
-    }
-
-    private Set<ShipOrderModel> mapSetEntityToModel(Set<ShipOrderEntity> ordersEntity) {
-        Set<ShipOrderModel> ordersModel = new HashSet<>();
-        for (ShipOrderEntity shipOrderEntity : ordersEntity) {
-            ordersModel.add(mapper.map(shipOrderEntity, ShipOrderModel.class));
-        }
-        return ordersModel;
     }
 
     @POST
@@ -160,33 +156,38 @@ public class OrderResource {
             ShipOrderEntity order = orderStorage.get(orderId);
             TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
 
-            ShipOrderWithStatusModel orderWithStatusModel = mapper.map(order, ShipOrderWithStatusModel.class);
-            OrderStatusHistoryEntity orderStatusHistoryEntity = OrderStatusHistoryEntity.getMostRecentOrderStatusHistoryEntity(order.getOrderStatuses());
-
-            // Get most recent history
-            OrderStatusModel orderStatus = mapper.map(orderStatusHistoryEntity, OrderStatusModel.class);
-            orderWithStatusModel.setOrderStatusModel(orderStatus);
-            orderWithStatusModel.setShipments(new ArrayList<ShipmentWithTrackingModel>());
-
-            CourierType courierType = order.getCourierServiceType().getCourier();
-            for (ShipmentEntity shipmentEntity : order.getShipments()) {
-                ShipmentWithTrackingModel shipmentWithTrackingModel = mapper.map(shipmentEntity, ShipmentWithTrackingModel.class);
-                if (shipmentEntity.getTrackingNumber() != null) {
-                    try {
-                        ShipmentTrackingModel shipmentTrackingModel = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
-                        shipmentWithTrackingModel.setTracking(shipmentTrackingModel);
-                    } catch (IllegalArgumentException e) {
-                        System.out.println("WARN: one of the shipment for " + shipmentEntity.getId() + " cannot be tracked.");
-                    }
-                }
-                orderWithStatusModel.getShipments().add(shipmentWithTrackingModel);
-            }
+            ShipOrderWithStatusModel orderWithStatusModel = calculateOrderWithStatus(order);
             return Response.status(Response.Status.OK).entity(orderWithStatusModel).build();
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e);
         } catch (ResourceNotFoundException e) {
             return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
         }
+    }
+
+    public ShipOrderWithStatusModel calculateOrderWithStatus(ShipOrderEntity order) throws DependentServiceException, ResourceNotFoundException {
+        ShipOrderWithStatusModel orderWithStatusModel = mapper.map(order, ShipOrderWithStatusModel.class);
+        OrderStatusHistoryEntity orderStatusHistoryEntity = OrderStatusHistoryEntity.getMostRecentOrderStatusHistoryEntity(order.getOrderStatuses());
+
+        // Get most recent history
+        OrderStatusModel orderStatus = mapper.map(orderStatusHistoryEntity, OrderStatusModel.class);
+        orderWithStatusModel.setOrderStatusModel(orderStatus);
+        orderWithStatusModel.setShipments(new ArrayList<ShipmentWithTrackingModel>());
+
+        CourierType courierType = order.getCourierServiceType().getCourier();
+        for (ShipmentEntity shipmentEntity : order.getShipments()) {
+            ShipmentWithTrackingModel shipmentWithTrackingModel = mapper.map(shipmentEntity, ShipmentWithTrackingModel.class);
+            if (shipmentEntity.getTrackingNumber() != null) {
+                try {
+                    ShipmentTrackingModel shipmentTrackingModel = shipmentClient.getTracking(courierType, shipmentEntity.getTrackingNumber());
+                    shipmentWithTrackingModel.setTracking(shipmentTrackingModel);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("WARN: one of the shipment for " + shipmentEntity.getId() + " cannot be tracked.");
+                }
+            }
+            orderWithStatusModel.getShipments().add(shipmentWithTrackingModel);
+        }
+        return orderWithStatusModel;
     }
 
     @POST
