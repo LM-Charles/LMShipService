@@ -150,6 +150,27 @@ public class OrderResource {
     }
 
     @GET
+    @Path("/{orderId}/statusHistories")
+    public Response getOrderStatusHistory(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) throws DependentServiceException {
+        try {
+            ShipOrderEntity order = orderStorage.get(orderId);
+            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
+
+            List<OrderStatusHistoryEntity> orderStatusHistoryEntity = orderStorage.getOrderStatusHistory(order);
+            List<OrderStatusModel> model = new ArrayList<>();
+            for (OrderStatusHistoryEntity entity : orderStatusHistoryEntity) {
+                model.add(mapper.map(entity, OrderStatusModel.class));
+            }
+
+            return Response.status(Response.Status.OK).entity(model).build();
+        } catch (NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e);
+        } catch (ResourceNotFoundException e) {
+            return ResourceResponseUtil.generateNotFoundMessage("order " + orderId + " does not exist");
+        }
+    }
+
+    @GET
     @Path("/{orderId}/status")
     public Response getOrderStatus(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) throws DependentServiceException {
         try {
