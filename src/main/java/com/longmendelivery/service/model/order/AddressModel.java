@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressModel {
+    private String name;
+    private String phone;
     private String address;
     private String address2;
     private String city;
