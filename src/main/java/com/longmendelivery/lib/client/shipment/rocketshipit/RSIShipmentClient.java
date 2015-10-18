@@ -41,11 +41,9 @@ public class RSIShipmentClient implements ShipmentClient {
         private void getRateForCourier() {
             RSIScriptEngine engine = null;
             try {
-                System.out.println("Create Engine");
                 engine = new RSIScriptEngine();
-                System.out.println("Create Engine done: " + engine.toString());
             } catch (DependentServiceException e) {
-                System.out.println("WARN GetAllRate failed to initialize some of the couriers.");
+                System.out.println("WARN GetAllRate failed to initialize some of the couriers: " + type);
                 return;
             }
 
