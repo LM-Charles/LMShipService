@@ -28,6 +28,7 @@ public class ShipOrderWithStatusModel implements DTOModel {
     private DateTime orderDate;
     @NonNull
     private CourierServiceType courierServiceType;
+    private String service_icon_url;
     @NonNull
     private List<ShipmentWithTrackingModel> shipments;
     private BigDecimal estimateCost;
