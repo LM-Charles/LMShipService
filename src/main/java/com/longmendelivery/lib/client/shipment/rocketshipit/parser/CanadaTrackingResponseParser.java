@@ -11,36 +11,34 @@ import org.joda.time.format.DateTimeFormatter;
  * Created by desmond on 15/08/15.
  */
 public class CanadaTrackingResponseParser implements TrackingResponseParser {
-    //    $.TrackResponse.Response.ResponseStatusDescription : '0' => "Success"
-//    $.TrackResponse.Shipment.PickupDate : '0' => "20100608"
-//    $.TrackResponse.Shipment.Package.Activity[0].Status.StatusType.Description :  '0' => "DELIVERED"
-//    $.TrackResponse.Shipment.Package.Activity[0].ActivityLocation.Address :
-//            '0' ...
-//            'City' => "ANYTOWN"
-//            'StateProvinceCode' => "GA"
-//            'PostalCode' => "30340"
-//            'CountryCode' => "US"
+    //    /tracking-detail/xmlns => "http://www.canadapost.ca/ws/track"
+//    /tracking-detail/significant-events/occurrence[0]/event-date => "2013-01-13"
+//    /tracking-detail/significant-events/occurrence[0]/event-description => "Item successfully delivered"
+//    /tracking-detail/significant-events/occurrence[0]/event-site
+//            'event-site' => "DARTMOUTH"
+//            'event-province' => "NS"
     @Override
     public ShipmentTrackingModel parseResponse(JsonNode jsonNode, String trackingNumber) throws DependentServiceException {
-        String status = jsonNode.at("/TrackResponse/Response/ResponseStatusDescription").asText();
-        if (!status.equals("Success")) {
+        String status = jsonNode.at("/tracking-detail/xmlns").asText();
+        if (!status.equals("http://www.canadapost.ca/ws/track")) {
             System.out.println(jsonNode.toString());
             throw new DependentServiceException("UPS Responded with failure message to this tracking request");
         }
-        DateTimeFormatter upsDateTimeFormat = DateTimeFormat.forPattern("yyyyMMDD");
-        String pickupDateString = jsonNode.at("/TrackResponse/Shipment/PickupDate").asText();
-        DateTime pickUpDate = pickupDateString.isEmpty() ? null : DateTime.parse(pickupDateString, upsDateTimeFormat);
-        String trackingDateString = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/Date").asText();
-        DateTime trackingDate = trackingDateString.isEmpty() ? null : DateTime.parse(trackingDateString, upsDateTimeFormat);
-        String trackingCity = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/ActivityLocation/Address/City").asText();
-        String trackingCountry = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/ActivityLocation/Address/CountryCode").asText();
+        DateTimeFormatter canadaDateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-DD");
+        Integer numberOfEvent = jsonNode.at("/tracking-detail/significant-events/occurrence").size();
+        String pickUpDateString = jsonNode.at("/tracking-detail/significant-events/occurrence/" + (numberOfEvent - 1) + "/event-date").asText();
+        DateTime pickUpDate = pickUpDateString.isEmpty() ? null : DateTime.parse(pickUpDateString, canadaDateTimeFormat);
+        String trackingDateString = jsonNode.at("/tracking-detail/significant-events/occurrence/0/event-date").asText();
+        DateTime trackingDate = trackingDateString.isEmpty() ? null : DateTime.parse(trackingDateString, canadaDateTimeFormat);
+        String trackingCity = jsonNode.at("/tracking-detail/significant-events/occurrence/0/event-site").asText();
+        String trackingCountry = null;
 
-        String trackingStatus = jsonNode.at("/TrackResponse/Shipment/Package/Activity/0/Status/StatusType/Description").asText();
+        String trackingStatus = jsonNode.at("/tracking-detail/significant-events/occurrence/0/event-description").asText();
         ShipmentTrackingModel model = new ShipmentTrackingModel(pickUpDate, trackingDate, trackingCity, trackingCountry, trackingStatus, buildTrackingURL(trackingNumber));
         return model;
     }
 
     public String buildTrackingURL(String trackingNumber) {
-        return "http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=" + trackingNumber + "";
+        return "http://www.canadapost.ca/cpotools/apps/track/personal/findByTrackNumber?trackingNumber=" + trackingNumber + "";
     }
 }
