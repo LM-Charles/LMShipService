@@ -268,9 +268,9 @@ return array(
     ),
 
     'canada' => array(
-        'username' => '',
-        'password' => '',
-        'accountNumber' => '',
+        'username' => '4c21fdbc66bb1373',
+        'password' => 'cf93d834da9cb506c31f4f',
+        'accountNumber' => '0008379000',
         'service' => 'DOM.EP',
 
     ),

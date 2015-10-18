@@ -36,9 +36,7 @@ public class RSIScriptEngine {
 
     public synchronized <T> T executeScript(String script, TypeReference<T> valueTypeRef) throws DependentServiceException {
         try {
-            System.out.println("Execute");
             String value = (String) engine.eval(script);
-            System.out.println("Finished: " + value);
             T response = objectMapper.readValue(value, valueTypeRef);
             return response;
         } catch (ScriptException e) {
