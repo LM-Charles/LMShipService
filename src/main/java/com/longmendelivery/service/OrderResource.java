@@ -208,6 +208,7 @@ public class OrderResource {
             }
             orderWithStatusModel.getShipments().add(shipmentWithTrackingModel);
         }
+        orderWithStatusModel.setService_icon_url(orderWithStatusModel.getCourierServiceType().getIconURL());
         return orderWithStatusModel;
     }
 
