@@ -59,13 +59,14 @@ public class RateScriptGenerator {
     }
 
     public String generate() {
-        StringBuilder scriptBuilder = new StringBuilder("$rate = new \\RocketShipIt\\Rate('" + courierType + "');\n");
+        StringBuilder scriptBuilder = new StringBuilder("$rate = new \\RocketShipIt\\Rate('" + courierType.getApiServiceId() + "');\n");
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             scriptBuilder.append("$rate->setParameter('" + entry.getKey() + "', '" + entry.getValue() + "');\n");
         }
         scriptBuilder.append("$response = $rate->getSimpleRates();\n");
         scriptBuilder.append("echo json_encode($response);");
-        return scriptBuilder.toString();
+        String script = scriptBuilder.toString();
+        return script;
     }
 
     public void validate(CourierType courierType) {

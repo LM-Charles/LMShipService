@@ -17,6 +17,13 @@ public enum CourierServiceType {
     UPS_EXPRESS_EARLY_AM(CourierType.UPS, "UPS Express Early AM", "14", "FASTEST_COURIER", "/public/image/ups.png"),
 
     FEDEX_GROUND(CourierType.FEDEX, "FedEx Ground", "FEDEX_GROUND", "ECONOMY_COURIER", "/public/image/fedex.jpg"),
+
+    CANADA_EXPEDITED(CourierType.CANADA_POST, "Canada Expedited Post", "DOM.EP", "FASTEST_COURIER", "/public/image/canadapost.jpg"),
+    CANADA_PRIORITY(CourierType.CANADA_POST, "Canada Priority Post", "DOM.PC", "MEDIUM_COURIER", "/public/image/canadapost.jpg"),
+    CANADA_REGULAR(CourierType.CANADA_POST, "Canada Regular Post", "DOM.RP", "ECONOMY_COURIER", "/public/image/canadapost.jpg"),
+    CANADA_EXPRESS(CourierType.CANADA_POST, "Canada Express Post", "DOM.XP", "FASTEST_COURIER", "/public/image/canadapost.jpg"),
+
+
     LONGMEN_STANDARD(CourierType.LONGMEN, "Long Men Standard", "LONGMEN_STANDARD", "MEDIUM_COURIER", "/public/image/longmen.jpg"),
 
     LONGMEN_HANDLING(CourierType.LONGMEN, "Long Men Handling Fee", "LONGMEN_HANDLING", "HANDLING", "/public/image/longmen.jpg"),
@@ -28,6 +35,7 @@ public enum CourierServiceType {
                 return service;
             }
         }
+        System.out.println("[WARN] new service discovered: " + courier + " service: " + serviceCode);
         return null;
     }
 
