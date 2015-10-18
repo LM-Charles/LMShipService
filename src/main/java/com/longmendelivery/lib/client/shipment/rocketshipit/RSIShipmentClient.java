@@ -60,7 +60,7 @@ public class RSIShipmentClient implements ShipmentClient {
                         rateMap.put(CourierServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
                     }
                 } catch (DependentServiceException e) {
-                    System.out.println("Invalid query for shipment " + shipmentModel.toString());
+                    System.out.println("Invalid query for shipment " + shipmentModel.toString() + " carrier " + type + " error " + e);
                     return;
                 }
             } finally {
