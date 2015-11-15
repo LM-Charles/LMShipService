@@ -15,10 +15,10 @@ import java.util.EnumSet;
 @AllArgsConstructor
 @Getter
 public enum CourierType {
-    UPS("UPS", RSIShipmentClient.class, "02", new UPSTrackingResponseParser()),
-    FEDEX("fedex", RSIShipmentClient.class, "YOUR_PACKAGING", new FedexTrackingResponseParser()),
-    CANADA_POST("CANADA", RSIShipmentClient.class, "", new CanadaTrackingResponseParser()),
-    LONGMEN("longmen", LongmenShipmentClient.class, "", null);
+    UPS("UPS", RSIShipmentClient.class, "CP", "EE", new UPSTrackingResponseParser()),
+    FEDEX("fedex", RSIShipmentClient.class, "YOUR_PACKAGING", "FEDEX_ENVELOPE", new FedexTrackingResponseParser()),
+    CANADA_POST("CANADA", RSIShipmentClient.class, "", "", new CanadaTrackingResponseParser()),
+    LONGMEN("longmen", LongmenShipmentClient.class, "", "", null);
 
     public static EnumSet<CourierType> ALL = EnumSet.allOf(CourierType.class);
     public static EnumSet<CourierType> ENABLED = EnumSet.of(FEDEX, UPS, CANADA_POST);
@@ -26,5 +26,6 @@ public enum CourierType {
     private final String apiServiceId;
     private final Class<? extends ShipmentClient> shipmentClient;
     private final String selfPackagingCode;
+    private final String letterPackagingCode;
     private final TrackingResponseParser trackingResponseParser;
 }

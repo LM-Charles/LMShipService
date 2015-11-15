@@ -3,6 +3,7 @@ package com.longmendelivery.lib.client.shipment.rocketshipit.script;
 import com.longmendelivery.service.model.order.AddressModel;
 import com.longmendelivery.service.model.order.DimensionModel;
 import com.longmendelivery.service.model.shipment.CourierType;
+import com.longmendelivery.service.model.shipment.ShipmentPackageType;
 import org.apache.commons.lang.NotImplementedException;
 
 import java.util.EnumSet;
@@ -24,7 +25,6 @@ public class RateScriptGenerator {
     public RateScriptGenerator(final CourierType courierType) {
         validate(courierType);
         this.courierType = courierType;
-        parameters.put("packagingType", courierType.getSelfPackagingCode());
     }
 
     public RateScriptGenerator withSourceAddress(AddressModel address) {
@@ -55,6 +55,15 @@ public class RateScriptGenerator {
         parameters.put("width", dimension.getWidth().toString());
         parameters.put("height", dimension.getHeight().toString());
         parameters.put("weight", dimension.getWeight().toString());
+        return this;
+    }
+
+    public RateScriptGenerator withPackaging(ShipmentPackageType type) {
+        if (type.equals(ShipmentPackageType.LETTER)) {
+            parameters.put("packagingType", courierType.getLetterPackagingCode());
+        } else {
+            parameters.put("packagingType", courierType.getSelfPackagingCode());
+        }
         return this;
     }
 
