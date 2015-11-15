@@ -43,4 +43,5 @@ public class ShipOrderWithStatusModel implements DTOModel {
     private DateTime appointmentDate;
     private AppointmentSlotType appointmentSlotType;
     private OrderStatusModel orderStatusModel;
+    private List<OrderStatusModel> orderStatusHistory;
 }

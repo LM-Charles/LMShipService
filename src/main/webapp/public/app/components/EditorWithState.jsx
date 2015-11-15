@@ -102,7 +102,8 @@ var EditorWithState = React.createClass({
         var order = this.state.order == null ? "Query for Order first" : deepClone(this.state.order);
         delete order.shipments;
         delete order.orderStatusModel;
-        var orderStatusModel = this.state.order == null ? "Query for Order first" : this.state.order.orderStatusModel;
+        delete order.orderStatusHistory;
+        var orderStatusHistory = this.state.order == null ? "Query for Order first" : this.state.order.orderStatusHistory;
         var orderHeader = ">> Order Details for #" + orderId;
 
         return (
@@ -111,7 +112,7 @@ var EditorWithState = React.createClass({
                     <Panel collapsible header={{orderHeader}}>
                             <textarea value={JSON.stringify(order, null, 4)} rows="31">
                             </textarea>
-                            <textarea value={JSON.stringify(orderStatusModel, null, 4)} rows="6">
+                            <textarea value={JSON.stringify(orderStatusHistory, null, 4)} rows="6">
                             </textarea>
                     </Panel>
                 </Col>
