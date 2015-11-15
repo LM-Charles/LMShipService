@@ -188,7 +188,11 @@ public class OrderResource {
 
     public ShipOrderWithStatusModel calculateOrderWithStatus(ShipOrderEntity order) throws DependentServiceException, ResourceNotFoundException {
         ShipOrderWithStatusModel orderWithStatusModel = mapper.map(order, ShipOrderWithStatusModel.class);
-        OrderStatusHistoryEntity orderStatusHistoryEntity = OrderStatusHistoryEntity.getMostRecentOrderStatusHistoryEntity(order.getOrderStatuses());
+        Set<OrderStatusHistoryEntity> orderStatuses = order.getOrderStatuses();
+        List<OrderStatusHistoryEntity> orderStatusesArray = Arrays.asList(orderStatuses.toArray(new OrderStatusHistoryEntity[orderStatuses.size()]));
+        Collections.sort(orderStatusesArray, OrderStatusHistoryEntity.ORDER_STATUS_HISTORY_ENTITY_COMPARATOR);
+
+        OrderStatusHistoryEntity orderStatusHistoryEntity = orderStatusesArray.get(0);
 
         // Get most recent history
         OrderStatusModel orderStatus = mapper.map(orderStatusHistoryEntity, OrderStatusModel.class);
@@ -209,6 +213,13 @@ public class OrderResource {
             orderWithStatusModel.getShipments().add(shipmentWithTrackingModel);
         }
         orderWithStatusModel.setService_icon_url(orderWithStatusModel.getCourierServiceType().getIconURL());
+
+        ArrayList<OrderStatusModel> statusHistory = new ArrayList<>();
+        for (OrderStatusHistoryEntity status : orderStatusesArray) {
+            statusHistory.add(mapper.map(status, OrderStatusModel.class));
+        }
+        orderWithStatusModel.setOrderStatusHistory(statusHistory);
+
         return orderWithStatusModel;
     }
 
@@ -235,6 +246,7 @@ public class OrderResource {
 
         }
     }
+
 
     @POST
     @Path("/{orderId}/tracking/{shipmentId}")

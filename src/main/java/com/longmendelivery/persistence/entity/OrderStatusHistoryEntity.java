@@ -23,6 +23,12 @@ import java.util.Set;
 @Table(name = "OrderStatusHistory", indexes = {@Index(name = "OrderStatusHistory_order", columnList = "order_id"), @Index(name = "OrderStatusHistory_statusDate", columnList = "statusDate")})
 
 public class OrderStatusHistoryEntity implements DAOEntity {
+    public static final Comparator<OrderStatusHistoryEntity> C = new Comparator<OrderStatusHistoryEntity>() {
+        @Override
+        public int compare(OrderStatusHistoryEntity entity, OrderStatusHistoryEntity other) {
+            return -entity.getStatusDate().compareTo(other.getStatusDate());
+        }
+    };
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
@@ -37,12 +43,7 @@ public class OrderStatusHistoryEntity implements DAOEntity {
 
     public static OrderStatusHistoryEntity getMostRecentOrderStatusHistoryEntity(Set<OrderStatusHistoryEntity> entities) {
         OrderStatusHistoryEntity[] entitiesArray = entities.toArray(new OrderStatusHistoryEntity[entities.size()]);
-        Arrays.sort(entitiesArray, new Comparator<OrderStatusHistoryEntity>() {
-            @Override
-            public int compare(OrderStatusHistoryEntity entity, OrderStatusHistoryEntity other) {
-                return -entity.getStatusDate().compareTo(other.getStatusDate());
-            }
-        });
+        Arrays.sort(entitiesArray, C);
         return entitiesArray[0];
     }
 }
