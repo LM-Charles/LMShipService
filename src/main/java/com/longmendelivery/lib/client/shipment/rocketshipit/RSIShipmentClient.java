@@ -52,6 +52,7 @@ public class RSIShipmentClient implements ShipmentClient {
                 generator.withSourceAddress(sourceAddress);
                 generator.withDestinationAddress(destinationAddress);
                 generator.withDimensions(new DimensionModel(shipmentModel.getLength(), shipmentModel.getWidth(), shipmentModel.getHeight(), shipmentModel.getWeight()));
+                generator.withPackaging(shipmentModel.getShipmentPackageType());
                 String script = generator.generate();
                 try {
                     List<RSIRateEntry> result = engine.executeScript(script, new TypeReference<List<RSIRateEntry>>() {
