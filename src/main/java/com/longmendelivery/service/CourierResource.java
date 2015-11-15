@@ -52,6 +52,21 @@ public class CourierResource {
         }
     }
 
+    @GET
+    @Path("/insurance")
+    public Response getTracking(@QueryParam("insuranceValue") String insuranceValue) throws DependentServiceException {
+        BigDecimal value = new BigDecimal(insuranceValue);
+        if (value.compareTo(new BigDecimal("2000")) > 0) {
+            return ResourceResponseUtil.generateBadRequestMessage("insurance value can only be up to 2000");
+        }
+
+        BigDecimal insurance = value.multiply(new BigDecimal("3.5")).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal tax = insurance.multiply(new BigDecimal("12")).divide(new BigDecimal("100"), 2, BigDecimal.ROUND_HALF_UP);
+
+        RateEntryModel insuranceQuote = new RateEntryModel("", "INSURANCE", insurance, tax, "LM_DELIVERY", "GENERAL_INSURANCE");
+        return Response.status(Response.Status.OK).entity(insuranceQuote).build();
+    }
+
     @POST
     @Path("/rate")
     public Response calculateRate(OrderCreationRequest order, @QueryParam("token") String token) throws DependentServiceException {
