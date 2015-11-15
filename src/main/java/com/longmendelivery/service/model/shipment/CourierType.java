@@ -15,7 +15,7 @@ import java.util.EnumSet;
 @AllArgsConstructor
 @Getter
 public enum CourierType {
-    UPS("UPS", RSIShipmentClient.class, "CP", "EE", new UPSTrackingResponseParser()),
+    UPS("UPS", RSIShipmentClient.class, "02", "EE", new UPSTrackingResponseParser()),
     FEDEX("fedex", RSIShipmentClient.class, "YOUR_PACKAGING", "FEDEX_ENVELOPE", new FedexTrackingResponseParser()),
     CANADA_POST("CANADA", RSIShipmentClient.class, "", "", new CanadaTrackingResponseParser()),
     LONGMEN("longmen", LongmenShipmentClient.class, "", "", null);
