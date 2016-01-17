@@ -7,7 +7,8 @@ import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.order.OrderCreationRequest;
 import com.longmendelivery.service.model.order.RateEntryModel;
 import com.longmendelivery.service.model.shipment.*;
-import com.longmendelivery.service.security.ThrottleSecurity;
+import com.longmendelivery.service.security.SecurityPower;
+import com.longmendelivery.service.security.TokenSecurity;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,12 @@ public class CourierResource {
 
     @GET
     @Path("/tracking")
-    public Response getTracking(@QueryParam("trackingNumber") String trackingNumber, @QueryParam("courier") String courierCode, @QueryParam("token") String token) throws DependentServiceException {
+    public Response getTracking(@QueryParam("trackingNumber") String trackingNumber, @QueryParam("courier") String courierCode, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.PUBLIC_READ, authId, token, authId);
+        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
+        }
 
         try {
             CourierType type = CourierType.valueOf(courierCode);
@@ -54,7 +60,13 @@ public class CourierResource {
 
     @GET
     @Path("/insurance")
-    public Response getTracking(@QueryParam("insuranceValue") String insuranceValue) throws DependentServiceException {
+    public Response getTracking(@QueryParam("insuranceValue") String insuranceValue, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.PUBLIC_READ, authId, token, authId);
+        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
+        }
+
         BigDecimal value = new BigDecimal(insuranceValue);
         if (value.compareTo(new BigDecimal("2000")) > 0) {
             return ResourceResponseUtil.generateBadRequestMessage("insurance value can only be up to 2000");
@@ -69,8 +81,13 @@ public class CourierResource {
 
     @POST
     @Path("/rate")
-    public Response calculateRate(OrderCreationRequest order, @QueryParam("token") String token) throws DependentServiceException {
-        ThrottleSecurity.getInstance().throttle(order.hashCode());
+    public Response calculateRate(OrderCreationRequest order, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.PUBLIC_READ, authId, token, authId);
+        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
+        }
+
         RateResponseModel responseModel = calculateRate(order);
 
         if (responseModel == null) {

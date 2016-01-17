@@ -47,11 +47,11 @@ public class OrderResource {
     }
 
     @GET
-    public Response listOrdersForUser(@QueryParam("userId") Integer userId, @QueryParam("limit") @DefaultValue(value = "36") Integer limit, @QueryParam("offset") @DefaultValue("0") Integer offset, @QueryParam("token") String token) throws DependentServiceException {
+    public Response listOrdersForUser(@QueryParam("userId") Integer userId, @QueryParam("limit") @DefaultValue(value = "36") Integer limit, @QueryParam("offset") @DefaultValue("0") Integer offset, @QueryParam("authId") Integer authId, @QueryParam("token") String token) throws DependentServiceException {
         try {
-            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, userId);
-        } catch (NotAuthorizedException e) {
-            ResourceResponseUtil.generateForbiddenMessage(e);
+            TokenSecurity.getInstance().authorize(SecurityPower.PRIVATE_READ, userId, token, authId);
+        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
 
         try {
@@ -70,12 +70,12 @@ public class OrderResource {
 
     @POST
     @Transactional(readOnly = false)
-    public Response createOrder(OrderCreationRequest orderCreationRequest, @QueryParam("token") String token) {
+    public Response createOrder(OrderCreationRequest orderCreationRequest, @QueryParam("token") String token, @QueryParam("authId") Integer authId) {
         Integer userId = orderCreationRequest.getClient();
         try {
-            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
-        } catch (NotAuthorizedException e) {
-            return ResourceResponseUtil.generateForbiddenMessage(e);
+            TokenSecurity.getInstance().authorize(SecurityPower.PRIVATE_WRITE, orderCreationRequest.getClient(), token, authId);
+        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
 
         try {
@@ -136,10 +136,10 @@ public class OrderResource {
 
     @GET
     @Path("/{orderId}")
-    public Response getOrderDetails(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) {
+    public Response getOrderDetails(@PathParam("orderId") Integer orderId, @QueryParam("token") String token, @QueryParam("authId") Integer authId) {
         try {
             ShipOrderEntity order = orderStorage.get(orderId);
-            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
+            TokenSecurity.getInstance().authorize(SecurityPower.PRIVATE_READ, order.getClient().getId(), token, authId);
             ShipOrderModel shipOrderModel = mapper.map(order, ShipOrderModel.class);
             return Response.status(Response.Status.OK).entity(shipOrderModel).build();
         } catch (NotAuthorizedException e) {
@@ -151,10 +151,10 @@ public class OrderResource {
 
     @GET
     @Path("/{orderId}/statusHistories")
-    public Response getOrderStatusHistory(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) throws DependentServiceException {
+    public Response getOrderStatusHistory(@PathParam("orderId") Integer orderId, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
         try {
             ShipOrderEntity order = orderStorage.get(orderId);
-            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
+            TokenSecurity.getInstance().authorize(SecurityPower.PRIVATE_READ, order.getClient().getId(), token, authId);
 
             List<OrderStatusHistoryEntity> orderStatusHistoryEntity = orderStorage.getOrderStatusHistory(order);
             List<OrderStatusModel> model = new ArrayList<>();
@@ -172,10 +172,10 @@ public class OrderResource {
 
     @GET
     @Path("/{orderId}/status")
-    public Response getOrderStatus(@PathParam("orderId") Integer orderId, @QueryParam("token") String token) throws DependentServiceException {
+    public Response getOrderStatus(@PathParam("orderId") Integer orderId, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
         try {
             ShipOrderEntity order = orderStorage.get(orderId);
-            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, order.getClient().getId());
+            TokenSecurity.getInstance().authorize(SecurityPower.PRIVATE_READ, order.getClient().getId(), token, authId);
 
             ShipOrderWithStatusModel orderWithStatusModel = calculateOrderWithStatus(order);
             return Response.status(Response.Status.OK).entity(orderWithStatusModel).build();
@@ -226,15 +226,15 @@ public class OrderResource {
     @POST
     @Path("/{orderId}/status")
     @Transactional(readOnly = false)
-    public Response updateOrderStatus(@PathParam("orderId") Integer orderId, OrderStatusUpdateRequest status, @QueryParam("backendUserId") Integer backendUserId, @QueryParam("token") String token) {
+    public Response updateOrderStatus(@PathParam("orderId") Integer orderId, OrderStatusUpdateRequest status, @QueryParam("authId") Integer authId, @QueryParam("token") String token) {
         try {
-            TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE, backendUserId);
+            TokenSecurity.getInstance().authorize(SecurityPower.BACKEND_WRITE, authId, token, authId);
         } catch (NotAuthorizedException e) {
             ResourceResponseUtil.generateForbiddenMessage(e);
         }
 
         try {
-            AppUserEntity backendUser = userStorage.get(backendUserId);
+            AppUserEntity backendUser = userStorage.get(authId);
             ShipOrderEntity order = orderStorage.get(orderId);
             OrderStatusHistoryEntity orderStatusHistoryEntity = new OrderStatusHistoryEntity(null, status.getStatus(), order, status.getStatusDescription(), backendUser.getEmail(), DateTime.now());
             orderStorage.createHistory(orderStatusHistoryEntity);
@@ -251,9 +251,12 @@ public class OrderResource {
     @POST
     @Path("/{orderId}/tracking/{shipmentId}")
     @Transactional(readOnly = false)
-    public Response addTrackingNumber(@PathParam("orderId") Integer orderId, @PathParam("shipmentId") Integer shipmentId, ShipmentAddTrackingRequest request, @QueryParam("token") String token) {
-        TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE);
-
+    public Response addTrackingNumber(@PathParam("orderId") Integer orderId, @PathParam("shipmentId") Integer shipmentId, ShipmentAddTrackingRequest request, @QueryParam("token") String token, @QueryParam("authId") Integer authId) {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.BACKEND_WRITE, authId, token, authId);
+        } catch (NotAuthorizedException e) {
+            ResourceResponseUtil.generateForbiddenMessage(e);
+        }
         try {
             ShipmentEntity shipmentEntity = shipmentStorage.get(shipmentId);
             shipmentEntity.setTrackingNumber(request.getTrackingNumber());
@@ -268,9 +271,12 @@ public class OrderResource {
     @POST
     @Path("/{orderId}/dimension/{shipmentId}")
     @Transactional(readOnly = false)
-    public Response setDimension(@PathParam("orderId") Integer orderId, @PathParam("shipmentId") Integer shipmentId, DimensionModel dimension, @QueryParam("packageType") ShipmentPackageType shipmentPackageType, @QueryParam("token") String token) {
-        TokenSecurity.getInstance().authorize(token, SecurityPower.BACKEND_WRITE);
-
+    public Response setDimension(@PathParam("orderId") Integer orderId, @PathParam("shipmentId") Integer shipmentId, DimensionModel dimension, @QueryParam("packageType") ShipmentPackageType shipmentPackageType, @QueryParam("authId") Integer authId, @QueryParam("token") String token) {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.BACKEND_WRITE, authId, token, authId);
+        } catch (NotAuthorizedException e) {
+            ResourceResponseUtil.generateForbiddenMessage(e);
+        }
         try {
             ShipmentEntity shipmentEntity = shipmentStorage.get(shipmentId);
             shipmentEntity.setWeight(dimension.getWeight());

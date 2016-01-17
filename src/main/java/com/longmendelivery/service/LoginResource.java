@@ -55,11 +55,11 @@ public class LoginResource {
 
     @DELETE
     @Path("/{userId}")
-    public Response logout(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
+    public Response logout(@PathParam("userId") Integer userId, @QueryParam("token") String token, @QueryParam("authId") Integer authId) {
         try {
-            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
+            TokenSecurity.getInstance().authorize(SecurityPower.PRIVATE_WRITE, userId, token, authId);
         } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
-            ResourceResponseUtil.generateForbiddenMessage(e);
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
 
         AppUserEntity user = null;
