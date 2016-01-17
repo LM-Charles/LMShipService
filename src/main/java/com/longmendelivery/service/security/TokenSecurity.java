@@ -26,35 +26,34 @@ public class TokenSecurity {
         return instance;
     }
 
-    public void authorize(String token, SecurityPower requestedPower, Integer userId) throws NotAuthorizedException {
-        if (token == null || userId == null) {
-            throw new NotAuthorizedException("Must have a token and userId to validate this request");
+    public void authorize(SecurityPower requestedPower, Integer requestedUserId, String authToken, Integer authUserId) throws NotAuthorizedException {
+        if (authToken == null || authUserId == null) {
+            throw new NotAuthorizedException("Must have a token and requestedUserId to validate this request");
         } else if (requestedPower.equals(SecurityPower.PUBLIC_READ)) {
             return;
         } else {
             try {
-                boolean found = false;
-                AppUserEntity user = userStorage.get(userId);
+                AppUserEntity authUser = userStorage.get(authUserId);
 
-                if (!user.getApiToken().equals(token)) {
+                if (!authUser.getApiToken().equals(authToken)) {
                     throw new NotAuthorizedException("token or user not logged in properly");
                 }
 
                 if (requestedPower.equals(SecurityPower.PRIVATE_READ) || requestedPower.equals(SecurityPower.PRIVATE_WRITE)) {
-                    return;
-                } else {
-                    if (user.getUserGroup().equals(AppUserGroupType.ADMIN_USER)) {
-                        return;
-                    } else {
+                    if (!authUserId.equals(requestedUserId) && !authUser.getUserGroup().equals(AppUserGroupType.ADMIN_USER)) {
                         throw new NotAuthorizedException("token or user require admin power for this request");
                     }
+
+                    return;
+                } else {
+                    if (!authUser.getUserGroup().equals(AppUserGroupType.ADMIN_USER)) {
+                        throw new NotAuthorizedException("token or user require admin power for this request");
+                    }
+                    return;
                 }
             } catch (ResourceNotFoundException e) {
                 throw new NotAuthorizedException("Must have a valid user for this request");
             }
         }
-    }
-
-    public void authorize(String token, SecurityPower requestedPower) {
     }
 }

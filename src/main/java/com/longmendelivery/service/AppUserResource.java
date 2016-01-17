@@ -39,8 +39,13 @@ public class AppUserResource {
 
     @SuppressWarnings("unchecked")
     @GET
-    public Response listUsers(@QueryParam("token") String token) {
-        TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN);
+    public Response listUsers(@QueryParam("token") String token, @QueryParam("authId") Integer authId) {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+        } catch (NotAuthorizedException e) {
+            ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
+        }
+
         List<AppUserEntity> users = userStorage.listAll(Integer.MAX_VALUE, 0);
         List<AppUserModel> usersModel = new ArrayList<>();
         for (AppUserEntity user : users) {
@@ -93,11 +98,11 @@ public class AppUserResource {
 
     @GET
     @Path("/{userId}")
-    public Response getUser(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
+    public Response getUser(@PathParam("userId") Integer userId, @QueryParam("token") String token, @QueryParam("authId") Integer authId) {
         try {
-            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_READ, userId);
+            TokenSecurity.getInstance().authorize(SecurityPower.PRIVATE_READ, userId, token, authId);
         } catch (NotAuthorizedException e) {
-            return ResourceResponseUtil.generateForbiddenMessage(e);
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
 
         try {
@@ -113,11 +118,11 @@ public class AppUserResource {
 
     @GET
     @Path("/{userId}/admin")
-    public Response getUserAdmin(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
+    public Response getUserAdmin(@PathParam("userId") Integer userId, @QueryParam("token") String token, @QueryParam("authId") Integer authId) {
         try {
-            TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN, userId);
+            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, userId, token, authId);
         } catch (NotAuthorizedException e) {
-            return ResourceResponseUtil.generateForbiddenMessage(e);
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
 
         try {
@@ -133,12 +138,13 @@ public class AppUserResource {
     @POST
     @Path("/{userId}")
     @Transactional(readOnly = false)
-    public Response changeUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token, UserProfileModel request) {
+    public Response changeUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token, UserProfileModel request, @QueryParam("authId") Integer authId) {
         try {
-            TokenSecurity.getInstance().authorize(token, SecurityPower.PRIVATE_WRITE, userId);
+            TokenSecurity.getInstance().authorize(SecurityPower.PRIVATE_WRITE, userId, token, authId);
         } catch (NotAuthorizedException e) {
-            return ResourceResponseUtil.generateForbiddenMessage(e);
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
+
 
         try {
             AppUserEntity user = userStorage.get(userId);
@@ -280,9 +286,12 @@ public class AppUserResource {
     @DELETE
     @Path("/{userId}")
     @Transactional(readOnly = false)
-    public Response disableUser(@PathParam("userId") Integer userId, @QueryParam("token") String token) {
-        TokenSecurity.getInstance().authorize(token, SecurityPower.ADMIN);
-
+    public Response disableUser(@PathParam("userId") Integer userId, @QueryParam("token") String token, @QueryParam("authId") Integer authId) {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, userId, token, authId);
+        } catch (NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
+        }
 
         AppUserEntity user = null;
         try {

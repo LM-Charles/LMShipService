@@ -4,6 +4,8 @@ import com.longmendelivery.lib.client.exceptions.DependentServiceException;
 import com.longmendelivery.lib.client.exceptions.DependentServiceRequestException;
 import com.longmendelivery.lib.client.shipment.rocketshipit.engine.RSIScriptEngine;
 import com.longmendelivery.lib.client.sms.twilio.TwilioSMSClient;
+import com.longmendelivery.service.security.SecurityPower;
+import com.longmendelivery.service.security.TokenSecurity;
 import com.longmendelivery.service.util.ResourceResponseUtil;
 import org.hibernate.SessionFactory;
 import org.hibernate.internal.SessionFactoryImpl;
@@ -28,7 +30,13 @@ public class DebugResource {
 
     @PUT
     @Path("testSMS")
-    public Response testSMS(@QueryParam("to") String to, @QueryParam("body") String body) throws DependentServiceException {
+    public Response testSMS(@QueryParam("to") String to, @QueryParam("body") String body, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
+        }
+
         String output = "Testing SMS to : " + to + " with body: " + body;
         try {
             new TwilioSMSClient().sendSMS(to, body);
@@ -41,7 +49,13 @@ public class DebugResource {
     @POST
     @Path("testPHP")
     @Consumes("text/plain")
-    public Response testPHP(String script) throws DependentServiceException, ScriptException {
+    public Response testPHP(String script, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException, ScriptException {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
+        }
+
         RSIScriptEngine engine = new RSIScriptEngine();
         try {
             String message = engine.executeScriptToString(script);
@@ -54,7 +68,13 @@ public class DebugResource {
     @GET
     @Path("testEnvironment")
     @Consumes("text/plain")
-    public Response testEnvironment() throws DependentServiceException, ScriptException {
+    public Response testEnvironment(@QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException, ScriptException {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
+        }
+
         Map<String, String> envVar = System.getenv();
         return Response.status(Response.Status.OK).entity(envVar).build();
     }
@@ -62,7 +82,13 @@ public class DebugResource {
     @GET
     @Path("testSystem")
     @Consumes("text/plain")
-    public Response testSystem() throws DependentServiceException, ScriptException {
+    public Response testSystem(@QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException, ScriptException {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
+        }
+
         Properties properties = System.getProperties();
         return Response.status(Response.Status.OK).entity(properties.entrySet()).build();
     }
@@ -71,7 +97,13 @@ public class DebugResource {
     @Path("testDB")
     @Transactional(readOnly = true)
     @Produces("text/plain")
-    public Response testDB() throws DependentServiceException {
+    public Response testDB(@QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
+        try {
+            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
+            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
+        }
+
         Map<String, ClassMetadata> map = sessionFactory.getAllClassMetadata();
         StringBuilder builder = new StringBuilder();
         builder.append("Testing DB Hibernate entity mapping...");
