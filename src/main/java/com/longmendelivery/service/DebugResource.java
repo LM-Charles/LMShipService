@@ -27,12 +27,13 @@ import java.util.Properties;
 public class DebugResource {
     @Autowired
     private SessionFactory sessionFactory;
-
+    @Autowired
+    private TokenSecurity tokenSecurity;
     @PUT
     @Path("testSMS")
     public Response testSMS(@QueryParam("to") String to, @QueryParam("body") String body, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+            tokenSecurity.authorize(SecurityPower.ADMIN, authId, token, authId);
         } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
@@ -51,7 +52,7 @@ public class DebugResource {
     @Consumes("text/plain")
     public Response testPHP(String script, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException, ScriptException {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+            tokenSecurity.authorize(SecurityPower.ADMIN, authId, token, authId);
         } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
@@ -70,7 +71,7 @@ public class DebugResource {
     @Consumes("text/plain")
     public Response testEnvironment(@QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException, ScriptException {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+            tokenSecurity.authorize(SecurityPower.ADMIN, authId, token, authId);
         } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
@@ -84,7 +85,7 @@ public class DebugResource {
     @Consumes("text/plain")
     public Response testSystem(@QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException, ScriptException {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+            tokenSecurity.authorize(SecurityPower.ADMIN, authId, token, authId);
         } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
@@ -99,7 +100,7 @@ public class DebugResource {
     @Produces("text/plain")
     public Response testDB(@QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+            tokenSecurity.authorize(SecurityPower.ADMIN, authId, token, authId);
         } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }

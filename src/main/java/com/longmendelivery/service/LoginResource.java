@@ -29,6 +29,8 @@ import java.util.Arrays;
 public class LoginResource {
     @Autowired
     private UserStorage userStorage;
+    @Autowired
+    private TokenSecurity tokenSecurity;
     @POST
     public Response login(@QueryParam("email") String email, @QueryParam("password") String password) {
         ThrottleSecurity.getInstance().throttle(email);
@@ -57,7 +59,7 @@ public class LoginResource {
     @Path("/{userId}")
     public Response logout(@PathParam("userId") Integer userId, @QueryParam("token") String token, @QueryParam("authId") Integer authId) {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.PRIVATE_WRITE, userId, token, authId);
+            tokenSecurity.authorize(SecurityPower.PRIVATE_WRITE, userId, token, authId);
         } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }

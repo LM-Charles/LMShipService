@@ -36,12 +36,13 @@ public class AppUserResource {
     @Autowired
     private UserStorage userStorage;
     private Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-
+    @Autowired
+    private TokenSecurity tokenSecurity;
     @SuppressWarnings("unchecked")
     @GET
     public Response listUsers(@QueryParam("token") String token, @QueryParam("authId") Integer authId) {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, authId, token, authId);
+            tokenSecurity.authorize(SecurityPower.ADMIN, authId, token, authId);
         } catch (NotAuthorizedException e) {
             ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
@@ -100,7 +101,7 @@ public class AppUserResource {
     @Path("/{userId}")
     public Response getUser(@PathParam("userId") Integer userId, @QueryParam("token") String token, @QueryParam("authId") Integer authId) {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.PRIVATE_READ, userId, token, authId);
+            tokenSecurity.authorize(SecurityPower.PRIVATE_READ, userId, token, authId);
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
@@ -120,7 +121,7 @@ public class AppUserResource {
     @Path("/{userId}/admin")
     public Response getUserAdmin(@PathParam("userId") Integer userId, @QueryParam("token") String token, @QueryParam("authId") Integer authId) {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, userId, token, authId);
+            tokenSecurity.authorize(SecurityPower.ADMIN, userId, token, authId);
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
@@ -140,7 +141,7 @@ public class AppUserResource {
     @Transactional(readOnly = false)
     public Response changeUserDetail(@PathParam("userId") Integer userId, @QueryParam("token") String token, UserProfileModel request, @QueryParam("authId") Integer authId) {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.PRIVATE_WRITE, userId, token, authId);
+            tokenSecurity.authorize(SecurityPower.PRIVATE_WRITE, userId, token, authId);
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
@@ -288,7 +289,7 @@ public class AppUserResource {
     @Transactional(readOnly = false)
     public Response disableUser(@PathParam("userId") Integer userId, @QueryParam("token") String token, @QueryParam("authId") Integer authId) {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.ADMIN, userId, token, authId);
+            tokenSecurity.authorize(SecurityPower.ADMIN, userId, token, authId);
         } catch (NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
