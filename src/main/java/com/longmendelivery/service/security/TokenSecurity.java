@@ -3,6 +3,7 @@ package com.longmendelivery.service.security;
 import com.longmendelivery.persistence.UserStorage;
 import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
+import com.longmendelivery.service.initializer.EnvironmentUtil;
 import com.longmendelivery.service.model.user.AppUserGroupType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,20 +16,15 @@ public class TokenSecurity {
     @Autowired
     private UserStorage userStorage;
 
-    private static TokenSecurity instance;
+    public TokenSecurity() {
 
-    private TokenSecurity() {
-
-    }
-
-    public static TokenSecurity getInstance() {
-        if (instance == null) {
-            instance = new TokenSecurity();
-        }
-        return instance;
     }
 
     public void authorize(SecurityPower requestedPower, Integer requestedUserId, String authToken, Integer authUserId) throws NotAuthorizedException {
+        if (!EnvironmentUtil.getAPISecurity()) {
+            return;
+        }
+
         if (authToken == null || authUserId == null) {
             throw new NotAuthorizedException("Must have a token and requestedUserId to validate this request");
         } else if (requestedPower.equals(SecurityPower.PUBLIC_READ)) {
