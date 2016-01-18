@@ -5,10 +5,12 @@ import com.longmendelivery.persistence.entity.AppUserEntity;
 import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import com.longmendelivery.service.model.user.AppUserGroupType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by desmond on 04/06/15.
  */
+@Component
 public class TokenSecurity {
     @Autowired
     private UserStorage userStorage;
@@ -46,7 +48,7 @@ public class TokenSecurity {
 
                     return;
                 } else {
-                    if (!authUser.getUserGroup().equals(AppUserGroupType.ADMIN_USER)) {
+                    if (!authUser.getUserGroup().equals(AppUserGroupType.ADMIN_USER) && !authUser.getUserGroup().equals(AppUserGroupType.BACKEND_USER)) {
                         throw new NotAuthorizedException("token or user require admin power for this request");
                     }
                     return;

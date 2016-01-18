@@ -30,7 +30,8 @@ public class CourierResource {
     private RSIShipmentClient rsiClient;
     @Autowired
     private LongmenShipmentClient longmenShipmentClient;
-
+    @Autowired
+    private TokenSecurity tokenSecurity;
     public CourierResource() throws DependentServiceException {
     }
 
@@ -38,7 +39,7 @@ public class CourierResource {
     @Path("/tracking")
     public Response getTracking(@QueryParam("trackingNumber") String trackingNumber, @QueryParam("courier") String courierCode, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.PUBLIC_READ, authId, token, authId);
+            tokenSecurity.authorize(SecurityPower.PUBLIC_READ, authId, token, authId);
         } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
@@ -62,7 +63,7 @@ public class CourierResource {
     @Path("/insurance")
     public Response getTracking(@QueryParam("insuranceValue") String insuranceValue, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.PUBLIC_READ, authId, token, authId);
+            tokenSecurity.authorize(SecurityPower.PUBLIC_READ, authId, token, authId);
         } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
@@ -83,7 +84,7 @@ public class CourierResource {
     @Path("/rate")
     public Response calculateRate(OrderCreationRequest order, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
         try {
-            TokenSecurity.getInstance().authorize(SecurityPower.PUBLIC_READ, authId, token, authId);
+            tokenSecurity.authorize(SecurityPower.PUBLIC_READ, authId, token, authId);
         } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
             return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
         }
