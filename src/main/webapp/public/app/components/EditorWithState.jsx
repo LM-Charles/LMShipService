@@ -16,7 +16,7 @@ var EditorWithState = React.createClass({
         });
     },
     updateOrderStatusConfirm(){
-        var result = new AjaxClient().ajaxUpdateStatus(this.state.order.id, this.refs.newStatus.getValue(), this.refs.newStatusDescription.getValue());
+        var result = new AjaxClient().ajaxUpdateStatus(this.refs.username.getValue(), this.refs.password.getValue(), this.state.order.id, this.refs.newStatus.getValue(), this.refs.newStatusDescription.getValue());
         this.onClickQueryOrder();
         this.closeUpdateOrderStatus();
     },
@@ -26,18 +26,18 @@ var EditorWithState = React.createClass({
         });
     },
     onClickQueryOrder(){
-        var result = new AjaxClient().ajaxLoadOrder(this.refs.orderId.getValue());
+        var result = new AjaxClient().ajaxLoadOrder(this.refs.username.getValue(), this.refs.password.getValue(), this.refs.orderId.getValue());
         console.log(JSON.stringify(result));
         this.setState({
             order: result
         })
     },
     onClickUpdateTracking(sequence){
-        var result = new AjaxClient().ajaxSaveTracking(this.state.order.id, this.state.order.shipments[sequence].id, this.refs["tracking" + sequence].getValue());
+        var result = new AjaxClient().ajaxSaveTracking(this.refs.username.getValue(), this.refs.password.getValue(), this.state.order.id, this.state.order.shipments[sequence].id, this.refs["tracking" + sequence].getValue());
         this.onClickQueryOrder();
     },
     onClickUpdateDimension(sequence){
-        var result = new AjaxClient().ajaxUpdateDimension(this.state.order.id, this.state.order.shipments[sequence].id,
+        var result = new AjaxClient().ajaxUpdateDimension(this.refs.username.getValue(), this.refs.password.getValue(), this.state.order.id, this.state.order.shipments[sequence].id,
             this.refs["length" + sequence].getValue(),
             this.refs["width" + sequence].getValue(),
             this.refs["height" + sequence].getValue(),
@@ -167,8 +167,8 @@ var EditorWithState = React.createClass({
             <div className="component-EditorWithState-container">
                 <h3>LM Administrative Website</h3>
                 <Row>
-                    <Col md="6"><Input type='text' label='Username'/></Col>
-                    <Col md="6"><Input type='password' label='Password'/></Col>
+                    <Col md="6"><Input type='text' ref='username' label='Username'/></Col>
+                    <Col md="6"><Input type='password' ref='password' label='Password'/></Col>
                 </Row>
                 <Row>
                     <Col md="12"> <Input type='text' ref='orderId' label='Search for Order by ID'
