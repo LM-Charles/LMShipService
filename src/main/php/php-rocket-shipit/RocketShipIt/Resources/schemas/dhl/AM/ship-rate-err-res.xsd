@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:dhl="http://www.dhl.com/datatypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.dhl.com" elementFormDefault="unqualified"
+            xmlns="http://www.dhl.com">
+    <xsd:import namespace="http://www.dhl.com/datatypes" schemaLocation="datatypes.xsd"/>
+
+    <xsd:element name="ShipmentRatingErrorResponse">
+        <xsd:annotation>
+            <xsd:documentation>Shipment Validation error response root element</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Response" type="dhl:ErrorResponse"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

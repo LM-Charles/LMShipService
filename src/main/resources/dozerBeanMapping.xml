@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns="http://dozer.sourceforge.net"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <configuration>
+
+        <custom-converters>
+            <!-- Dozer creates a new blank instance of DateTime, via new DateTime() which will be set to the current time instead of proper time-->
+            <converter type="com.longmendelivery.lib.conversion.DateTimeCustomConverter">
+                <class-a>org.joda.time.DateTime</class-a>
+                <class-b>org.joda.time.DateTime</class-b>
+            </converter>
+            <!-- Convert from a database entity into their Integer Id, this implementation does not support reverse transformation -->
+            <converter type="com.longmendelivery.lib.conversion.EntityToIdCustomConverter">
+                <class-a>com.longmendelivery.persistence.DAOEntity</class-a>
+                <class-b>java.lang.Integer</class-b>
+            </converter>
+        </custom-converters>
+    </configuration>
+</mappings> 
