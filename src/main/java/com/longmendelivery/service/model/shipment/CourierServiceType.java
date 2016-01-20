@@ -37,10 +37,10 @@ public enum CourierServiceType {
 
     CANADA_INTERNATIONAL_EXPRESS(CourierType.CANADA_POST, "Xpresspost International", "INT.XP", "FASTEST_COURIER", "/public/image/canadapost.jpg"),
 
-    LONGMEN_STANDARD(CourierType.LONGMEN, "Long Men Standard", "LONGMEN_STANDARD", "MEDIUM_COURIER", "/public/image/longmen.jpg"),
+    LONGMEN_STANDARD(CourierType.LONGMEN, "Long Men Standard", "LONGMEN_STANDARD", "MEDIUM_COURIER", "/public/image/longmen.png"),
 
-    LONGMEN_HANDLING(CourierType.LONGMEN, "Long Men Handling Fee", "LONGMEN_HANDLING", "HANDLING", "/public/image/longmen.jpg"),
-    LONGMEN_INSURANCE(CourierType.LONGMEN, "Long Men Insurance", "LONGMEN_INSURANCE", "INSURANCE", "/public/image/longmen.jpg");
+    LONGMEN_HANDLING(CourierType.LONGMEN, "Long Men Handling Fee", "LONGMEN_HANDLING", "HANDLING", "/public/image/longmen.png"),
+    LONGMEN_INSURANCE(CourierType.LONGMEN, "Long Men Insurance", "LONGMEN_INSURANCE", "INSURANCE", "/public/image/longmen.png");
 
     public static CourierServiceType getFromServiceCode(CourierType courier, String serviceCode) {
         for (CourierServiceType service : CourierServiceType.values()) {
