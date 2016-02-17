@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by desmond on 04/06/15.
+ * Created by rabiddesire on 04/06/15.
  */
 @Component
 public class TokenSecurity {

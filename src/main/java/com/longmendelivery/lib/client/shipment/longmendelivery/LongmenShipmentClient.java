@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Created by desmond on 15/08/15.
+ * Created by rabiddesire on 15/08/15.
  */
 @Component
 public class LongmenShipmentClient implements ShipmentClient {

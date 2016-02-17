@@ -7,7 +7,7 @@ import com.longmendelivery.persistence.exception.ResourceNotFoundException;
 import java.util.List;
 
 /**
- * Created by desmond on 23/08/15.
+ * Created by rabiddesire on 23/08/15.
  */
 public interface UserStorage {
     List<AppUserEntity> listAll(int pageSize, int offset);

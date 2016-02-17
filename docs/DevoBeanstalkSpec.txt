@@ -30,7 +30,7 @@ Instance type
     t2.micro
 Key pair
 Email address
-    desmond007@gmail.com
+    rabiddesire007@gmail.com
 Root volume type
     (default)
 Root volume size

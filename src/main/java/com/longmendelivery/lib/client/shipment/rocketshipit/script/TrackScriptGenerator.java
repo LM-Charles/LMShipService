@@ -5,7 +5,7 @@ import com.longmendelivery.service.model.shipment.CourierType;
 import java.util.EnumSet;
 
 /**
- * Created by desmond on 05/07/15.
+ * Created by rabiddesire on 05/07/15.
  */
 public class TrackScriptGenerator {
     public static final EnumSet<CourierType> SUPPORTED = EnumSet.of(CourierType.FEDEX, CourierType.UPS, CourierType.CANADA_POST);

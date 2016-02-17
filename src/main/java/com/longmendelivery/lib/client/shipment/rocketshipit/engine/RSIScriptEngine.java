@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * This engine must be released explicitly by calling release().
  *
- * Created by desmond on 21/06/15.
+ * Created by rabiddesire on 21/06/15.
  */
 public class RSIScriptEngine {
     private static String getRocketShipItPath() {

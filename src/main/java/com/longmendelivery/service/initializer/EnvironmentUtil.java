@@ -3,7 +3,7 @@ package com.longmendelivery.service.initializer;
 import com.longmendelivery.lib.client.sms.twilio.TwilioStage;
 
 /**
- * Created by desmond on 09/08/15.
+ * Created by rabiddesire on 09/08/15.
  */
 public class EnvironmentUtil {
     public static EnvironmentStage getStage() {

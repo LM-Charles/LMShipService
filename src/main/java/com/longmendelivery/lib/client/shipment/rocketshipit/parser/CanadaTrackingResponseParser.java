@@ -8,7 +8,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 /**
- * Created by desmond on 15/08/15.
+ * Created by rabiddesire on 15/08/15.
  */
 public class CanadaTrackingResponseParser implements TrackingResponseParser {
     //    /tracking-detail/xmlns => "http://www.canadapost.ca/ws/track"

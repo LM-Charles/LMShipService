@@ -8,7 +8,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 /**
- * Created by desmond on 15/08/15.
+ * Created by rabiddesire on 15/08/15.
  */
 public class UPSTrackingResponseParser implements TrackingResponseParser {
     //    $.TrackResponse.Response.ResponseStatusDescription : '0' => "Success"

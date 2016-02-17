@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 /**
- * Created by desmond on 17/06/15.
+ * Created by rabiddesire on 17/06/15.
  */
 public class SecurityUtil {
     public static final String UTF_8 = "UTF-8";

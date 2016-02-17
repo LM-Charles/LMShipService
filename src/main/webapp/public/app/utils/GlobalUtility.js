@@ -1,5 +1,5 @@
 /**
- * Created by desmondz on 7/25/2015.
+ * Created by rabiddesirez on 7/25/2015.
  */
 
 function toTitleCase(stringValue)

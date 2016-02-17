@@ -6,7 +6,7 @@ import com.longmendelivery.service.security.NotAuthorizedException;
 import javax.ws.rs.core.Response;
 
 /**
- * Created by desmond on 20/06/15.
+ * Created by rabiddesire on 20/06/15.
  */
 public class ResourceResponseUtil {
     public static Response generateForbiddenMessage(NotAuthorizedException e) {

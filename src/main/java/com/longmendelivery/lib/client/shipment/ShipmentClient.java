@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 /**
- * Created by desmond on 04/06/15.
+ * Created by rabiddesire on 04/06/15.
  */
 public interface ShipmentClient {
     Map<CourierServiceType, BigDecimal> getAllRates(AddressModel source, AddressModel destination, ShipmentModel shipmentModel) throws DependentServiceException;
