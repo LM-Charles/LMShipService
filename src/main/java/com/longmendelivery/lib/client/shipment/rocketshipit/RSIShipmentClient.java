@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 /**
- * Created by  rabiddesireon 20/06/15.
+ * Created by rabiddesire on 20/06/15.
  */
 public class RSIShipmentClient implements ShipmentClient {
 

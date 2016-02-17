@@ -1,7 +1,7 @@
 package com.longmendelivery.service.security;
 
 /**
- * Created by  rabiddesireon 20/06/15.
+ * Created by rabiddesire on 20/06/15.
  */
 public class NotAuthorizedException extends Exception {
     private String responseMessage;

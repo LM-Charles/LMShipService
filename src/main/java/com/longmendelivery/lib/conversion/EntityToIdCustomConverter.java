@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 
 /**
- * Created by  rabiddesireon 21/06/15.
+ * Created by rabiddesire on 21/06/15.
  */
 @Component
 public class EntityToIdCustomConverter implements CustomConverter {

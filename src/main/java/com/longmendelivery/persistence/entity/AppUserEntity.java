@@ -12,7 +12,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 /**
- * Created by  rabiddesireon 04/06/15.
+ * Created by rabiddesire on 04/06/15.
  */
 @Entity(name = "AppUser")
 @Data

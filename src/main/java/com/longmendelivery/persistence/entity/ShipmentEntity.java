@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 /**
- * Created by  rabiddesireon 04/06/15.
+ * Created by rabiddesire on 04/06/15.
  */
 @Data
 @AllArgsConstructor

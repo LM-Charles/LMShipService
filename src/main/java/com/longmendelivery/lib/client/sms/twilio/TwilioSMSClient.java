@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by  rabiddesireon 04/06/15.
+ * Created by rabiddesire on 04/06/15.
  */
 public class TwilioSMSClient implements SMSClient {
 

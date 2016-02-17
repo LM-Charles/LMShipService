@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
 
 /**
- * Created by  rabiddesireon 05/07/15.
+ * Created by rabiddesire on 05/07/15.
  */
 @Data
 @AllArgsConstructor

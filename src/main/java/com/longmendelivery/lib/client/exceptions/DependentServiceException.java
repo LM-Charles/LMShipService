@@ -1,7 +1,7 @@
 package com.longmendelivery.lib.client.exceptions;
 
 /**
- * Created by  rabiddesireon 04/06/15.
+ * Created by rabiddesire on 04/06/15.
  */
 public class DependentServiceException extends Exception {
     public DependentServiceException(Throwable e) {

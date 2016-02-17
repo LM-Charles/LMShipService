@@ -774,7 +774,7 @@
 		},
 		{
 			"headers": "",
-			"url": "{{path}}/rest/login?email=desmond007@gmail.com&password=qwerty",
+		  "url": "{{path}}/rest/login?email=rabiddesire007@gmail.com&password=qwerty",
 			"preRequestScript": "",
 			"pathVariables": {},
 			"method": "POST",

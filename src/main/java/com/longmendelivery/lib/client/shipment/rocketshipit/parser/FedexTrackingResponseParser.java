@@ -6,7 +6,7 @@ import com.longmendelivery.service.model.shipment.ShipmentTrackingModel;
 import org.joda.time.DateTime;
 
 /**
- * Created by  rabiddesireon 15/08/15.
+ * Created by rabiddesire on 15/08/15.
  */
 public class FedexTrackingResponseParser implements TrackingResponseParser {
     //    $.TrackReply.Notifications.Severity :	'0' => "SUCCESS"

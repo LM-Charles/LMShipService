@@ -1,7 +1,7 @@
 package com.longmendelivery.lib.client.sms.twilio;
 
 /**
- * Created by  rabiddesireon 04/06/15.
+ * Created by rabiddesire on 04/06/15.
  */
 class TwilioProdCredentials {
     public static final String ACCOUNT_SID = "SKda8d34ae88397694c583bd94f5d3598c";

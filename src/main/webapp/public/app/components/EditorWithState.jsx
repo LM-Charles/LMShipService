@@ -1,5 +1,5 @@
 /**
- * Created by desmondz on 7/26/2015.
+ * Created by rabiddesirez on 7/26/2015.
  */
 var EditorWithState = React.createClass({
     getInitialState(){

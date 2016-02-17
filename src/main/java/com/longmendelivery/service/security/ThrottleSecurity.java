@@ -1,7 +1,7 @@
 package com.longmendelivery.service.security;
 
 /**
- * Created by  rabiddesireon 04/06/15.
+ * Created by rabiddesire on 04/06/15.
  */
 public class ThrottleSecurity {
     private static ThrottleSecurity instance;

@@ -1,8 +1,8 @@
 Desktop PHP Root
 {
-  "message": "/home/desmond/IdeaProjects/LMShipService"
+  "message": "/home/rabiddesire/IdeaProjects/LMShipService"
 }
-Script location: /home/desmond/IdeaProjects/LMShipService/src/main/php/php-rocket-shipit/RocketShipIt/Carrier/Usps.php
+Script location: /home/rabiddesire/IdeaProjects/LMShipService/src/main/php/php-rocket-shipit/RocketShipIt/Carrier/Usps.php
 
 Devo PHP Root
 {

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by  rabiddesireon 05/07/15.
+ * Created by rabiddesire on 05/07/15.
  */
 public class RateScriptGenerator {
     public static final EnumSet<CourierType> SUPPORTED = EnumSet.of(CourierType.FEDEX, CourierType.UPS, CourierType.CANADA_POST);
