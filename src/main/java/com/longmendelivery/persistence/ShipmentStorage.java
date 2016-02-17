@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Created by rabiddesire on 23/08/15.
+ * ok
  */
 public interface ShipmentStorage {
     List<ShipmentEntity> listAll(int pageSize, int offset);
