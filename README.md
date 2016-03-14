@@ -2,7 +2,7 @@
 
 ### Production
 
-Endpoint: https://lmshipservice-prod.longmenservice.com/
+Endpoint: https://lmshipservice-prod.longmenservice.com
 
 Database: Please see the environment configuration on AWS console for lmshipservice-prod.longmenservice on US East.
 
