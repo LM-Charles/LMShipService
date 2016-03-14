@@ -10,7 +10,9 @@ Database: Please see the environment configuration on AWS console for lmshipserv
 
 Endpoint:  http://lmshipservice-devo.elasticbeanstalk.com
 
-Database:  jdbc:mysql://aa1ocjxj7xik49d.costzmua3eod.us-west-2.rds.amazonaws.com:3306/ebdb?user=lmdevo&password=Hkduf4KUYSteWEKf
+Database:
+
+> jdbc:mysql://aa1ocjxj7xik49d.costzmua3eod.us-west-2.rds.amazonaws.com:3306/ebdb?user=lmdevo&password=Hkduf4KUYSteWEKf
 
 #### Resource
 
