@@ -21,7 +21,7 @@ public class EnvironmentUtil {
 
     public static TwilioStage getTwilioStage() {
         String twilioStage = System.getProperty("TWILIO_STAGE");
-        if (twilioStage != null && !twilioStage.isEmpty() && twilioStage.equals(TwilioStage.PROD.name())) {
+        if (twilioStage != null && !twilioStage.isEmpty() && twilioStage.equalsIgnoreCase(TwilioStage.PROD.name())) {
             return TwilioStage.PROD;
         }
         return TwilioStage.TEST;
@@ -29,7 +29,7 @@ public class EnvironmentUtil {
 
     public static boolean getAPISecurity() {
         String apiSecurity = System.getProperty("API_SECURITY");
-        if (apiSecurity != null && !apiSecurity.isEmpty() && apiSecurity.equals("enabled")) {
+        if (apiSecurity != null && !apiSecurity.isEmpty() && apiSecurity.equalsIgnoreCase("enabled")) {
             return true;
         } else {
             return false;
