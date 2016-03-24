@@ -83,12 +83,6 @@ public class CourierResource {
     @POST
     @Path("/rate")
     public Response calculateRate(OrderCreationRequest order, @QueryParam("token") String token, @QueryParam("authId") Integer authId) throws DependentServiceException {
-        try {
-            tokenSecurity.authorize(SecurityPower.PUBLIC_READ, authId, token, authId);
-        } catch (com.longmendelivery.service.security.NotAuthorizedException e) {
-            return ResourceResponseUtil.generateForbiddenMessage(e.getLocalizedMessage());
-        }
-
         RateResponseModel responseModel = calculateRate(order);
 
         if (responseModel == null) {
