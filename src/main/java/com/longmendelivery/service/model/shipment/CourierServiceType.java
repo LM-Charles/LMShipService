@@ -19,6 +19,11 @@ public enum CourierServiceType {
     UPS_INTERNATIONAL_PRIORITY(CourierType.UPS, "UPS International Priority", "08", "MEDIUM_COURIER", "/public/image/ups.png"),
     UPS_INTERNATIONAL_SAVER(CourierType.UPS, "UPS World Wide Saver", "65", "ECONOMY_COURIER", "/public/image/ups.png"),
 
+    FIRST_OVERNIGHT(CourierType.FEDEX, "First Overnight", "FIRST_OVERNIGHT", "FASTEST_COURIER", "/public/image/fedex.jpg"),
+    PRIORITY_OVERNIGHT(CourierType.FEDEX, "Priority Overnight", "PRIORITY_OVERNIGHT", "FASTEST_COURIER", "/public/image/fedex.jpg"),
+    STANDARD_OVERNIGHT(CourierType.FEDEX, "Standard Overnight", "STANDARD_OVERNIGHT", "FASTEST_COURIER", "/public/image/fedex.jpg"),
+    FEDEX_2_DAY(CourierType.FEDEX, "Fedex 2 Day", "FEDEX_2_DAY", "MEDIUM_COURIER", "/public/image/fedex.jpg"),
+    FEDEX_EXPRESS_SAVER(CourierType.FEDEX, "FedEx Express Saver", "FEDEX_EXPRESS_SAVER", "ECONOMY_COURIER", "/public/image/fedex.jpg"),
     FEDEX_GROUND(CourierType.FEDEX, "FedEx Ground", "FEDEX_GROUND", "ECONOMY_COURIER", "/public/image/fedex.jpg"),
 
     CANADA_EXPEDITED(CourierType.CANADA_POST, "Expedited Parcel", "DOM.EP", "FASTEST_COURIER", "/public/image/canadapost.jpg"),

@@ -16,7 +16,7 @@ return array(
     'generic' => array(
         // 1 for Debug mode, 0 for normal operations
         // This also changes from testing to production mode
-        'debugMode' => 1,
+        'debugMode' => 0,
 
         // Default timezone
         // You can find out which timezones are available here: 
@@ -24,16 +24,16 @@ return array(
         'timezone' => 'America/Vancouver',
 
         // Your company name
-        'shipper' => 'Long Men',
+        'shipper' => 'Longmen Express',
 
         // Key shipping contact individual at your company
         'shipContact' => 'Charles',
 
-        'shipAddr1' => '9188 Hemlock Drive',
+        'shipAddr1' => '12800 Bathgate Way',
         'shipAddr2' => '',
         'shipCity' => 'Richmond',
         'shipState' => 'BC',
-        'shipCode' => 'V4C0A9',
+        'shipCode' => 'V6V1Z4',
         'shipCountry' => 'CA',
 
         // Phone number in this format: 1234567890
@@ -54,10 +54,10 @@ return array(
     */
 
     'fedex' => array(
-        'key' => 'zsbcq5Rq25vlCGLd',
-        'password' => '8Swwmx7v0JDNX1d4nGfaPpoIH',
-        'accountNumber' => '510088000',
-        'meterNumber' => '118685333',
+        'key' => 'rrK1jyua39JK7EHy',
+        'password' => 'WAEHGu6mC6RdeOOOsBgB7N94a',
+        'accountNumber' => '679568787',
+        'meterNumber' => '108272006',
 
         'packagingType' => 'YOUR_PACKAGING',
         'weightUnit' => 'KG',
