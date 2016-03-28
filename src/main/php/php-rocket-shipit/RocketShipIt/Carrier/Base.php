@@ -2,7 +2,7 @@
 
 namespace RocketShipIt\Carrier;
 
-use \RocketShipIt\Helper\General;
+use RocketShipIt\Helper\General;
 
 class Base
 {
@@ -12,13 +12,14 @@ class Base
     public $mockXmlResponse;
     public $url;
     public $fullUrl;
-    var $xmlPrevSent;
-    var $curlReturned;
-    var $parameters;
-    var $testingUrl;
-    var $productionUrl;
-    var $helper;
-    var $config;
+    public $xmlPrevSent;
+    public $curlReturned;
+    public $parameters;
+    public $testingUrl;
+    public $productionUrl;
+    public $helper;
+    public $config;
+    public $debugMode = 1;
 
     public function __construct()
     {
@@ -28,7 +29,7 @@ class Base
         $this->fullUrl = '';
         $this->parameters = array(
             'packages' => array(),
-            'customs' => array()
+            'customs' => array(),
         );
 
         // Default 60 second request timeout
@@ -36,16 +37,18 @@ class Base
         $this->mockXmlRequest = '';
         $this->mockXmlResponse = '';
         $this->validateOnly = '';
-        $this->helper = new General;
-        $this->config = new \RocketShipIt\Config;
+        $this->helper = new General();
+        $this->config = new \RocketShipIt\Config();
+        $this->debugMode = $this->config->getDefault('generic', 'debugMode');
     }
 
     public function isCliMode()
     {
-        if (php_sapi_name() == "cli") {
+        if (php_sapi_name() == 'cli') {
             return true;
         }
-        return false; 
+
+        return false;
     }
 
     public function getMockResponse()
@@ -56,15 +59,20 @@ class Base
             } else {
                 $mockXml = $this->mockXmlResponse;
             }
+
             return $mockXml;
         }
 
         return false;
     }
 
-    function addfilterParams($filteredParams, $type)
+    public function addfilterParams($filteredParams, $type)
     {
         $filteredParams[$type] = array();
+        if (!isset($this->parameters[$type])) {
+            return $filteredParams;
+        }
+
         foreach ($this->parameters[$type] as $package) {
             $pack = array();
             foreach ($package as $param => $value) {
@@ -107,15 +115,15 @@ class Base
     }
 
     // Creates a section in the debug output
-    function debugSection($name, $info, $nohtmlentities=true)
+    public function debugSection($name, $info, $nohtmlentities = true)
     {
         if ($info == '') {
             return;
         }
         $debugInfo = '';
-        $debugInfo .= '--------------------------------------------------'. "\n";
-        $debugInfo .= $name. "\n";
-        $debugInfo .= '--------------------------------------------------'. "\n";
+        $debugInfo .= '--------------------------------------------------' . "\n";
+        $debugInfo .= $name . "\n";
+        $debugInfo .= '--------------------------------------------------' . "\n";
         $debugInfo .= $this->encodeOutputForDisplay($info, $nohtmlentities);
         $debugInfo .= "\n\n";
 
@@ -129,10 +137,10 @@ class Base
             $this->debugMode = 0;
         }
 
-        $topSection = 'Version: '. \RocketShipIt\VERSION. "\n"
-            ."Debug Mode: $this->debugMode". "\n";
+        $topSection = 'Version: ' . \RocketShipIt\VERSION . "\n"
+            . "Debug Mode: $this->debugMode" . "\n";
         if (isset($this->request->url)) {
-            $topSection .= "URL: ". $this->request->url;
+            $topSection .= 'URL: ' . $this->request->url;
         }
 
         $debugInfo .= $this->debugSection(
@@ -156,16 +164,21 @@ class Base
         } else {
             $debugInfo .= $this->debugSection('XML Sent', 'xmlSent was not set', $this->isCliMode());
         }
-        if (isset($this->xmlResponse)) {
+        if (isset($this->xmlResponse) && gettype($this->xmlResponse) == 'string') {
             $debugInfo .= $this->debugSection('XML Response', $this->helper->xmlPrettyPrint($this->xmlResponse), $this->isCliMode());
         } else {
             $debugInfo .= $this->debugSection('XML Response', 'xmlResponse was not set', $this->isCliMode());
         }
         $helper = $this->helper;
         $debugInfo .= $this->debugSection('Set Parameters', $helper->jsonPrettyPrint($this->jsonEncodeParameters()), $this->isCliMode());
-        $debugInfo .= $this->debugSection('PHP Information', 'Version: '. phpversion(), $this->isCliMode());
+        $debugInfo .= $this->debugSection('PHP Information', 'Version: ' . phpversion(), $this->isCliMode());
         if (isset($this->curlReturned)) {
-            $debugInfo .= $this->debugSection('cURL Return Information', $this->curlReturned, $this->isCliMode());
+            $debugInfo .= $this->debugSection('Raw Response', $this->curlReturned, $this->isCliMode());
+        }
+        if (isset($this->request)) {
+            if (method_exists($this->request, 'getInfo')) {
+                $debugInfo .= $this->debugSection('Response Details', $helper->jsonPrettyPrint(json_encode($this->request->getInfo())), $this->isCliMode());
+            }
         }
         $debugInfo .= '</pre>';
 
@@ -178,6 +191,10 @@ class Base
             return $text;
         }
 
+        if ($this->parameters['password'] == '') {
+            return $text;
+        }
+
         if (substr_count($text, $this->parameters['password']) > 5) {
             return $text;
         }
@@ -187,8 +204,8 @@ class Base
 
     public function saveResponse($xmlResponse)
     {
-        $random = substr(md5(rand()),0,7);
-        $filename = $random. '.xml';
+        $random = substr(md5(rand()), 0, 7);
+        $filename = $random . '.xml';
         $fh = fopen($filename, 'w');
         fwrite($fh, $xmlResponse);
         fclose($fh);
@@ -196,17 +213,14 @@ class Base
         return true;
     }
 
-    public function setTestingMode($bool)
+    public function getUrl()
     {
-        if (!$bool) {
-            // Production mode
-            $this->debugMode = false;
-            $this->url = $this->productionUrl;
-            return;
+        if ($this->debugMode) {
+            return $this->testingUrl;
         }
 
-        $this->debugMode = true;
-        $this->url = $this->testingUrl;
+        // Production mode
+        return $this->productionUrl;
     }
 
     public function isServiceDown($statusCode)
@@ -221,7 +235,7 @@ class Base
     public function returnResponseOrDownResponse($request)
     {
         if ($this->isServiceDown($request->getStatusCode())) {
-            return array('error' => 'The FedEx service seems to be down with HTTP/1.1 '. $request->getResponse());
+            return array('error' => 'The FedEx service seems to be down with HTTP/1.1 ' . $request->getResponse());
         } else {
             $response = strstr($this->curlReturned, '<?'); // Separate the html header and the actual XML because we turned CURLOPT_HEADER to 1
             $this->xmlResponse = $response;

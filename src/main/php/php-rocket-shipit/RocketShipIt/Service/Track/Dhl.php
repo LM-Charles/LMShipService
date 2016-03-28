@@ -2,7 +2,6 @@
 
 namespace RocketShipIt\Service\Track;
 use RocketShipIt\Helper\XmlBuilder as XmlBuilder;
-use RocketShipIt\Helper\XmlParser as XmlParser;
 
 /**
 * Main class for tracking shipments and packages

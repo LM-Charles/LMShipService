@@ -1,7 +1,6 @@
 <?php
 
 namespace RocketShipIt\Service\Track;
-use \RocketShipIt\Helper\XmlParser;
 
 /**
 * Main class for tracking shipments and packages

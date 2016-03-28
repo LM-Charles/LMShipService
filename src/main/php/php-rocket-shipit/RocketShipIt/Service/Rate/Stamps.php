@@ -2,24 +2,24 @@
 
 namespace RocketShipIt\Service\Rate;
 
-use \RocketShipIt\Helper\General;
+use RocketShipIt\Helper\General;
 
 /**
-* Main Rate class for producing rates for various packages/shipments
-*
-* This class is a wrapper for use with all carriers to produce rates
-* Valid carriers are: UPS, USPS, Stamps, DHL, CANADA, and FedEx.
-*/
+ * Main Rate class for producing rates for various packages/shipments.
+ *
+ * This class is a wrapper for use with all carriers to produce rates
+ * Valid carriers are: UPS, USPS, Stamps, DHL, CANADA, and FedEx.
+ */
 class Stamps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateInterface
 {
-    var $packageCount;
-    var $helper;
+    public $packageCount;
+    public $helper;
 
-    function __construct()
+    public function __construct()
     {
         $classParts = explode('\\', __CLASS__);
         $carrier = end($classParts);
-        $this->helper = new General;
+        $this->helper = new General();
         parent::__construct($carrier);
     }
 
@@ -58,7 +58,9 @@ class Stamps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateI
             }
         }
 
-        $rate['PackageType'] = $this->packagingType;
+        if ($this->packagingType != '') {
+            $rate['PackageType'] = $this->packagingType;
+        }
 
         $rate['Length'] = $this->length;
         $rate['Width'] = $this->width;
@@ -74,10 +76,10 @@ class Stamps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateI
         if ($this->shipDate != '') {
             $rate['ShipDate'] = $this->shipDate;
         } else {
-            $rate['ShipDate'] = date("Y-m-d");
+            $rate['ShipDate'] = date('Y-m-d');
         }
 
-        $rate['AddOnsV2'] = Array();
+        $rate['AddOnsV2'] = array();
 
         $request = array();
         $request['Credentials'] = $creds;
@@ -86,14 +88,15 @@ class Stamps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateI
         return $request;
     }
 
-    function getAllRates()
+    public function getAllRates()
     {
         $request = $this->buildRateRequest();
         $response = $this->core->request('GetRates', $request);
+
         return $response;
     }
 
-    function getSimpleRates($user_func=null)
+    public function getSimpleRates($user_func = null)
     {
         $stamps = $this->getAllRates();
         // If error do an array with error as key and description as value
@@ -101,7 +104,7 @@ class Stamps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateI
             return array('error' => $stamps->getMessage());
         }
         // else, for each rate find the description and value and put it into an array
-        $rates = Array();
+        $rates = array();
         foreach ($stamps->Rates->Rate as $rte) {
             if ($rte) {
                 $svc_code = $rte->ServiceType;
@@ -113,7 +116,7 @@ class Stamps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateI
                     'desc' => "$service - $packageType",
                     'rate' => $value,
                     'service_code' => $svc_code,
-                    'package_type' => $packageType
+                    'package_type' => $packageType,
                 );
                 if (!empty($user_func)) {
                     $simpleRate = call_user_func($user_func, end(explode('\\', __CLASS__)), $rte, $simpleRate);
@@ -121,15 +124,17 @@ class Stamps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateI
                 $rates[] = $simpleRate;
             }
         }
+
         return $rates;
     }
 
     // Checks the country to see if the request is International
-    function isInternational($country)
+    public function isInternational($country)
     {
         if ($country == '' || $country == 'US' || $country == $this->core->getCountryName('US')) {
             return false;
         }
+
         return true;
     }
 
@@ -178,29 +183,29 @@ class Stamps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateI
     public function filterAddons($rate, $addonsToFilter)
     {
         $filteredAddons = array();
-        foreach ($rate->AddOns->AddOnV4 as $addon) {
+        foreach ($rate->AddOns->AddOnV7 as $addon) {
             if (in_array($addon->AddOnType, $addonsToFilter)) {
                 $filteredAddons[] = $addon;
             }
         }
-        $rate->AddOns->AddOnV4 = $filteredAddons;
+        $rate->AddOns->AddOnV7 = $filteredAddons;
 
         return $rate;
     }
 
     public function addonsContainProhibited($rate, $addons)
     {
-        if (!isset($rate->AddOns->AddOnV4)) {
+        if (!isset($rate->AddOns->AddOnV7)) {
             return false;
         }
 
         $prohibitedAddons = array();
-        foreach ($rate->AddOns->AddOnV4 as $addon) {
+        foreach ($rate->AddOns->AddOnV7 as $addon) {
             if (in_array($addon->AddOnType, $addons)) {
-                if (!isset($addon->ProhibitedWithAnyOf->AddOnTypeV4)) {
+                if (!isset($addon->ProhibitedWithAnyOf->AddOnTypeV7)) {
                     continue;
                 }
-                $prohibitedAddons = array_merge($addon->ProhibitedWithAnyOf->AddOnTypeV4, $prohibitedAddons);
+                $prohibitedAddons = array_merge($addon->ProhibitedWithAnyOf->AddOnTypeV7, $prohibitedAddons);
             }
         }
 
@@ -215,13 +220,13 @@ class Stamps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateI
 
     public function addonsHaveRequirements($rate, $addons)
     {
-        if (!isset($rate->AddOns->AddOnV4)) {
+        if (!isset($rate->AddOns->AddOnV7)) {
             return true;
         }
 
-        foreach ($rate->AddOns->AddOnV4 as $addon) {
+        foreach ($rate->AddOns->AddOnV7 as $addon) {
             // Ignore addons that don't require anything
-            if (!isset($addon->RequiresAllOf->RequiresOneOf->AddOnTypeV4)) {
+            if (!isset($addon->RequiresAllOf->RequiresOneOf->AddOnTypeV7)) {
                 continue;
             }
 
@@ -231,7 +236,7 @@ class Stamps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateI
             }
 
             // If we have at least one requirement sastified return true
-            foreach ($addon->RequiresAllOf->RequiresOneOf->AddOnTypeV4 as $a) {
+            foreach ($addon->RequiresAllOf->RequiresOneOf->AddOnTypeV7 as $a) {
                 if (in_array($a, $addons)) {
                     return true;
                 }

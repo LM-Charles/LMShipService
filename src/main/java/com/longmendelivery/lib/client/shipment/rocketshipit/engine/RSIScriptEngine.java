@@ -37,6 +37,8 @@ public class RSIScriptEngine {
     public synchronized <T> T executeScript(String script, TypeReference<T> valueTypeRef) throws DependentServiceException {
         try {
             String value = (String) engine.eval(script);
+            System.out.println(value);
+
             T response = objectMapper.readValue(value, valueTypeRef);
             return response;
         } catch (ScriptException e) {
@@ -53,6 +55,8 @@ public class RSIScriptEngine {
     public synchronized JsonNode executeScriptToTree(String script) throws DependentServiceException {
         try {
             String value = (String) engine.eval(script);
+            System.out.println(value);
+
             JsonNode response = objectMapper.readTree(value);
             return response;
         } catch (ScriptException e) {
@@ -73,6 +77,8 @@ public class RSIScriptEngine {
     public synchronized String executeScriptToString(String script) throws DependentServiceException {
         try {
             String value = (String) engine.eval(script);
+            System.out.println(value);
+
             return value;
         } catch (ScriptException e) {
             e.printStackTrace();

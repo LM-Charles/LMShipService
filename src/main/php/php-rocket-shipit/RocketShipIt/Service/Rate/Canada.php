@@ -2,8 +2,7 @@
 
 namespace RocketShipIt\Service\Rate;
 
-use \RocketShipIt\Helper\XmlBuilder;
-use \RocketShipIt\Helper\XmlParser;
+use RocketShipIt\Helper\XmlBuilder;
 
 /**
 * Main Rate class for producing rates for various packages/shipments
@@ -65,15 +64,15 @@ class Canada extends \RocketShipIt\Service\Common implements \RocketShipIt\RateI
                 $xml->pop(); // end options
             }
 
-            $xml->element('origin-postal-code', preg_replace('/[^0-9a-z]/i', '', $this->shipCode));
+        $xml->element('origin-postal-code', strtoupper(preg_replace('/[^0-9a-z]/i', '', $this->shipCode)));
             $xml->push('destination');
                 if ($this->toCountry == 'CA') {
                     $xml->push('domestic');
-                        $xml->element('postal-code', preg_replace('/[^0-9a-zA-Z]/i', '', $this->toCode));
+                    $xml->element('postal-code', strtoupper(preg_replace('/[^0-9a-zA-Z]/i', '', $this->toCode)));
                     $xml->pop(); // end domestic
                 } else if ($this->toCountry == 'US') {
                     $xml->push('united-states');
-                        $xml->element('zip-code', preg_replace('/[^0-9-]/i', '', $this->toCode));
+                    $xml->element('zip-code', strtoupper(preg_replace('/[^0-9-]/i', '', $this->toCode)));
                     $xml->pop(); // end domestic
                 }
                 else {
@@ -88,13 +87,13 @@ class Canada extends \RocketShipIt\Service\Common implements \RocketShipIt\RateI
 
     public function getServiceDescriptionFromName($name)
     {
-        // TODO
         return "Canada Post $name";
     }
 
     function getSimpleRates($user_func=null)
     {
         $canada = $this->getAllRates();
+        print("CANADA: $canada");
         if (isset($canada['error'])) {
             // Error
             return $canada;

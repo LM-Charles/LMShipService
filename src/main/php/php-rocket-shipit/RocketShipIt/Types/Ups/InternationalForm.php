@@ -2,7 +2,7 @@
 
 namespace RocketShipIt\Types\Ups;
 
-use \RocketShipIt\Helper\DomBuilder;
+use RocketShipIt\Helper\DomBuilder;
 
 class InternationalForm
 {

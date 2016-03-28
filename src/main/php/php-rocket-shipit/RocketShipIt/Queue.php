@@ -2,24 +2,23 @@
 
 namespace RocketShipIt;
 
-use \RocketShipIt\Helper\XmlParser;
+use RocketShipIt\Helper\XmlParser;
 
 /**
-* Queueing class that is responsible for simultaneous requests
-*
-* This class will take a RocketShipIt object such as
-* RocketShipRate, RocketShipShipment, etc. and
-* add them to a queue they will then be executed
-* with curl simultaneously.
-*/
+ * Queueing class that is responsible for simultaneous requests.
+ *
+ * This class will take a RocketShipIt object such as
+ * RocketShipRate, RocketShipShipment, etc. and
+ * add them to a queue they will then be executed
+ * with curl simultaneously.
+ */
 class Queue extends \RocketShipIt\Service\Base
 {
+    public $queue;
+    public $mh;
+    public $activeCurlHandles;
 
-    var $queue;
-    var $mh; 
-    var $activeCurlHandles;
-
-    function __construct()
+    public function __construct()
     {
         $this->queue = array();
         $this->mh = curl_multi_init();
@@ -27,37 +26,40 @@ class Queue extends \RocketShipIt\Service\Base
         $this->xmlParser = new xmlParser($xmlResponse);
     }
 
-    function append($obj)
+    public function append($obj)
     {
         array_push($this->queue, $obj);
 
         return 1;
     }
 
-    function prepend($obj)
+    public function prepend($obj)
     {
         array_unshift($this->queue, $obj);
 
         return 1;
     }
 
-    function getCurlHandle($obj)
+    public function getCurlHandle($obj)
     {
         $c = get_class($obj);
 
-        switch($c) {
-            case "RocketShipRate":
+        switch ($c) {
+            case 'RocketShipRate':
                 if ($obj->carrier == 'FEDEX') {
                     $xml = $obj->inherited->buildFEDEXRateXml();
                     $ch = $obj->core->request($xml, true);
+
                     return $ch;
                 } elseif ($obj->carrier == 'UPS') {
                     $xml = $obj->inherited->buildUPSRateXml();
                     $ch = $obj->core->request('Rate', $xml, true);
+
                     return $ch;
                 } elseif ($obj->carrier == 'USPS') {
                     $xml = $obj->inherited->buildUSPSRateXml();
                     $ch = $obj->core->request('ShippingAPI.dll', $xml, true);
+
                     return $ch;
                 }
             case 'RocketShipShipment':
@@ -65,7 +67,7 @@ class Queue extends \RocketShipIt\Service\Base
         }
     }
 
-    function executeCurlMultiRequest()
+    public function executeCurlMultiRequest()
     {
         $a = array();
 
@@ -100,7 +102,7 @@ class Queue extends \RocketShipIt\Service\Base
         return $a;
     }
 
-    function execute($max=0)
+    public function execute($max = 0)
     {
         if (sizeof($this->queue) > 0) {
             if ($max == 0) {
@@ -115,8 +117,9 @@ class Queue extends \RocketShipIt\Service\Base
                 }
                 $a = $this->executeCurlMultiRequest();
             } else {
-                $a = array_slice($this->queue,0,$max);
+                $a = array_slice($this->queue, 0, $max);
             }
+
             return $a;
         } else {
             $a = array('error' => 'You must pass a RocketShipIt object into the RocketShipQueue object');
@@ -124,5 +127,4 @@ class Queue extends \RocketShipIt\Service\Base
             return $a;
         }
     }
-
 }

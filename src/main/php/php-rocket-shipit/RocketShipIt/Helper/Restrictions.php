@@ -40,6 +40,10 @@ class Restrictions {
        This restriction does not apply to registered mail and official government mail marked MOM.',
        'I1' => 'This restriction does not apply to registered mail.',
        'I2' => 'This restriction does not apply to official government mail marked MOM.',
+        'I3' => 'Mail may not exceed the following dimensions:
+       * Maximum length 27 inches
+       * Maximum width 14 inches 
+       * Maximum height 14 inches',
        'J' => 'Parcels may not exceed 108 inches in length and girth combined.',
        'K' => 'Mail that includes in the address the words, “Dependent Mail Section,” may consist only of letter mail, newspapers, magazines, and books. No parcel of any class containing any other matter may be mailed to the Dependent Mail section. This restriction does not apply if the address does not include the words “Dependent Mail Section.”',
        'L' => 'All official mail is prohibited.',

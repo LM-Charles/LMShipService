@@ -1,16 +1,19 @@
 <?php
-require_once("RocketShipIt.php");
+
+require_once 'RocketShipIt.php';
 
 // For authentication set to true and make sure
 // token matches the token parameter in your config file
-define("ALLOW_AUTH_BY_CARRIER_CREDS", false);
-define("TOKEN", 'abc123');
+define('ALLOW_AUTH_BY_CARRIER_CREDS', false);
+define('TOKEN', 'abc123');
 
 // TODO: If debug mode set return xmlsent/response etc.
-class logger {
-    function log($message, $obj=null) {
+class logger
+{
+    public function log($message, $obj = null)
+    {
         $time = date('c');
-        $log_message = $time. ' '. $_SERVER['REMOTE_ADDR']. ' '.  $message. "\n";
+        $log_message = $time . ' ' . $_SERVER['REMOTE_ADDR'] . ' ' . $message . "\n";
         if ($obj) {
             $log_message .= var_export($obj, true);
         }
@@ -81,7 +84,7 @@ $valid_classes = array(
     'RocketShipTrack',
     'RocketShipShipment',
     'RocketShipPackage',
-    'RocketShipCustoms'
+    'RocketShipCustoms',
 );
 
 if (!in_array($request['type'], $valid_classes)) {
@@ -94,8 +97,8 @@ $class = '';
 $carrier = '';
 $action = '';
 $args = array();
-$parameters = Array();
-$packages = Array();
+$parameters = array();
+$packages = array();
 
 $class = $request['type'];
 $carrier = $request['carrier'];
@@ -114,14 +117,14 @@ if (in_array('args', array_keys($request))) {
 
 try {
     $obj = new $class($carrier);
-    foreach ($parameters as $key=>$value) {
+    foreach ($parameters as $key => $value) {
         $obj->setParameter($key, $value);
     }
 
     if (in_array('packages', array_keys($request))) {
         foreach ($packages as $package) {
             $p = new \RocketShipIt\Package($carrier);
-            foreach ($package as $key=>$value) {
+            foreach ($package as $key => $value) {
                 $p->setParameter($key, $value);
             }
             call_user_func(array($obj, 'addPackageToShipment'), $p);

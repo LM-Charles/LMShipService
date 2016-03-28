@@ -3,24 +3,24 @@
 namespace RocketShipIt\Helper;
 
 /**
- * General
+ * General.
  *
- * @package 
  * @author RocketShipIt
  */
-class General {
-
+class General
+{
     public function startsWith($haystack, $needle)
     {
-        return $needle === "" || strpos($haystack, $needle) === 0;
+        return $needle === '' || strpos($haystack, $needle) === 0;
     }
 
     public function endsWith($haystack, $needle)
     {
-        return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+        return $needle === '' || substr($haystack, -strlen($needle)) === $needle;
     }
 
-    public function getCarrierFromTracking($trackNum) {
+    public function getCarrierFromTracking($trackNum)
+    {
         if ($this->isValidUpsTracking($trackNum)) {
             return 'UPS';
         }
@@ -64,13 +64,13 @@ class General {
       Determine if this is a UPS tracking number.
       This checks the format of the number and calculates
       if the checkdigit is correct.
-    
+
       Returns: true - tracking number is OK
                false - not a valid tracking number
-    
-    
+
+
     */
-    function isValidUpsTracking($tracknum)
+    public function isValidUpsTracking($tracknum)
     {
         if (!preg_match('/^(1Z[A-Z0-9]{16}|[0-9]{11}|[A-T][0-9]{10})$/i', $tracknum)) {
             return false;
@@ -86,7 +86,7 @@ class General {
         $last_ch = substr($str, -1);
 
         $t = 0;
-        for ($i=0; $i < ($len -1); $i++) {
+        for ($i = 0; $i < ($len - 1); ++$i) {
             $ch = substr($str, $i, 1);
             $n = ord($ch) - 48;
             if ($n < 0 || $n >= 10) {
@@ -113,19 +113,19 @@ class General {
 
         return true;
     }
-    
+
     /*
-      Determines if this a valid DHL tracking number 
+      Determines if this a valid DHL tracking number
       with the proper checkdigit.
-    
+
       DHL calculates a checkdigit by doing a MOD 7 on
       the first part of the tracking number (everything
       except the final digit).
-    
+
       Returns: true - tracking number is OK
                false - not a valid tracking number
     */
-    function isValidDhlTracking($tracknum)
+    public function isValidDhlTracking($tracknum)
     {
         # tracking numbes are 10 digits
         if (!preg_match('/^([0-9]{10})$/i', $tracknum)) {
@@ -135,47 +135,48 @@ class General {
         $len = strlen($tracknum);
         $last_ch = substr($tracknum, -1);
 
-        $checkdigit = substr($tracknum, 0, $len-1) % 7;
+        $checkdigit = substr($tracknum, 0, $len - 1) % 7;
 
         if ($last_ch != $checkdigit) {
             return false;
         }
+
         return true;
     }
 
-    /* 
+    /*
       Determine if this is a Fedex tracking number.
       This checks the format of the number and calculates
       if the checkdigit is correct.
-    
+
       Returns: true - tracking number is OK
                false - not a valid tracking number
     */
-    function isValidFedexTracking($tracknum)
+    public function isValidFedexTracking($tracknum)
     {
         if (!preg_match('/^([0-9]{12}|[0-9]{14,15}|[0-9]{22})$/i', $tracknum)) {
             return false;
         }
 
         $len = strlen($tracknum);
-        $last_ch = substr($tracknum, -1);;
+        $last_ch = substr($tracknum, -1);
         $stop = 0;
         $mod = 3;
 
         if ($len == 12) {  // EXPRESS - 12 digits
             $stop = 0;
             $mod = 3;
-        } else if ($len == 22) {  // GROUND - 22 digits
+        } elseif ($len == 22) {  // GROUND - 22 digits
             $stop = 7;
             $mod = 2;
-        } else if ($len == 14 || $len == 15) {  // GROUND - 14 or 15 digits
+        } elseif ($len == 14 || $len == 15) {  // GROUND - 14 or 15 digits
             $stop = 0;
             $mod = 2;
         }
 
         $t = 0;
         $j = 0;
-        for ($i=($len-2); $i >= $stop; $i--) {
+        for ($i = ($len - 2); $i >= $stop; --$i) {
             $ch = substr($tracknum, $i, 1);
             $n = ord($ch) - 48;
             $pos = $j % $mod;
@@ -183,19 +184,19 @@ class General {
             if ($mod == 3) {
                 if ($pos == 0) {
                     $t += $n;
-                } else if ($pos == 1) {
+                } elseif ($pos == 1) {
                     $t += ($n * 3);
                 } else {
                     $t += ($n * 7);
                 }
-            } else if ($mod == 2) {
+            } elseif ($mod == 2) {
                 if ($pos == 0) {
                     $t += ($n * 3);
                 } else {
                     $t += $n;
                 }
             }
-            $j++;
+            ++$j;
         }
 
         if ($mod == 3) {
@@ -205,7 +206,7 @@ class General {
             } else {
                 $checkdigit = $x;
             }
-        } else if ($mod == 2) {
+        } elseif ($mod == 2) {
             $x = $t % 10;
             if ($x == 0) {
                 $checkdigit = 0;
@@ -219,21 +220,22 @@ class General {
             if ($len == 22) {
                 return $this->isValidUspsTracking($tracknum);
             }
+
             return false;
         }
+
         return true;
     }
 
-    
     /*
       Returns true if this is a USPS tracking number
       with the proper checkdigit.
-    
+
       Based on information from USPS publications:
         http://www.usps.com/cpim/ftp/pubs/pub91.pdf
         http://www.usps.com/cpim/ftp/pubs/pub97.pdf
     */
-    function isValidUspsTracking($tracking)
+    public function isValidUspsTracking($tracking)
     {
         if (preg_match('/^(\d{2})(\d{18})$/', $tracking, $m)) {  # 20 digits
             //
@@ -243,6 +245,7 @@ class General {
             if ($m[1] == '04') {
                 $tracking = '91'.$tracking;
             }
+
             return($this->isUspsMod10($tracking));
         } elseif (preg_match('/^(\d{8})(\d{22})$/', $tracking, $m)) {  // 30 digits
             return($this->isUspsMod10($m[2]));
@@ -256,18 +259,18 @@ class General {
     }
 
     /*
-      Return true if this is a 
+      Return true if this is a
       USPS digit string with a
       valid MOD-10 checkdigit.
-    
+
       MOD-10 is used for domestic
       mail only.
     */
-    function isUspsMod10($str)
+    public function isUspsMod10($str)
     {
         $len = strlen($str);
         $sum = 0;
-        for ($i=0; $i < $len-1; $i++) {
+        for ($i = 0; $i < $len - 1; ++$i) {
             $d = substr($str, $i, 1);
 
             if ($i % 2) {
@@ -282,22 +285,21 @@ class General {
         } else {
             $checkdigit = $remainder;
         }
-        $lastdigit = substr($str, $len-1, 1);
+        $lastdigit = substr($str, $len - 1, 1);
 
         return ($lastdigit == $checkdigit);
     }
 
-    
     /*
-      Return true if this is a 
+      Return true if this is a
       USPS digit string with a
       valid MOD-11 checkdigit
-    
+
       MOD-11 is required for international mail,
       but may be used for domestic mail with
       USS code 39.
     */
-    function isUspsMod11($str)
+    public function isUspsMod11($str)
     {
         //
         //  Do MOD 11 verification of checkdigit
@@ -306,7 +308,7 @@ class General {
 
         $len = strlen($str);
         $sum = 0;
-        for ($i=0; $i < ($len-1); $i++) {
+        for ($i = 0; $i < ($len - 1); ++$i) {
             $d = substr($str, $i, 1);
             $sum += $d * $f[$i];
         }
@@ -319,7 +321,7 @@ class General {
         } else {
             $checkdigit = 11 - $remainder;
         }
-        $lastdigit = substr($str, ($len-1), 1);
+        $lastdigit = substr($str, ($len - 1), 1);
 
         return ($lastdigit == $checkdigit);
     }
@@ -330,24 +332,24 @@ class General {
         $level = 0;
         $prev_char = '';
         $in_quotes = false;
-        $ends_line_level = NULL;
+        $ends_line_level = null;
         $json_length = strlen($json);
 
-        for ($i = 0; $i < $json_length; $i++) {
+        for ($i = 0; $i < $json_length; ++$i) {
             $char = $json[$i];
-            $new_line_level = NULL;
-            $post = "";
-            if ($ends_line_level !== NULL) {
+            $new_line_level = null;
+            $post = '';
+            if ($ends_line_level !== null) {
                 $new_line_level = $ends_line_level;
-                $ends_line_level = NULL;
+                $ends_line_level = null;
             }
             if ($char === '"' && $prev_char != '\\') {
                 $in_quotes = !$in_quotes;
-            } else if (!$in_quotes) {
-                switch($char) {
+            } elseif (!$in_quotes) {
+                switch ($char) {
                     case '}': case ']':
                         $level--;
-                        $ends_line_level = NULL;
+                    $ends_line_level = null;
                         $new_line_level = $level;
                         break;
 
@@ -358,18 +360,21 @@ class General {
                         break;
 
                     case ':':
-                        $post = " ";
+                        $post = ' ';
                         break;
 
-                    case " ": case "  ": case "\n": case "\r":
-                        $char = "";
+                    case ' ':
+                    case '  ':
+                    case "\n":
+                    case "\r":
+                        $char = '';
                         $ends_line_level = $new_line_level;
-                        $new_line_level = NULL;
+                        $new_line_level = null;
                         break;
                 }
             }
-            if ($new_line_level !== NULL ) {
-                $result .= "\n". str_repeat("  ", $new_line_level);
+            if ($new_line_level !== null) {
+                $result .= "\n" . str_repeat('  ', $new_line_level);
             }
             $result .= $char.$post;
             $prev_char = $char;
@@ -378,7 +383,7 @@ class General {
         return $result;
     }
 
-    function getValueFromPath($arr, $path, $default=null)
+    public function getValueFromPath($arr, $path, $default = null)
     {
         $path = explode('/', $path);
         $dest = $arr;
@@ -396,7 +401,7 @@ class General {
         return $dest[$finalKey];
     }
 
-    function setValueFromPath(&$arr, $path, $value)
+    public function setValueFromPath(&$arr, $path, $value)
     {
         $path = explode('/', $path);
         $dest = &$arr;
@@ -407,14 +412,19 @@ class General {
         $dest[$finalKey] = $value;
     }
 
-    function weightToLbsOunces($weight)
+    public function weightToLbsOunces($weight)
     {
         list($lbs, $partialLb) = explode('.', "$weight.");
-        $ounces =  round(($weight-floor($weight)) * 16, 0);
+        $actualOunces = ($weight - floor($weight)) * 16;
+        if ($actualOunces < 1 && $actualOunces > 0) {
+            $actualOunces = 1;
+        }
+        $ounces = round($actualOunces, 0);
+
         return array((string)$lbs, (string)$ounces);
     }
 
-    function xmlPrettyPrint($xml, $tryAgain=false)
+    public function xmlPrettyPrint($xml, $tryAgain = false)
     {
         if (empty($xml)) {
             return $xml;
@@ -423,13 +433,13 @@ class General {
 
         if ($tryAgain) {
             $xml = preg_replace('/<\?xml .*\?>/', '', $xml);
-            $xml = '<root>'. $xml. '</root>';
+            $xml = '<root>' . $xml . '</root>';
         }
         $previous_value = libxml_use_internal_errors(true);
         $doc = new \DOMDocument();
         $doc->strictErrorChecking = false;
         $doc->preserveWhiteSpace = false;
-        $doc->formatOutput   = true;
+        $doc->formatOutput = true;
         $status = $doc->loadXML($xml, LIBXML_NOWARNING);
         $formatted_xml = $doc->saveXML();
         libxml_clear_errors();
@@ -439,32 +449,32 @@ class General {
             if ($tryAgain) {
                 $formatted_xml = str_replace("<root>\n", '', $formatted_xml);
                 $formatted_xml = str_replace("</root>\n", '', $formatted_xml);
-                $formatted_xml = str_replace("<root>", '', $formatted_xml);
-                $formatted_xml = str_replace("</root>", '', $formatted_xml);
+                $formatted_xml = str_replace('<root>', '', $formatted_xml);
+                $formatted_xml = str_replace('</root>', '', $formatted_xml);
             }
+
             return $formatted_xml;
         } else {
             if ($tryAgain == false) {
                 return $this->xmlPrettyPrint($xml, true);
             }
+
             return $originalXml;
         }
     }
 
     /**
-    * Create html code for base64 embedded image
-    *
-    * This function will return valid html for an
-    * embedded base64 image.  This html does not
-    * work in all browsers.
-    */
-    function label_html($base64EncodedLabel, $imageType)
+     * Create html code for base64 embedded image.
+     *
+     * This function will return valid html for an
+     * embedded base64 image.  This html does not
+     * work in all browsers.
+     */
+    public function label_html($base64EncodedLabel, $imageType)
     {
         return sprintf('<img src="data:image/%s;base64,%s" alt="Label" />',
             $imageType,
             $base64EncodedLabel
         );
     }
-
-
 }

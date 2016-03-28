@@ -17,7 +17,7 @@ class UpsGfp extends \RocketShipIt\Service\Common
     {
         $this->soapClient = $this->getSoapClient();
         $this->rateResponse = null;
-        parent::__construct('UPS');    
+        parent::__construct('Ups');
     }
 
     public function getSoapClient()
@@ -94,6 +94,18 @@ class UpsGfp extends \RocketShipIt\Service\Common
         return $address;
     }
 
+    public function buildToAddress()
+    {
+        $address = new \stdClass();
+        $address->AddressLine = $this->toAddr1;
+        $address->City = $this->toCity;
+        $address->StateProvinceCode = $this->toState;
+        $address->PostalCode = $this->toCode;
+        $address->CountryCode = $this->toCountry;
+
+        return $address;
+    }
+
     public function buildRequest()
     {
         $shipper = new \stdClass();
@@ -103,8 +115,8 @@ class UpsGfp extends \RocketShipIt\Service\Common
         $shipper->Address = $this->buildAddress();
 
         $shipTo = new \stdClass();
-        $shipTo->Name = $this->shipper;
-        $shipTo->Address = $this->buildAddress();
+        $shipTo->Name = $this->toCompany;
+        $shipTo->Address = $this->buildToAddress();
 
         $shipment = new \stdClass();
         $shipment->Shipper = $shipper;
@@ -112,6 +124,9 @@ class UpsGfp extends \RocketShipIt\Service\Common
 
         if ($this->groundFreight == '1') {
             $shipmentRatingOptions = new \stdClass();
+            if ($this->negotiatedRates == '1') {
+                $shipmentRatingOptions->NegotiatedRatesIndicator = 1;
+            }
             $shipmentRatingOptions->FRSShipmentIndicator = 1;
             $shipment->ShipmentRatingOptions = $shipmentRatingOptions;
         }
@@ -143,7 +158,7 @@ class UpsGfp extends \RocketShipIt\Service\Common
         // Rate or Shop, Shop to get all rates
         // Rate to get single rate
         if ($this->groundFreight == '1') {
-            // Shop is not allowed when requesting ground 
+            // Shop is not allowed when requesting ground
             // freight pricing
             $this->requestOption = 'Rate';
         }

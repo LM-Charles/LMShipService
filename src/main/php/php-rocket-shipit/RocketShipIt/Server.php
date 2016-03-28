@@ -4,12 +4,11 @@ namespace RocketShipIt;
 
 class Server
 {
-
     public $allowedCarriers = array(
         'UPS',
         'FEDEX',
         'USPS',
-        'DHL'
+        'DHL',
     );
 
     public $allowedTypes = array(
@@ -62,7 +61,7 @@ class Server
         $packages = array();
         $customs = array();
 
-        $class = '\RocketShipIt\\'. $request['type'];
+        $class = '\RocketShipIt\\' . $request['type'];
         $carrier = $request['carrier'];
         if (in_array('action', array_keys($request))) {
             $action = $request['action'];
@@ -102,5 +101,4 @@ class Server
 
         return json_encode($response);
     }
-
 }

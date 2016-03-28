@@ -2,39 +2,39 @@
 
 namespace RocketShipIt\Carrier;
 
-use \RocketShipIt\Request;
+use RocketShipIt\Request;
 
 /**
-* Core Ontrac Class
-*
-* Used internally to send data, set debug information, change
-* urls, and build xml
-*/
+ * Core Ontrac Class.
+ *
+ * Used internally to send data, set debug information, change
+ * urls, and build xml
+ */
 class Ontrac extends \RocketShipIt\Carrier\Base
 {
-    var $request;
+    public $request;
 
-    function __construct($config=null)
+    public function __construct($config = null)
     {
         parent::__construct();
         if ($config) {
             $this->config = $config;
         }
-        $this->debugMode = $this->config->getDefault('generic', 'debugMode');
+
         $this->testingUrl = 'https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc';
         $this->productionUrl = 'https://www.shipontrac.net/OnTracWebServices/OnTracServices.svc';
-        $this->setTestingMode($this->debugMode);
     }
 
     public function getRequest()
     {
         if (!isset($this->request)) {
-            $this->request = new Request;
+            $this->request = new Request();
         }
+
         return $this->request;
     }
 
-    function request($type, $method='get', $params=array(), $xml=null)
+    public function request($type, $method = 'get', $params = array(), $xml = null)
     {
         if ($this->mockXmlResponse != '') {
             if (is_array($this->mockXmlResponse)) {
@@ -43,18 +43,19 @@ class Ontrac extends \RocketShipIt\Carrier\Base
                 $mockXml = $this->mockXmlResponse;
             }
             $this->xmlResponse = $mockXml;
+
             return $mockXml;
         }
 
         $queryString = '';
         if (count($params) > 0) {
-            $queryString = '?'. http_build_query($params);
+            $queryString = '?' . http_build_query($params);
         }
 
         //$this->xmlSent = $xml;
 
         $request = $this->getRequest();
-        $request->url = $this->url. $type. $queryString;
+        $request->url = $this->getUrl() . $type . $queryString;
         $this->fullUrl = $request->url;
         $request->requestTimeout = $this->requestTimeout;
         if ($method == 'post') {
@@ -73,10 +74,10 @@ class Ontrac extends \RocketShipIt\Carrier\Base
     public function getServiceDescriptionFromCode($code)
     {
         $serviceDescriptionMap = array(
-            'C'	=> 'OnTrac Ground',
-            'S'	=> 'Sunrise',
-            'G'	=> 'Gold',
-            'H'	=> 'Palletized Freight',
+            'C' => 'OnTrac Ground',
+            'S' => 'Sunrise',
+            'G' => 'Gold',
+            'H' => 'Palletized Freight',
         );
 
         if (isset($serviceDescriptionMap[$code])) {

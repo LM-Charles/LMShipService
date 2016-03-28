@@ -2,22 +2,26 @@
 
 namespace RocketShipIt\Carrier;
 
-use \RocketShipIt\Request;
+use RocketShipIt\Request;
 
 /**
-* Core FedEx Class
-*
-* Used internally to send data, set debug information, change
-* urls, and build xml for FedEx
-*/
+ * Core FedEx Class.
+ *
+ * Used internally to send data, set debug information, change
+ * urls, and build xml for FedEx
+ */
 class Fedex extends \RocketShipIt\Carrier\Base
 {
-
     public $paramSynonyms = array(
         'customsOriginCountry' => 'countryOfManufacture',
         'customsHsTariff' => 'harmonizedCode',
         'customsWeightUnit' => 'weightUnit',
         'customsLineAmount' => 'customsValue',
+    );
+
+    public $paramValueSynonyms = array(
+        'LBS' => 'LB',
+        'KGS' => 'KG',
     );
 
     public function __construct()
@@ -30,39 +34,38 @@ class Fedex extends \RocketShipIt\Carrier\Base
         $this->meterNumber = $this->config->getDefault('fedex', 'meterNumber');
 
         $this->xmlObject = new \RocketShipIt\Helper\XmlBuilder(true);
-        $this->debugMode = $this->config->getDefault('generic', 'debugMode');
         $this->testingUrl = 'https://gatewaybeta.fedex.com/xml';
         $this->productionUrl = 'https://gateway.fedex.com/xml';
-        $this->setTestingMode($this->debugMode);
-        $this->request = new Request;
+        $this->request = new Request();
     }
 
     // Create the auth xml that is used in every request
-    function access()
+    public function access()
     {
         $xml = $this->xmlObject;
         $xml->push('ns:WebAuthenticationDetail');
-            $xml->push('ns:UserCredential');
-                $xml->element('ns:Key', $this->key);
-                $xml->element('ns:Password', $this->password);
-            $xml->pop(); // end UserCredential
+        $xml->push('ns:UserCredential');
+        $xml->element('ns:Key', $this->key);
+        $xml->element('ns:Password', $this->password);
+        $xml->pop(); // end UserCredential
         $xml->pop(); // end WebAuthenticationDetail
         $xml->push('ns:ClientDetail');
-            $xml->element('ns:AccountNumber', $this->accountNumber);
-            $xml->element('ns:MeterNumber', $this->meterNumber);
+        $xml->element('ns:AccountNumber', $this->accountNumber);
+        $xml->element('ns:MeterNumber', $this->meterNumber);
         $xml->pop(); // end ClientDetail
 
         $this->xmlObject = $xml;
 
         $this->accessRequest = true;
+
         return $this->xmlObject->getXml(); // returns xmlstring, but probably not used
     }
-
 
     public function request($xml)
     {
         if ($this->mockXmlResponse != '') {
             $this->xmlResponse = $this->getMockResponse();
+
             return $this->xmlResponse;
         }
 
@@ -71,7 +74,7 @@ class Fedex extends \RocketShipIt\Carrier\Base
         $request = $this->request;
         $this->xmlSent = $xml; // Store the xmlSent for debugging
         $this->xmlResponse = '';
-        $request->url = $this->url.'/xml';
+        $request->url = $this->getUrl() . '/xml';
         $request->requestTimeout = $this->requestTimeout;
         $request->payload = $xml;
         $request->post();
@@ -89,7 +92,7 @@ class Fedex extends \RocketShipIt\Carrier\Base
         return $this->returnResponseOrDownResponse($request);
     }
 
-    function getServiceDescriptionFromCode($code)
+    public function getServiceDescriptionFromCode($code)
     {
         $serviceDescriptionMap = array(
             'EUROPE_FIRST_INTERNATIONAL_PRIORITY' => 'FedEx Europe First International Priority®',
@@ -97,7 +100,7 @@ class Fedex extends \RocketShipIt\Carrier\Base
             'FEDEX_2_DAY' => 'FedEx 2Day®',
             'FEDEX_2_DAY_AM' => 'FedEx 2Day® A.M.',
             'FEDEX_2_DAY_FREIGHT' => 'FedEx 2Day® Freight',
-            'FEDEX_3_DAY_FREIGHT' => 'FedEx 3Day® Freigt',
+            'FEDEX_3_DAY_FREIGHT' => 'FedEx 3Day® Freight',
             'FEDEX_EXPRESS_SAVER' => 'FedEx Express Saver®',
             'FEDEX_FIRST_FREIGHT' => 'FedEx First® Freight',
             'FEDEX_FREIGHT_ECONOMY' => 'FedEx Freight® Economy',
@@ -112,18 +115,19 @@ class Fedex extends \RocketShipIt\Carrier\Base
             'INTERNATIONAL_PRIORITY_FREIGHT' => 'FedEx International Priority® Freight',
             'PRIORITY_OVERNIGHT' => 'FedEx Priority Overnight®',
             'SMART_POST' => 'FedEx SmartPost®',
-            'STANDARD_OVERNIGHT' => 'FedEx Standard Overnight®'
+            'STANDARD_OVERNIGHT' => 'FedEx Standard Overnight®',
         );
 
         if (isset($serviceDescriptionMap[$code])) {
             return $serviceDescriptionMap[$code];
         }
+
         return $code;
     }
 
     // Returns if a country code accepts electronic trade documents,
     // array('inbound' => true/false, 'outbound' => true/false)
-    function acceptsEtd($countryCode)
+    public function acceptsEtd($countryCode)
     {
         return $this->countriesAcceptingEtd[$countryCode];
     }
@@ -209,6 +213,6 @@ class Fedex extends \RocketShipIt\Carrier\Base
         'US' => array('inbound' => true, 'outbound' => true),
         'VI' => array('inbound' => false, 'outbound' => true),
         'IT' => array('inbound' => true, 'outbound' => false),
-        'GB' => array('inbound' => true, 'outbound' => true)
+        'GB' => array('inbound' => true, 'outbound' => true),
     );
 }

@@ -2,15 +2,12 @@
 
 namespace RocketShipIt;
 
-use \RocketShipIt\Helper\XmlParser;
-
 /**
-* Main class for generating end of day scan forms 
-*
-*/
+ * Main class for generating end of day scan forms.
+ */
 class ScanForm extends \RocketShipIt\Service\Base
 {
-    function __construct($carrier, $options=array())
+    public function __construct($carrier, $options = array())
     {
         $classParts = explode('\\', __CLASS__);
         $service = end($classParts);
@@ -18,8 +15,8 @@ class ScanForm extends \RocketShipIt\Service\Base
     }
 
     /**
-    * Returns a ScanForm response from the carrier.
-    */
+     * Returns a ScanForm response from the carrier.
+     */
     public function create()
     {
         if (!method_exists($this->inherited, 'create')) {

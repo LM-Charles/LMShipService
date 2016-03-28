@@ -2,8 +2,7 @@
 
 namespace RocketShipIt\Service\Track;
 
-use \RocketShipIt\Helper\XmlParser;
-use \RocketShipIt\Helper\XmlBuilder;
+use RocketShipIt\Helper\XmlBuilder;
 
 /**
 * Main class for tracking shipments and packages
@@ -24,7 +23,11 @@ class Fedex extends \RocketShipIt\Service\Common
     function trackFEDEX($trackingNumber)
     {
         $xml = $this->core->xmlObject;
-        $xml->push('ns:TrackRequest', array('xmlns:ns' => 'http://fedex.com/ws/track/v4', 'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation' => 'http://fedex.com/ws/track/v4 TrackService v4.xsd'));
+        $xml->push('ns:TrackRequest', array(
+            'xmlns:ns' => 'http://fedex.com/ws/track/v4',
+            'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+            'xsi:schemaLocation' => 'http://fedex.com/ws/track/v4 TrackService v4.xsd',
+        ));
         $this->core->xmlObject = $xml;
         $this->core->access();
         $xml = $this->core->xmlObject;
@@ -51,7 +54,107 @@ class Fedex extends \RocketShipIt\Service\Common
         $this->core->request($xmlString);
 
         // Convert the xmlString to an array
-        return $this->arrayFromXml($this->core->xmlResponse);
+        return $this->simplifyResponse($this->arrayFromXml($this->core->xmlResponse));
+    }
+
+    public function simplifyResponse($resp)
+    {
+        $t = new \RocketShipIt\Response\Track;
+        $t->Meta->Code = 200;
+
+        $trackDetails = array();
+        if (isset($resp['TrackReply']['TrackDetails'])) {
+            $trackDetails = array($resp['TrackReply']['TrackDetails']);
+        }
+        if (isset($resp['TrackReply']['TrackDetails'][0])) {
+            $trackDetails = $resp['TrackReply']['TrackDetails'];
+        }
+
+        $d = new \RocketShipIt\Response\Track\Destination;
+        foreach ($trackDetails as $trackDetail) {
+            if (isset($trackDetail['TrackingNumber'])) {
+                $t->Data->ShipmentId = $trackDetail['TrackingNumber'];
+            }
+            if (isset($trackDetail['DestinationAddress']['StateOrProvinceCode'])) {
+                $d->State = $trackDetail['DestinationAddress']['StateOrProvinceCode'];
+            }
+            if (isset($trackDetail['DestinationAddress']['CountryCode'])) {
+                $d->Country = $trackDetail['DestinationAddress']['CountryCode'];
+            }
+            if (isset($trackDetail['DestinationAddress']['City'])) {
+                $d->City = $trackDetail['DestinationAddress']['City'];
+            }
+
+            $p = new \RocketShipIt\Response\Track\Package;
+            if (isset($trackDetail['TrackingNumber'])) {
+                $p->TrackingNumber = $trackDetail['TrackingNumber'];
+
+                $signatory = '';
+                if (isset($trackDetail['DeliverySignatureName'])) {
+                    $signatory = $trackDetail['DeliverySignatureName'];
+                }
+
+                if (isset($trackDetail['Events'])) {
+                    $events = array($trackDetail['Events']);
+                    if (isset($trackDetail['Events'][0])) {
+                        $events = $trackDetail['Events'];
+                    }
+
+                    foreach ($events as $event) {
+                        $a = new \RocketShipIt\Response\Track\Activity;
+                        if (isset($event['EventDescription'])) {
+                            $a->Description = $event['EventDescription'];
+                        }
+                        $a->Time = $event['Timestamp'];
+                        $a->StatusCode = $event['EventType'];
+                        if ($a->StatusCode == 'DL') {
+                            $a->Signatory = $signatory;
+                        }
+                        if (isset($event['EventDescription'])) {
+                            $a->StatusDescription = $event['EventDescription'];
+                        }
+                        $l = new \RocketShipIt\Response\Track\Location;
+                        if (isset($event['Address']['City'])) {
+                            $l->City = $event['Address']['City'];
+                        }
+                        if (isset($event['Address']['StateOrProvinceCode'])) {
+                            $l->State = $event['Address']['StateOrProvinceCode'];
+                        }
+                        if (isset($event['Address']['PostalCode'])) {
+                            $l->PostalCode = $event['Address']['PostalCode'];
+                        }
+                        if (isset($event['Address']['CountryCode'])) {
+                            $l->Country = $event['Address']['CountryCode'];
+                        }
+                        $a->Location = $l;
+                        $p->Activity[] = $a;
+                    }
+                }
+            }
+
+            $t->Data->Packages[] = $p;
+        }
+
+        if (isset($resp['TrackReply']['Notifications'])) {
+            $notifications = array($resp['TrackReply']['Notifications']);
+            if (isset($resp['TrackReply']['Notifications'][0])) {
+                $notifications = $resp['TrackReply']['Notifications'];
+            }
+            foreach ($notifications as $notification) {
+                $e = new \RocketShipIt\Response\Error;
+                if ($notification['Severity'] == 'SUCCESS') {
+                    continue;
+                }
+                $e->Code = $notification['Code'];
+                $e->Description = $notification['LocalizedMessage'];
+                $e->Type = $notification['Severity'];
+                $t->Data->Errors[] = $e;
+            }
+        }
+
+        $t->Data->Destination = $d;
+
+        return (array)json_decode(json_encode($t), true);
     }
 
     function buildVersionXml()
@@ -109,7 +212,11 @@ class Fedex extends \RocketShipIt\Service\Common
     function buildProofOfDeliveryXml()
     {
         $xml = $this->core->xmlObject;
-        $xml->push('ns:SignatureProofOfDeliveryLetterRequest',array('xmlns:ns' => 'http://fedex.com/ws/track/v6', 'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation' => 'http://fedex.com/ws/track/v6 TrackService_v6.xsd'));
+        $xml->push('ns:SignatureProofOfDeliveryLetterRequest', array(
+            'xmlns:ns' => 'http://fedex.com/ws/track/v6',
+            'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+            'xsi:schemaLocation' => 'http://fedex.com/ws/track/v6 TrackService_v6.xsd'
+        ));
         $this->core->xmlObject = $xml;
         $this->core->access();
         $xml = $this->core->xmlObject;

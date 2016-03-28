@@ -2,40 +2,39 @@
 
 namespace RocketShipIt\Carrier;
 
-use \RocketShipIt\Request;
+use RocketShipIt\Request;
 
 /**
-* Core Stamp.com Class
-*
-* Used internally to send data, set debug information, change
-* urls, and build xml
-*/
+ * Core Stamp.com Class.
+ *
+ * Used internally to send data, set debug information, change
+ * urls, and build xml
+ */
 class Stamps extends \RocketShipIt\Carrier\Base
 {
-
-    var $xmlSent;
-    var $xmlPrevResponse;
-    var $xmlResponse;
+    public $xmlSent;
+    public $xmlPrevResponse;
+    public $xmlResponse;
     public $paramSynonyms = array(
         'weight' => 'weightPounds',
     );
 
     public $serviceDescriptions = array(
-        'US-PM'  => 'USPS Priority Mail',
+        'US-PM' => 'USPS Priority Mail',
         'US-PMI' => 'USPS Priority Mail International',
-        'US-XM'  => 'USPS Express Mail',
+        'US-XM' => 'USPS Express Mail',
         'US-EMI' => 'USPS Express Mail International',
-        'US-PP'  => 'USPS Parcel Post',
-        'US-MM'  => 'USPS Media Mail',
-        'US-FC'  => 'USPS First Class Mail',
+        'US-PP' => 'USPS Parcel Post',
+        'US-MM' => 'USPS Media Mail',
+        'US-FC' => 'USPS First Class Mail',
         'US-FCI' => 'USPS First Class Mail International',
-        'US-BP'  => 'USPS Bound Printed Matter',
-        'US-LM'  => 'USPS Library Mail',
-        'US-PS'  => 'USPS Parcel Select',
-        'US-CM'  => 'USPS Critical Mail'
+        'US-BP' => 'USPS Bound Printed Matter',
+        'US-LM' => 'USPS Library Mail',
+        'US-PS' => 'USPS Parcel Select',
+        'US-CM' => 'USPS Critical Mail',
     );
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
@@ -45,7 +44,7 @@ class Stamps extends \RocketShipIt\Carrier\Base
         $creds['Username'] = $this->config->getDefault('stamps', 'username');
         $creds['Password'] = $this->config->getDefault('stamps', 'password');
         $this->debugMode = $this->config->getDefault('generic', 'debugMode');
-        $this->mediaRequest = new Request;
+        $this->mediaRequest = new Request();
 
         $this->credentials = $creds;
     }
@@ -64,12 +63,12 @@ class Stamps extends \RocketShipIt\Carrier\Base
         return $this->credentials;
     }
 
-    function request($action, $request)
+    public function request($action, $request)
     {
         $options = array(
             'trace' => 1,
             'cache_wsdl' => WSDL_CACHE_NONE,
-            'exceptions' => 0
+            'exceptions' => 0,
         );
         // If proxy is specified as enviornment variable pass it in.
         if (getenv('PROXY_HOST')) {
@@ -84,7 +83,7 @@ class Stamps extends \RocketShipIt\Carrier\Base
 
         $options['connection_timeout'] = $this->requestTimeout;
 
-        $wsdl = __DIR__. "/stamps.wsdl";
+        $wsdl = ROCKETSHIPIT_RESOURCE_PATH . '/wsdls/stamps.wsdl';
 
         $client = new \RocketShipIt\Helper\SoapClient($wsdl, $options);
 
@@ -123,7 +122,7 @@ class Stamps extends \RocketShipIt\Carrier\Base
         return base64_encode($media);
     }
 
-    function access()
+    public function access()
     {
         $auth = new \stdClass();
         $auth->Credentials = $this->credentials;
@@ -131,7 +130,7 @@ class Stamps extends \RocketShipIt\Carrier\Base
         return $this->request('AuthenticateUser', $auth);
     }
 
-    function getAccountInfo()
+    public function getAccountInfo()
     {
         $info = new \stdClass();
         $info->Credentials = $this->credentials;
@@ -139,7 +138,7 @@ class Stamps extends \RocketShipIt\Carrier\Base
         return $this->request('GetAccountInfo', $info);
     }
 
-    function getUrl()
+    public function getUrl()
     {
         $url = new \stdClass();
         $url->Credentials = $this->credentials;
@@ -148,16 +147,17 @@ class Stamps extends \RocketShipIt\Carrier\Base
         return $this->request('GetUrl', $url);
     }
 
-    function purchasePostage($amount)
+    public function purchasePostage($amount)
     {
         $ai = $this->getAccountInfo();
         $controlAmount = $ai->AccountInfo->PostageBalance->ControlTotal;
 
         $response = $this->addPostage($amount, $controlAmount);
+
         return $response;
     }
 
-    function addPostage($amount, $controlAmount)
+    public function addPostage($amount, $controlAmount)
     {
         $p = new \stdClass();
         $p->Credentials = $this->credentials;
@@ -167,7 +167,7 @@ class Stamps extends \RocketShipIt\Carrier\Base
         return $this->request('PurchasePostage', $p);
     }
 
-    function getPurchaseStatus($transactionId)
+    public function getPurchaseStatus($transactionId)
     {
         $ps = new \stdClass();
         $ps->Credentials = $this->credentials;
@@ -176,7 +176,7 @@ class Stamps extends \RocketShipIt\Carrier\Base
         return $this->request('GetPurchaseStatus', $ps);
     }
 
-    function getServiceDescriptionFromCode($code)
+    public function getServiceDescriptionFromCode($code)
     {
         if (!isset($this->serviceDescriptions[$code])) {
             return 'Unknown service code';
@@ -185,10 +185,10 @@ class Stamps extends \RocketShipIt\Carrier\Base
         return $this->serviceDescriptions[$code];
     }
 
-    function getCountryName($countryCode)
+    public function getCountryName($countryCode)
     {
-        $converter = new \RocketShipIt\Helper\CountryConverter;
-        return $converter->getCountryName($countryCode); 
+        $converter = new \RocketShipIt\Helper\CountryConverter();
+
+        return $converter->getCountryName($countryCode);
     }
-   
 }

@@ -4,8 +4,7 @@ namespace RocketShipIt;
 
 class AddressValidate extends \RocketShipIt\Service\Base
 {
-
-    public function __construct($carrier, $options=array())
+    public function __construct($carrier, $options = array())
     {
         $classParts = explode('\\', __CLASS__);
         $service = end($classParts);
@@ -13,24 +12,25 @@ class AddressValidate extends \RocketShipIt\Service\Base
     }
 
     /**
-    * Send address data to carrier.
-    *
-    * This function detects carrier and executes the
-    * carrier specific function.
-    */
+     * Send address data to carrier.
+     *
+     * This function detects carrier and executes the
+     * carrier specific function.
+     */
     public function validate()
     {
-        $method = 'get'. $this->carrier. 'Validate';
+        $method = 'get' . $this->carrier . 'Validate';
         if (!method_exists($this->inherited, $method)) {
             return $this->invalidCarrierResponse();
         }
+
         return $this->inherited->$method();
     }
 
     public function validateStreetLevel()
     {
         switch ($this->carrier) {
-            case "UPS":
+            case 'UPS':
                 return $this->inherited->getUPSValidateStreetLevel();
             default:
                 return $this->invalidCarrierResponse();

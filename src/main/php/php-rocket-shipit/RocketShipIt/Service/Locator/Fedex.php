@@ -2,8 +2,6 @@
 
 namespace RocketShipIt\Service\Locator;
 
-use \RocketShipIt\Helper\XmlParser;
-
 class Fedex extends \RocketShipIt\Service\Common
 {
     function __construct()

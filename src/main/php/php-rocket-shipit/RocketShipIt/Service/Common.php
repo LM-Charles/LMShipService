@@ -1,7 +1,8 @@
 <?php
 
 namespace RocketShipIt\Service;
-use \RocketShipIt\Helper\XmlParser;
+
+use RocketShipIt\Helper\XmlParser;
 
 class Common
 {

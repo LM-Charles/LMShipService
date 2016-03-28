@@ -22,9 +22,9 @@ class Stamps extends \RocketShipIt\Service\Common
 
         $address = new \stdClass;
         $address->FullName = 'John Doe';
-        $address->Address1 = $this->toAddr1;
+        $address->Address1 = substr($this->toAddr1, 0, 50);
         if ($this->toAddr2 != '') {
-            $address->Address2 = $this->toAddr2;
+            $address->Address2 = substr($this->toAddr2, 0, 50);
         }
         $address->City = $this->toCity;
         if ($this->toCountry == $this->shipCountry) {

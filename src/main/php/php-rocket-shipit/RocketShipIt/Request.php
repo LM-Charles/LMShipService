@@ -10,12 +10,12 @@ class Request
     public $response;
     public $proxyUrl;
     public $proxyPort;
-    var $ch;
-    var $curlInfo;
-    var $username;
-    var $password;
-    var $payload;
-    var $error;
+    public $ch;
+    public $curlInfo;
+    public $username;
+    public $password;
+    public $payload;
+    public $error;
 
     public function __construct()
     {
@@ -35,7 +35,7 @@ class Request
     public function setProxy()
     {
         if ($this->proxyUrl && $this->proxyPort) {
-            curl_setopt($this->ch, CURLOPT_PROXY, $this->proxyUrl. ':'. $this->proxyPort);
+            curl_setopt($this->ch, CURLOPT_PROXY, $this->proxyUrl . ':' . $this->proxyPort);
         }
     }
 
@@ -54,7 +54,7 @@ class Request
     {
         curl_setopt($this->ch, CURLOPT_URL, $this->url);
         if ($this->username != '' and $this->password != '') {
-            curl_setopt($this->ch, CURLOPT_USERPWD, $this->username . ":" . $this->password);
+            curl_setopt($this->ch, CURLOPT_USERPWD, $this->username . ':' . $this->password);
         }
         if ($this->header) {
             curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->header);
@@ -110,11 +110,12 @@ class Request
         if (!empty($this->curlInfo)) {
             return $this->curlInfo['http_code'];
         }
+
         return $this->statusCode;
     }
 
     public function getError()
     {
-        return $this->error; 
+        return $this->error;
     }
 }

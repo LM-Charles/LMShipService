@@ -2,8 +2,7 @@
 
 namespace RocketShipIt\Service\AddressValidate;
 
-use \RocketShipIt\Helper\XmlParser;
-use \RocketShipIt\Helper\XmlBuilder;
+use RocketShipIt\Helper\XmlBuilder;
 
 /**
 * Main Address Validation class for carrier.

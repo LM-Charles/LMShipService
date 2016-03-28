@@ -2,17 +2,16 @@
 
 namespace RocketShipIt\Carrier;
 
-use \RocketShipIt\Request;
+use RocketShipIt\Request;
 
 /**
-* Core UPS Class
-*
-* Used internally to send data, set debug information, change
-* urls, and build xml
-*/
+ * Core UPS Class.
+ *
+ * Used internally to send data, set debug information, change
+ * urls, and build xml
+ */
 class Ups extends \RocketShipIt\Carrier\Base
 {
-
     public $paramSynonyms = array(
         'customsDescription' => 'invoiceLineDescription',
         'customsQuantity' => 'invoiceLineNumber',
@@ -21,22 +20,20 @@ class Ups extends \RocketShipIt\Carrier\Base
         'customsOriginCountry' => 'invoiceLineOriginCountryCode',
     );
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
-        $this->debugMode = $this->config->getDefault('generic', 'debugMode');
         $this->testingUrl = 'https://wwwcie.ups.com';
         $this->productionUrl = 'https://onlinetools.ups.com';
-        $this->setTestingMode($this->debugMode);
-        
+
         // Create a new xmlObject to be used by access and other classes
         // This object will be used all the way through, until the final xmlObject
         // is converted to a string just before sending to UPS
         $this->xmlObject = new \RocketShipIt\Helper\XmlBuilder(false);
         //$this->access();
 
-        $this->request = new Request;
+        $this->request = new Request();
     }
 
     // Build the access XML to be used in EVERY request to UPS
@@ -44,9 +41,9 @@ class Ups extends \RocketShipIt\Carrier\Base
     {
         $xml = $this->xmlObject;
         $xml->push('AccessRequest', array('xml:lang' => 'en-US'));
-            $xml->element('AccessLicenseNumber', $this->license);
-            $xml->element('UserId', $this->username);
-            $xml->element('Password', $this->password);
+        $xml->element('AccessLicenseNumber', $this->license);
+        $xml->element('UserId', $this->username);
+        $xml->element('Password', $this->password);
         $xml->pop();
 
         $this->xmlObject = $xml;
@@ -56,7 +53,7 @@ class Ups extends \RocketShipIt\Carrier\Base
 
     // This function is the only function that actually transmits and receives data
     // from UPS. All classes use this to send XML to UPS servers.
-    function request($type, $xml)
+    public function request($type, $xml)
     {
         if ($this->mockXmlResponse != '') {
             if (is_array($this->mockXmlResponse)) {
@@ -71,7 +68,7 @@ class Ups extends \RocketShipIt\Carrier\Base
 
         $this->xmlSent = $xml;
         $request = $this->request;
-        $request->url = $this->url. '/ups.app/xml/'. $type;
+        $request->url = $this->getUrl() . '/ups.app/xml/' . $type;
         $request->requestTimeout = $this->requestTimeout;
         $request->payload = $xml;
         $request->post();
@@ -81,6 +78,7 @@ class Ups extends \RocketShipIt\Carrier\Base
             $error = $request->getError();
             $xml = "<error>$error</error>";
             $this->xmlResponse = $xml;
+
             return array($xml);
         }
         $this->curlReturned = $curlReturned;
@@ -88,18 +86,68 @@ class Ups extends \RocketShipIt\Carrier\Base
 
         // Find out if the UPS service is down
         if ($request->getStatusCode() != 100 && $request->getStatusCode() != 200) {
-            return array('error' => 'The UPS service seems to be down with HTTP/1.1 '. $request->getStatusCode());
+            return array('error' => 'The UPS service seems to be down with HTTP/1.1 ' . $request->getStatusCode());
         } else {
-            $response = strstr($curlReturned, '<?'); // Separate the html header and the actual XML because we turned CURLOPT_HEADER to 1
-            $this->xmlResponse = $response;
-            return $response;
+            $this->xmlResponse = $curlReturned;
+
+            return $this->xmlResponse;
         }
     }
 
-    function getServiceDescriptionFromCode($code, $country='US')
+    public function getServiceCodeFromDescription($desc, $country = 'US')
+    {
+        $desc = trim($desc);
+        if (strtoupper($country) == 'CA') {
+            $canadaMap = array(
+                '01' => 'UPS Express',
+                '02' => 'UPS Worldwide Expedited',
+                '07' => 'UPS Express',
+                '11' => 'UPS Standard',
+                '12' => 'UPS 3 Day Select',
+                '13' => 'UPS Saver',
+                '14' => 'UPS Express Early AM',
+            );
+            $canadaMap = array_flip($usMap);
+
+            if (isset($canadaMap[$desc])) {
+                return $canadaMap[$desc];
+            }
+
+            return 'Unknown service code';
+        }
+
+        $usMap = array(
+            'UPS Next Day Air' => '01',
+            'UPS 2nd Day Air' => '02',
+            'UPS 2nd Day Air (Saturday Delivery)' => '02',
+            'UPS Ground' => '03',
+            'UPS Worldwide Express' => '07',
+            'UPS Worldwide Expedited' => '08',
+            'UPS Standard' => '11',
+            'UPS 3 Day Select' => '12',
+            'UPS Next Day Air Saver' => '13',
+            'UPS Next Day Air Early' => '14',
+            'UPS Worldwide Express Plus' => '54',
+            'UPS 2nd Day Air A.M.' => '59',
+            'UPS Worldwide Saver' => '65',
+            'UPS Today Standard' => '82',
+            'UPS Today Dedicated' => '83',
+            'UPS Today Intercity' => '84',
+            'UPS Today Express' => '85',
+            'UPS Today Express Saver' => '86',
+        );
+
+        if (isset($usMap[$desc])) {
+            return $usMap[$desc];
+        }
+
+        return 'Unknown service code';
+    }
+
+    public function getServiceDescriptionFromCode($code, $country = 'US')
     {
         if (strtoupper($country) == 'CA') {
-            switch($code) {
+            switch ($code) {
                 case '01':
                     return 'UPS Express';
                 case '02':
@@ -118,7 +166,7 @@ class Ups extends \RocketShipIt\Carrier\Base
                     return 'Unknown service code';
             }
         } else {
-            switch($code) {
+            switch ($code) {
                 case '01':
                     return 'UPS Next Day Air';
                 case '02':
@@ -179,7 +227,7 @@ class Ups extends \RocketShipIt\Carrier\Base
         'KG' => 'KGS',
     );
 
-    function getShipmentDCISType($signatureCode)
+    public function getShipmentDCISType($signatureCode)
     {
         $signatureTypes = array(
             'INDIRECT' => '',
@@ -195,7 +243,7 @@ class Ups extends \RocketShipIt\Carrier\Base
         return $signatureCode;
     }
 
-    function getPackageDCISType($type)
+    public function getPackageDCISType($type)
     {
         $signatureTypes = array(
             'INDIRECT' => '1',
@@ -211,5 +259,4 @@ class Ups extends \RocketShipIt\Carrier\Base
 
         return $type;
     }
-
 }

@@ -2,9 +2,6 @@
 
 namespace RocketShipIt\Service\Rate;
 
-use \RocketShipIt\Helper\XmlBuilder;
-use \RocketShipIt\Helper\XmlParser;
-
 class Ontrac extends \RocketShipIt\Service\Common implements \RocketShipIt\RateInterface
 {
     var $packageCount;

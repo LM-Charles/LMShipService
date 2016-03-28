@@ -2,13 +2,11 @@
 
 namespace RocketShipIt\Carrier;
 
-use \RocketShipIt\Request;
-
 class Purolator extends \RocketShipIt\Carrier\Base
 {
-    var $request;
+    public $request;
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
@@ -17,15 +15,15 @@ class Purolator extends \RocketShipIt\Carrier\Base
         $options['password'] = $this->config->getDefault('purolator', 'password');
 
         //$options['location'] = 'http://localhost:8088/mockTrackingServiceEndpoint';
-        $wsdl = __DIR__. "/../Resources/schemas/purolator/EstimatingService.wsdl";
+        $wsdl = __DIR__ . '/../Resources/schemas/purolator/EstimatingService.wsdl';
         $this->soapClient = new \RocketShipIt\Helper\SoapClient($wsdl, $options);
-        $this->soapHeader = new \SoapHeader ( 'http://purolator.com/pws/datatypes/v1', 
-            'RequestContext', 
-                array (
-                    'Version'           =>  '1.3',
-                    'Language'          =>  'en',
-                    'GroupID'           =>  'xxx',
-                    'RequestReference'  =>  'Rating 123'
+        $this->soapHeader = new \SoapHeader('http://purolator.com/pws/datatypes/v1',
+            'RequestContext',
+            array(
+                'Version' => '1.3',
+                'Language' => 'en',
+                'GroupID' => 'xxx',
+                'RequestReference' => 'Rating 123',
                 )
             );
     }
@@ -59,5 +57,4 @@ class Purolator extends \RocketShipIt\Carrier\Base
 
         return $response;
     }
-
 }

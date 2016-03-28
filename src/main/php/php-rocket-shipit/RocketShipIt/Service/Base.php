@@ -56,7 +56,7 @@ class Base
         if (isset($this->inherited->paramValueSynonyms[$value])) {
             $value = $this->inherited->paramValueSynonyms[$value];
         }
-        if (isset($this->inherited->core->paramValueSynonyms[$value])) {
+        if (is_string($value) && isset($this->inherited->core->paramValueSynonyms[$value])) {
             $value = $this->inherited->core->paramValueSynonyms[$value];
         }
         $this->{$param} = $value;

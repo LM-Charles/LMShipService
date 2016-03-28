@@ -2,9 +2,6 @@
 
 namespace RocketShipIt\Service\Rate;
 
-use \RocketShipIt\Helper\XmlBuilder;
-use \RocketShipIt\Helper\XmlParser;
-
 /**
 * Main Rate class for producing rates for various packages/shipments
 *

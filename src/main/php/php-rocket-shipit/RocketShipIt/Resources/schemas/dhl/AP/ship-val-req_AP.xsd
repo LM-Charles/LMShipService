@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-<xsd:schema xmlns:dhl="http://www.dhl.com/datatypes_AP" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://www.dhl.com"
-            xmlns="http://www.dhl.com" elementFormDefault="unqualified">
+<xsd:schema targetNamespace="http://www.dhl.com" xmlns:dhl="http://www.dhl.com/datatypes_AP" xmlns="http://www.dhl.com"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified">
     <xsd:import namespace="http://www.dhl.com/datatypes_AP" schemaLocation="datatypes_AP.xsd"/>
     <xsd:element name="ShipmentValidateRequestAP">
         <xsd:annotation>

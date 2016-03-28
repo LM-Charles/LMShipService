@@ -3,14 +3,14 @@
 namespace RocketShipIt;
 
 /**
-* Main class for tracking shipments and packages
-*
-* This class is a wrapper for use with all carriers to track packages
-* Valid carriers are: UPS, USPS, and FedEx.
-*/
+ * Main class for tracking shipments and packages.
+ *
+ * This class is a wrapper for use with all carriers to track packages
+ * Valid carriers are: UPS, USPS, and FedEx.
+ */
 class Track extends \RocketShipIt\Service\Base
 {
-    public function __construct($carrier, $options=array())
+    public function __construct($carrier, $options = array())
     {
         $classParts = explode('\\', __CLASS__);
         $service = end($classParts);
@@ -22,21 +22,24 @@ class Track extends \RocketShipIt\Service\Base
         switch (strtoupper($this->carrier)) {
         case 'UPS':
             $retArr = $this->inherited->trackUPS($trackingNumber);
+            if (!isset($retArr['TrackResponse'])) {
+                return $retArr;
+            }
             $a = $retArr['TrackResponse'];
-            if ($a['Response']['ResponseStatusCode'] != "1") {
-                $this->result = "FAIL";
+            if ($a['Response']['ResponseStatusCode'] != '1') {
+                $this->result = 'FAIL';
                 $this->reason = $a['Response']['Error']['ErrorDescription'] .
-                                    " (".$a['Response']['Error']['ErrorCode'].")";
+                    ' (' . $a['Response']['Error']['ErrorCode'] . ')';
             } else {
-                if (array_key_exists("TrackingNumber",$a['Shipment']['Package'])) {
+                if (array_key_exists('TrackingNumber', $a['Shipment']['Package'])) {
                     // single package
                     $p = $a['Shipment']['Package'];
                 } else {
                     // multi-package
                     $p = $a['Shipment']['Package'][0];
                 }
-                $this->result = "OK";
-                if (array_key_exists("Status", $p['Activity'])) {
+                $this->result = 'OK';
+                if (array_key_exists('Status', $p['Activity'])) {
                     // just the one
                     $this->status = $p['Activity']['Status']['StatusType']['Description'];
                 } else {
@@ -44,6 +47,7 @@ class Track extends \RocketShipIt\Service\Base
                     $this->status = $p['Activity'][0]['Status']['StatusType']['Description'];
                 }
             }
+
             return $retArr;
         case 'FEDEX':
             return $this->inherited->trackFEDEX($trackingNumber);
@@ -60,6 +64,7 @@ class Track extends \RocketShipIt\Service\Base
         default:
             $retArr['result'] = 'fail';
             $retArr['reason'] = "Unknown carrier $this->carrier in RocketShipTrack";
+
             return $retArr;
         }
     }
@@ -71,6 +76,7 @@ class Track extends \RocketShipIt\Service\Base
         case 'UPS':
             $this->inherited->referenceNumber = $referenceNumber;
             $retArr = $this->inherited->trackUPS($referenceNumber);
+
             return $retArr;
         case 'FEDEX':
             return $retArr;
@@ -79,6 +85,7 @@ class Track extends \RocketShipIt\Service\Base
         default:
             $retArr['result'] = 'fail';
             $retArr['reason'] = "Unknown carrier $this->carrier in RocketShipTrack";
+
             return $retArr;
         }
     }
@@ -89,6 +96,7 @@ class Track extends \RocketShipIt\Service\Base
         if (!method_exists($this->inherited, $method)) {
             return $this->invalidCarrierResponse();
         }
+
         return (array) $this->inherited->$method();
     }
 
@@ -98,7 +106,7 @@ class Track extends \RocketShipIt\Service\Base
         if (!method_exists($this->inherited, $method)) {
             return $this->invalidCarrierResponse();
         }
+
         return (array) $this->inherited->$method();
     }
-
 }

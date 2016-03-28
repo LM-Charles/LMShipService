@@ -2,9 +2,8 @@
 
 namespace RocketShipIt\Service\TimeInTransit;
 
-use \RocketShipIt\Helper\XmlParser;
-use \RocketShipIt\Helper\XmlBuilder;
-use \RocketShipIt\Helper\General;
+use RocketShipIt\Helper\General;
+use RocketShipIt\Helper\XmlBuilder;
 
 /**
 * Main class for getting time in transit information
@@ -54,9 +53,11 @@ class Ups extends \RocketShipIt\Service\Common
             $simpleArr['is_guaranteed'] = false;
             $simpleArr['eta'] = 'N/A';
             $simpleArr['formatted_eta'] = 'N/A';
+            $simpleArr['service_rate_code'] = '';
 
             $simpleArr['desc'] = $this->helper->getValueFromPath($service, 'Service/Description', '');
             $simpleArr['service_code'] = $this->helper->getValueFromPath($service, 'Service/Code', '');
+            $simpleArr['service_rate_code'] = $this->core->getServiceCodeFromDescription($simpleArr['desc']);
 
             $guar = $this->helper->getValueFromPath($service, 'Guaranteed/Code', false);
             if ($guar == 'Y') {

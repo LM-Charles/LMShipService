@@ -2,9 +2,6 @@
 
 namespace RocketShipIt\Service\Track;
 
-use \RocketShipIt\Helper\XmlParser;
-use \RocketShipIt\Helper\XmlBuilder;
-
 /**
 * Main class for tracking shipments and packages
 *
@@ -59,7 +56,7 @@ class Ups extends \RocketShipIt\Service\Common
                 7 = POD, COD, Receiver Address, All Activity
                 */
                 // activity doesn't work for Mail Innovations use '1'
-                $xml->element('RequestOption', '1');
+        $xml->element('RequestOption', '3');
             $xml->pop(); // close Request
             if (!isset($this->referenceNumber)) {
                 $helper = new \RocketShipIt\Helper\General();
@@ -82,7 +79,7 @@ class Ups extends \RocketShipIt\Service\Common
 
     // Builds xml for tracking and sends the xml string to the ups->request method
     // receives a response from UPS and outputs an array.
-    function trackUPS($trackingNumber)
+    public function trackUPS($trackingNumber)
     {
         $xmlString = $this->buildUPSTrackingXml($trackingNumber);
 
@@ -91,6 +88,107 @@ class Ups extends \RocketShipIt\Service\Common
 
         $this->processResponse();
 
-        return $this->responseArray; 
+        return $this->simplifyResponse($this->responseArray);
+    }
+
+    public function simplifyResponse($resp)
+    {
+        $t = new \RocketShipIt\Response\Track;
+        $t->Meta->Code = 200;
+
+        if (isset($resp['TrackResponse']['Shipment']['ShipmentIdentificationNumber'])) {
+            $t->Data->ShipmentId = $resp['TrackResponse']['Shipment']['ShipmentIdentificationNumber'];
+        }
+
+        $pkgs = array();
+        if (isset($resp['TrackResponse']['Shipment']['Package']['TrackingNumber'])) {
+            $pkgs[] = $resp['TrackResponse']['Shipment']['Package'];
+        }
+
+        if (isset($resp['TrackResponse']['Shipment']['Package'][0])) {
+            $pkgs = $resp['TrackResponse']['Shipment']['Package'];
+        }
+
+        foreach ($pkgs as $pkg) {
+            $p = new \RocketShipIt\Response\Track\Package;
+            if (isset($pkg['TrackingNumber'])) {
+                $p->TrackingNumber = $pkg['TrackingNumber'];
+                $shpmnt = $resp['TrackResponse']['Shipment'];
+                $d = new \RocketShipIt\Response\Track\Destination;
+                if (isset($shpmnt['ShipTo']['Address']['AddressLine1'])) {
+                    $d->Addr1 = $shpmnt['ShipTo']['Address']['AddressLine1'];
+                }
+                if (isset($shpmnt['ShipTo']['Address']['AddressLine2'])) {
+                    $d->Addr2 = $shpmnt['ShipTo']['Address']['AddressLine2'];
+                }
+                if (isset($shpmnt['ShipTo']['Address']['City'])) {
+                    $d->City = $shpmnt['ShipTo']['Address']['City'];
+                }
+                if (isset($shpmnt['ShipTo']['Address']['StateProvinceCode'])) {
+                    $d->State = $shpmnt['ShipTo']['Address']['StateProvinceCode'];
+                }
+                if (isset($shpmnt['ShipTo']['Address']['PostalCode'])) {
+                    $d->PostalCode = $shpmnt['ShipTo']['Address']['PostalCode'];
+                }
+                if (isset($shpmnt['ShipTo']['Address']['CountryCode'])) {
+                    $d->Country = $shpmnt['ShipTo']['Address']['CountryCode'];
+                }
+                $t->Data->Destination = $d;
+
+                $activity = array();
+                if (!isset($pkg['Activity'][0]) && isset($pkg['Activity'])) {
+                    $activity[] = $pkg['Activity'];
+                } else {
+                    $activity = $pkg['Activity'];
+                }
+
+                foreach ($activity as $act) {
+                    $a = new \RocketShipIt\Response\Track\Activity;
+                    if (isset($act['Status']['StatusCode']['Code'])) {
+                        $a->StatusCode = $act['Status']['StatusCode']['Code'];
+                    }
+                    if (isset($act['Status']['StatusType']['Description'])) {
+                        $a->StatusDescription = $act['Status']['StatusType']['Description'];
+                    }
+                    $l = new \RocketShipIt\Response\Track\Location;
+                    if (isset($act['ActivityLocation']['Address']['City'])) {
+                        $l->City = $act['ActivityLocation']['Address']['City'];
+                    }
+                    if (isset($act['ActivityLocation']['Address']['StateProvinceCode'])) {
+                        $l->State = $act['ActivityLocation']['Address']['StateProvinceCode'];
+                    }
+                    if (isset($act['ActivityLocation']['Address']['PostalCode'])) {
+                        $l->PostalCode = $act['ActivityLocation']['Address']['PostalCode'];
+                    }
+                    if (isset($act['ActivityLocation']['Address']['CountryCode'])) {
+                        $l->Country = $act['ActivityLocation']['Address']['CountryCode'];
+                    }
+
+                    $date = '';
+                    if (isset($act['Date'])) {
+                        $date = $act['Date'];
+                    }
+                    $time = '';
+                    if (isset($act['Time'])) {
+                        $time = $act['Time'];
+                    }
+
+                    $a->Time = date('Y-m-d\TH:i:s\Z', strtotime($date . $time));
+                    $a->Location = $l;
+                    $p->Activity[] = $a;
+                }
+
+                $t->Data->Packages[] = $p;
+            }
+        }
+
+        if (isset($resp['TrackResponse']['Response']['Error']['ErrorDescription'])) {
+            $e = new \RocketShipIt\Response\Error;
+            $e->Description = $resp['TrackResponse']['Response']['Error']['ErrorDescription'];
+            $t->Data->Errors[] = $e;
+        }
+
+
+        return (array)json_decode(json_encode($t), true);
     }
 }

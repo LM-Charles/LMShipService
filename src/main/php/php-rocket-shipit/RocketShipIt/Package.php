@@ -3,17 +3,16 @@
 namespace RocketShipIt;
 
 /**
-* Main class for producing package objects that are later inserted into a shipment
-* @see RocketShipShipment::addPackageToShipment()
-*/
+ * Main class for producing package objects that are later inserted into a shipment.
+ *
+ * @see RocketShipShipment::addPackageToShipment()
+ */
 class Package extends \RocketShipIt\Service\Base
 {
+    public $ups;
 
-    var $ups;
-
-    public function __Construct($carrier, $options=array())
+    public function __Construct($carrier, $options = array())
     {
         parent::__construct($carrier, false, $options);
     }
-
 }

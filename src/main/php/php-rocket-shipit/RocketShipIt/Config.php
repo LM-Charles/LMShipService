@@ -4,17 +4,20 @@ namespace RocketShipIt;
 
 class Config
 {
-
     public $defaults;
     public $customEnvVar = 'RS_CUSTOM_CONFIG_PATH';
     public $carrier;
     public $defaultConfigFileName = 'config.php';
 
-    function __construct()
+    public function __construct()
     {
         $this->defaults = array();
         $this->loadConfig();
-        date_default_timezone_set($this->getDefault('generic', 'timezone'));
+
+        $timezone = $this->getDefault('generic', 'timezone');
+        if ($timezone != '') {
+            date_default_timezone_set($timezone);
+        }
     }
 
     private function isCustomConfig()
@@ -27,13 +30,13 @@ class Config
         if ($this->isCustomConfig()) {
             $this->loadConfigFromEnvVar($this->customEnvVar);
         } else {
-            $this->loadConfigFile(dirname(__FILE__). '/../'. $this->defaultConfigFileName);
+            $this->loadConfigFile(dirname(__FILE__) . '/../' . $this->defaultConfigFileName);
         }
     }
 
     public function loadConfigFromEnvVar($envVar)
     {
-        $this->loadConfigFile(getenv($envVar). '/'. $this->defaultConfigFileName);
+        $this->loadConfigFile(getenv($envVar) . '/' . $this->defaultConfigFileName);
     }
 
     public function loadConfigFile($filename)
@@ -42,7 +45,7 @@ class Config
             return;
         }
 
-        $this->defaults = include($filename);
+        $this->defaults = include $filename;
     }
 
     public function processCarrier()
@@ -53,9 +56,8 @@ class Config
 
     public function getParametersFile()
     {
-        return file_get_contents(dirname(__FILE__). '/Resources/parameters.json');
+        return file_get_contents(dirname(__FILE__) . '/Resources/parameters.json');
     }
-
 
     public function loadParameters()
     {
@@ -69,16 +71,17 @@ class Config
     }
 
     /**
-    * Ensures that only settable paramaters are allowed.
-    *
-    * This function aids the setPramater() function in that it only
-    * allows known paramaters to be set.  This helps to avoid typos when
-    * setting parameters.
-    *
-    * @param string $carrier name of carrier i.e. ups
-    * @return array $okparams array of all available params for given carrier
-    */
-    function getOKparams()
+     * Ensures that only settable paramaters are allowed.
+     *
+     * This function aids the setPramater() function in that it only
+     * allows known paramaters to be set.  This helps to avoid typos when
+     * setting parameters.
+     *
+     * @param string $carrier name of carrier i.e. ups
+     *
+     * @return array $okparams array of all available params for given carrier
+     */
+    public function getOKparams()
     {
         $this->processCarrier($this->carrier);
 
@@ -95,11 +98,11 @@ class Config
     }
 
     /**
-    * Gets defaults
-    *
-    * This function will grab defaults from config.php (or default config filename)
-    */
-    function getParameter($param, $value)
+     * Gets defaults.
+     *
+     * This function will grab defaults from config.php (or default config filename)
+     */
+    public function getParameter($param, $value)
     {
         $this->processCarrier($this->carrier);
 
@@ -113,7 +116,7 @@ class Config
         return $value;
     }
 
-    function limitParameterSize($param, $value)
+    public function limitParameterSize($param, $value)
     {
         $this->processCarrier($this->carrier);
 
@@ -123,35 +126,36 @@ class Config
         if (isset($sizeLimits[$this->carrier][$param])) {
             return substr($value, 0, $sizeLimits[$this->carrier][$param]);
         }
+
         return $value;
     }
 
     /**
-    * Validates carrier name
-    *
-    * This function will return true when given a proper
-    * carier name.
-    */
-    function validateCarrier()
+     * Validates carrier name.
+     *
+     * This function will return true when given a proper
+     * carier name.
+     */
+    public function validateCarrier()
     {
         $this->processCarrier($this->carrier);
 
         switch (strtoupper($this->carrier)) {
-            case "UPS":
+            case 'UPS':
                 return true;
-            case "FEDEX":
+            case 'FEDEX':
                 return true;
-            case "USPS":
+            case 'USPS':
                 return true;
-            case "STAMPS":
+            case 'STAMPS':
                 return true;
-            case "DHL":
+            case 'DHL':
                 return true;
-            case "CANADA":
+            case 'CANADA':
                 return true;
-            case "PUROLATOR":
+            case 'PUROLATOR':
                 return true;
-            case "ONTRAC":
+            case 'ONTRAC':
                 return true;
         }
     }
@@ -174,5 +178,4 @@ class Config
     {
         $this->defaults[$section][$param] = $value;
     }
-
 }

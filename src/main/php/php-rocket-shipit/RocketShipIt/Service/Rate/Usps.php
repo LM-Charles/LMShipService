@@ -2,9 +2,8 @@
 
 namespace RocketShipIt\Service\Rate;
 
-use \RocketShipIt\Helper\XmlParser;
-use \RocketShipIt\Helper\XmlBuilder;
-use \RocketShipIt\Helper\General;
+use RocketShipIt\Helper\General;
+use RocketShipIt\Helper\XmlBuilder;
 
 /**
 * Main Rate class for producing rates for various packages/shipments
@@ -164,7 +163,7 @@ class Usps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateInt
             $xml = $this->buildUSPSInternationalPackage($xml, $options);
         } else {
             $xml->push('Package',array('ID' => $packageId));
-            $xml->element('Service',$this->service);
+            $xml->element('Service', 'ALL');
             if ($this->firstClassMailType != '') {
                 $xml->element('FirstClassMailType',$package->firstClassMailType);
             }
@@ -181,16 +180,15 @@ class Usps extends \RocketShipIt\Service\Common implements \RocketShipIt\RateInt
                 $xml->element('Ounces',(string)$package->weightOunces);
             }
 
-            if ($this->container != '') {
+            if ($package->container != '') {
                 $xml->element('Container', $package->container);
             } else {
                 $xml->emptyelement('Container');
             }
-            
-            $girth = $this->length + ($this->height*2) + ($this->width*2);
 
-            if($girth > 108) $xml->element('Size','OVERSIZE');
-            else if($girth > 84) $xml->element('Size','LARGE');
+            $girth = $package->length + ($package->height * 2) + ($package->width * 2);
+
+            if ($girth > 84) $xml->element('Size', 'LARGE');
             else $xml->element('Size','Regular');
 
             $xml->element('Width',$package->width);

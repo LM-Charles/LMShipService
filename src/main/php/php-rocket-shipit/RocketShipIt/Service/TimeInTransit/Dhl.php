@@ -2,8 +2,7 @@
 
 namespace RocketShipIt\Service\TimeInTransit;
 
-use \RocketShipIt\Helper\XmlParser;
-use \RocketShipIt\Helper\General;
+use RocketShipIt\Helper\General;
 
 /**
 * Main class for getting time in transit information

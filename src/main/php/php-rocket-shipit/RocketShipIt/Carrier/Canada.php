@@ -2,39 +2,39 @@
 
 namespace RocketShipIt\Carrier;
 
-use \RocketShipIt\Request;
+use RocketShipIt\Request;
 
 /**
-* Core CanadaPost Class
-*
-* Used internally to send data, set debug information, change
-* urls, and build xml
-*/
+ * Core CanadaPost Class.
+ *
+ * Used internally to send data, set debug information, change
+ * urls, and build xml
+ */
 class Canada extends \RocketShipIt\Carrier\Base
 {
-    var $request;
+    public $request;
 
-    function __construct($config=null)
+    public function __construct($config = null)
     {
         parent::__construct();
         if ($config) {
             $this->config = $config;
         }
-        $this->debugMode = $this->config->getDefault('generic', 'debugMode');
+
         $this->testingUrl = 'https://ct.soa-gw.canadapost.ca';
         $this->productionUrl = 'https://soa-gw.canadapost.ca';
-        $this->setTestingMode($this->debugMode);
     }
 
     public function getRequest()
     {
         if (!isset($this->request)) {
-            $this->request = new Request;
+            $this->request = new Request();
         }
+
         return $this->request;
     }
 
-    function request($type, $xml, $header=false, $method='GET')
+    public function request($type, $xml, $header = false, $method = 'GET')
     {
         if ($this->mockXmlResponse != '') {
             if (is_array($this->mockXmlResponse)) {
@@ -43,13 +43,14 @@ class Canada extends \RocketShipIt\Carrier\Base
                 $mockXml = $this->mockXmlResponse;
             }
             $this->xmlResponse = $mockXml;
+
             return $mockXml;
         }
 
         $this->xmlSent = $xml;
 
         $request = $this->getRequest();
-        $request->url = $this->url. $type;
+        $request->url = $this->getUrl() . $type;
         $request->username = $this->username;
         $request->password = $this->password;
         $request->requestTimeout = $this->requestTimeout;
@@ -66,17 +67,7 @@ class Canada extends \RocketShipIt\Carrier\Base
 
         $response = strstr($response, '<?'); // Separate the html header and the actual XML because we turned CURLOPT_HEADER to 1
         $this->xmlResponse = $response;
-        return $response;
 
-        /*
-        if ($request->getStatusCode() != 100 && $request->getStatusCode() != 200) {
-            return array("error" => 'The CanadaPost service responded with HTTP/1.1 '. $request->getStatusCode());
-        } else {
-            $response = strstr($response, '<?'); // Separate the html header and the actual XML because we turned CURLOPT_HEADER to 1
-            $this->xmlResponse = $response;
-            return $response;
-        }
-        */
-        return '';
+        return $response;
     }
 }

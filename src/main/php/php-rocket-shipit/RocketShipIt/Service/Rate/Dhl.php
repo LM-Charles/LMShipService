@@ -2,8 +2,7 @@
 
 namespace RocketShipIt\Service\Rate;
 
-use \RocketShipIt\Helper\XmlParser;
-use \RocketShipIt\Helper\XmlBuilder;
+use RocketShipIt\Helper\XmlBuilder;
 
 /**
 * Main Rate class for producing rates for various packages/shipments
@@ -116,12 +115,28 @@ class Dhl extends \RocketShipIt\Service\Common implements \RocketShipIt\RateInte
     function buildDHLRateXml()
     {
         $xml = new \RocketShipIt\Helper\XmlBuilder();
-        $xml->push('p:DCTRequest', array('xmlns:p' => "http://www.dhl.com", 'xmlns:p1' => "http://www.dhl.com/datatypes", 'xmlns:p2' => "http://www.dhl.com/DCTRequestdatatypes", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xsi:schemaLocation' => "http://www.dhl.com DCT-req.xsd"));
+        $xml->push('p:DCTRequest', array(
+            'xmlns:p' => 'http://www.dhl.com',
+            'xmlns:p1' => 'http://www.dhl.com/datatypes',
+            'xmlns:p2' => 'http://www.dhl.com/DCTRequestdatatypes',
+            'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+            'xsi:schemaLocation' => 'http://www.dhl.com DCT-req.xsd'
+        ));
             $xml->push('GetQuote');
                 $xml->append($this->buildRequestXml());
                 $xml->append($this->buildFrom());
                 $xml->append($this->buildBkgDetails());
                 $xml->append($this->buildToXml());
+        if ($this->customsValue != "") {
+            $xml->push('Dutiable');
+            if ($this->customsCurrency == '') {
+                $xml->element('DeclaredCurrency', 'USD');
+            } else {
+                $xml->element('DeclaredCurrency', $this->customsCurrency);
+            }
+            $xml->element('DeclaredValue', $this->customsValue);
+            $xml->pop();
+        }
             $xml->pop(); // end GetCapability
         $xml->pop(); // end DCTRequest
         return $xml->getXml();
@@ -206,11 +221,15 @@ class Dhl extends \RocketShipIt\Service\Common implements \RocketShipIt\RateInte
                 }
             $xml->pop(); //end Pieces
             $xml->element('PaymentAccountNumber', $this->accountNumber);
+        if ($this->toCountry != $this->shipCountry) {
+            $xml->element('IsDutiable', 'Y');
+        }
             if ($this->insuredValue != '') {
                 $xml->element('InsuredValue', $this->insuredValue);
                 $xml->element('InsuredCurrency', $this->insuredCurrency);
             }
         $xml->pop(); //end BkgDetails
+
         return $xml->getXml();
     }
 

@@ -2,7 +2,6 @@
 
 namespace RocketShipIt\Service\TimeInTransit;
 
-use \RocketShipIt\Helper\XmlParser;
 use RocketShipIt\Helper\XmlBuilder as XmlBuilder;
 
 // USPS requires 4 seperate APIs for getting TimeInTransit for various services
