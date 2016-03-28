@@ -1,9 +1,6 @@
 <?php
 
-require "RocketShipIt/RocketShipIt.php";
-
-$resourcePath = __DIR__ . DIRECTORY_SEPARATOR . 'RocketShipIt'. DIRECTORY_SEPARATOR . 'Resources';
-define("ROCKETSHIPIT_RESOURCE_PATH", $resourcePath);
+require 'RocketShipIt/RocketShipIt.php';
 
 /**
  * Simple autoloader that follows the PHP Standards Recommendation #0 (PSR-0)
