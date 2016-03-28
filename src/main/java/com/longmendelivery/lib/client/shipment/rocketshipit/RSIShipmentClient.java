@@ -40,6 +40,10 @@ public class RSIShipmentClient implements ShipmentClient {
 
         private void getRateForCourier() {
             RSIScriptEngine engine = null;
+
+            long time = System.currentTimeMillis();
+
+            System.out.println("PrepareEngine " + type + (System.currentTimeMillis() - time));
             try {
                 engine = new RSIScriptEngine();
             } catch (DependentServiceException e) {
@@ -48,18 +52,23 @@ public class RSIShipmentClient implements ShipmentClient {
             }
 
             try {
+                System.out.println("PrepareGetTime " + type + (System.currentTimeMillis() - time));
                 RateScriptGenerator generator = new RateScriptGenerator(type);
                 generator.withSourceAddress(sourceAddress);
                 generator.withDestinationAddress(destinationAddress);
                 generator.withDimensions(new DimensionModel(shipmentModel.getLength(), shipmentModel.getWidth(), shipmentModel.getHeight(), shipmentModel.getWeight()));
                 generator.withPackaging(shipmentModel.getShipmentPackageType());
                 String script = generator.generate();
+                System.out.println("PrepareScript " + type + (System.currentTimeMillis() - time));
+
                 try {
                     List<RSIRateEntry> result = engine.executeScript(script, new TypeReference<List<RSIRateEntry>>() {
                     });
                     for (RSIRateEntry entry : result) {
                         rateMap.put(CourierServiceType.getFromServiceCode(type, entry.getServiceCode()), new BigDecimal(entry.getRate()));
                     }
+                    System.out.println("Complete Script " + type + (System.currentTimeMillis() - time));
+
                 } catch (DependentServiceException e) {
                     System.out.println("Invalid query for shipment " + shipmentModel.toString() + " carrier " + type + " error " + e);
                     return;
@@ -70,7 +79,7 @@ public class RSIShipmentClient implements ShipmentClient {
         }
     }
 
-    private static final int MAX_THREAD_POOL = 2;
+    private static final int MAX_THREAD_POOL = 4;
 
     public RSIShipmentClient() throws DependentServiceException {
     }
