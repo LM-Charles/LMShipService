@@ -23,7 +23,7 @@ import java.util.concurrent.*;
  */
 public class RSIShipmentClient implements ShipmentClient {
 
-    public static final int TIMEOUT = 30;
+    public static final int TIMEOUT = 14;
 
     @AllArgsConstructor
     private final class GetRateForCourierTask implements Runnable {
