@@ -29,10 +29,14 @@ public class ShipmentEntity implements DAOEntity {
     private Integer length;
     private Integer weight;
     private String trackingNumber;
+    @Enumerated(EnumType.STRING)
     private GoodCategoryType goodCategoryType;
+    @Enumerated(EnumType.STRING)
     private ShipmentPackageType shipmentPackageType;
     //There two are for display preference only, all measurements are standardized using the metric system in the system.
+    @Enumerated(EnumType.STRING)
     private LengthUnit displayLengthPreference;
+    @Enumerated(EnumType.STRING)
     private WeightUnit displayWeightPreference;
 
 }

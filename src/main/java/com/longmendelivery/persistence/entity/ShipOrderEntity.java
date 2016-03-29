@@ -32,6 +32,7 @@ public class ShipOrderEntity implements DAOEntity {
     private AppUserEntity client;
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime orderDate;
+    @Enumerated(EnumType.STRING)
     private CourierServiceType courierServiceType;
     @OneToMany(mappedBy = "order")
     private List<ShipmentEntity> shipments;
@@ -48,6 +49,7 @@ public class ShipOrderEntity implements DAOEntity {
     private BigDecimal insuranceValue;
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime appointmentDate;
+    @Enumerated(EnumType.STRING)
     private AppointmentSlotType appointmentSlotType;
     private String nickname;
 
