@@ -88,7 +88,8 @@ public class CourierResource {
         if (responseModel == null) {
             return ResourceResponseUtil.generateNotFoundMessage("no rate available");
         }
-        return Response.status(Response.Status.OK).entity(responseModel).build();
+        return Response.status(Response.Status.OK).entity(responseModel).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").build();
+
     }
 
     public RateResponseModel calculateRate(OrderCreationRequest order) throws DependentServiceException {
